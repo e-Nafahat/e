@@ -64,7 +64,7 @@
             color: var(--royal-gold);
             text-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
             font-family: 'Cairo', sans-serif;
-            line-height: 1.2; /* تم تصحيح الخطأ هنا */
+            line-height: 1.2;
         }
 
         .lib-header p {
@@ -78,7 +78,6 @@
             line-height: 1.6;
         }
         
-        /* باقي التنسيقات كما هي دون أي تغيير */
         .shelf-area {
             position: relative; z-index: 10;
             display: grid; grid-template-columns: 1fr 1fr;
@@ -165,9 +164,9 @@
     <canvas id="dust-canvas"></canvas>
 
     <div class="lib-header">
-<img src="../leader/LogoNafahat.png" alt="Logo" class="lib-logo">
-        <h1>المَكْتَبَــةُ الإِسْـلَامِيَّـةُ</h1>
-        <p>خَيْرُ جَلِيسٍ في الزَّمَانِ كِتَابُ .. وَمِنْهُ لِأَنْوَارِ الهُدَى أَبْوَابُ</p>
+        <img src="../leader/LogoNafahat.png" alt="Logo" class="lib-logo">
+        <h1>المَكْتَبَــةُ الإِسْـلَامِيَّـةُ</h1>
+        <p>خَيْرُ جَلِيسٍ في الزَّمَانِ كِتَابُ .. وَمِنْهُ لِأَنْوَارِ الهُدَى أَبْوَابُ</p>
     </div>
 
     <div class="shelf-area">
@@ -280,6 +279,7 @@
 
         function openBook(id, url) {
             localStorage.setItem('lastReadBook', id);
+            // استخدام replace لضمان تجربة تصفح سلسة
             window.location.replace(url);
         }
 
