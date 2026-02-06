@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-gold: #d4af37;
+            --bright-gold: #f9e29d;
+            --deep-emerald: #0d1a26;
+            --book-red: linear-gradient(145deg, #7a1d1d, #4a0d0d);
+            --book-green: linear-gradient(145deg, #1a4d32, #0d2619);
+            --book-blue: linear-gradient(145deg, #1a2a3a, #0d151d);
+            --shelf-wood: #2c1e14;
+            --bg-darker: #b0b0b0; 
+        }
+
+        /* كود منع ظهور حدود أو تظليل عند الضغط بناءً على طلبك */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-darker);
+            font-family: 'Noto Naskh Arabic', serif;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        #dust-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; opacity: 0.6;
+        }
+
+        .lib-header {
+            position: relative; 
+            z-index: 10;
+            background: radial-gradient(circle at center, #1a2a3a 0%, #050a0f 100%);
+            color: #fff; 
+            padding: 30px 15px 35px 15px; 
+            text-align: center;
+            border-bottom: 3px solid var(--royal-gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lib-logo {
+            height: 100px;
+            width: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            display: block; /* لضمان ظهوره كعنصر مستقل */
+        }
+
+        .lib-header h1 { 
+            margin: 0; 
+            font-size: 2rem; 
+            font-weight: 900; 
+            color: var(--royal-gold);
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.2;
+        }
+
+        .lib-header p {
+            margin: 10px 0 -20px 0;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #bdc3c7;
+            font-style: normal;
+            opacity: 1;
+            line-height: 1.6;
+        }
+        
+        .shelf-area {
+            position: relative; z-index: 10;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 50px 20px; padding: 40px 20px;
+            max-width: 400px; margin: 0 auto;
+        }
+
+        .shelf-row {
+            grid-column: 1 / -1; height: 12px;
+            background: var(--shelf-wood); border-radius: 2px;
+            margin-top: -45px; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border-bottom: 4px solid #1a120c; position: relative;
+        }
+
+        .book-wrapper {
+            position: relative; width: 105px; height: 145px;
+            margin: auto; perspective: 1000px; cursor: pointer; display: block;
+            text-decoration: none;
+        }
+
+        .book {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transform: rotateY(-25deg); 
+            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .last-read .book {
+            transform: rotateY(-5deg) scale(1.05);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .book-wrapper:active .book { transform: rotateY(0deg) scale(1.1); }
+
+        .cover {
+            position: absolute; width: 100%; height: 100%;
+            background: var(--book-blue); border-radius: 3px 5px 5px 3px;
+            z-index: 5; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.4); box-sizing: border-box;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .book-title { 
+            font-family: 'Cairo', sans-serif; 
+            font-size: 0.85rem; 
+            font-weight: 900; 
+            color: var(--royal-gold);
+            margin-top: 10px; 
+            text-align: center;
+            line-height: 1.2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,1);
+        }
+
+        .spine {
+            position: absolute; width: 24px; height: 100%;
+            right: 100%; top: 0; transform-origin: right;
+            transform: rotateY(-90deg); z-index: 4;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .pages {
+            position: absolute; width: 94%; height: 94%; top: 3%;
+            background: #fdfcf0; right: 2px; transform: translateZ(-20px);
+            border-radius: 0 3px 3px 0; box-shadow: inset -2px 0 5px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .book.red-edition .cover { background: var(--book-red); }
+        .book.red-edition .spine { background: #5e1914; }
+        .book.green-edition .cover { background: var(--book-green); }
+        .book.green-edition .spine { background: #14402a; }
+        .book.blue-edition .cover { background: var(--book-blue); }
+        .book.blue-edition .spine { background: #0d1a26; }
+
+        .lib-footer {
+            position: relative; z-index: 10; text-align: center; padding: 40px;
+            color: #2c1e14; font-size: 0.75rem; font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="dust-canvas"></canvas>
+
+    <div class="lib-header">
+        <img src="../leader/LogoNafahat.png" alt="Logo" class="lib-logo">
+        <h1>المَكْتَبَــةُ الإِسْـلَامِيَّـةُ</h1>
+        <p>خَيْرُ جَلِيسٍ في الزَّمَانِ كِتَابُ .. وَمِنْهُ لِأَنْوَارِ الهُدَى أَبْوَابُ</p>
+    </div>
+
+    <div class="shelf-area">
+        <div id="book-azkar" onclick="openBook('azkar', '../Textbook/azkar.html')" class="book-wrapper">
+            <div class="book green-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">☀️</span>
+                    <div class="book-title">أذكار الصباح</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div id="book-azkarNight" onclick="openBook('azkarNight', '../Textbook/azkarNight.html')" class="book-wrapper">
+            <div class="book blue-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">🌙</span>
+                    <div class="book-title">أذكار المساء</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div class="shelf-row"></div>
+
+        <div id="book-athkar-sleep" onclick="openBook('athkar-sleep', '../Textbook/athkar-sleep.html')" class="book-wrapper">
+            <div class="book blue-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">✨</span>
+                    <div class="book-title">أذكار النوم</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div id="book-nawawi" onclick="openBook('nawawi', '../Textbook/nawawi.html')" class="book-wrapper">
+            <div class="book red-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">📜</span>
+                    <div class="book-title">الأربعون النووية</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div class="shelf-row"></div>
+
+        <div id="book-hadith100" onclick="openBook('hadith100', '../Textbook/hadith100.html')" class="book-wrapper">
+            <div class="book red-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">📖</span>
+                    <div class="book-title">مائة حديث نبوي</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div id="book-bayqonia" onclick="openBook('bayqonia', '../Textbook/bayqonia.html')" class="book-wrapper">
+            <div class="book green-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">⚖️</span>
+                    <div class="book-title">المنظومة البيقونية</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div class="shelf-row"></div>
+
+        <div id="book-azkrony" onclick="openBook('azkrony', '../Textbook/AZKRONY.html')" class="book-wrapper">
+            <div class="book blue-edition">
+                <div class="spine"></div>
+                <div class="cover">
+                    <span style="font-size: 1.4rem;">📿</span>
+                    <div class="book-title">فاذكروني أذكركم</div>
+                </div>
+                <div class="pages"></div>
+            </div>
+        </div>
+
+        <div class="shelf-row"></div>
+
+    </div>
+
+    <div class="lib-footer">
+        نَفَحَاتٌ إِيمَانِيَّةٌ &copy; ٢٠٢٦ مـ<br>
+        مَنْهَلٌ لِلْهُدَى وَالْمَعْرِفَةِ
+    </div>
+
+    <script>
+        const canvas = document.getElementById('dust-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        class Particle {
+            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 1.5; this.speedY = Math.random() * 0.3 + 0.1; this.opacity = Math.random() * 0.5; }
+            update() { this.y -= this.speedY; if (this.y < 0) this.y = canvas.height; }
+            draw() { ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        animate();
+
+        function openBook(id, url) {
+            localStorage.setItem('lastReadBook', id);
+            // استخدام replace لضمان تجربة تصفح سلسة
+            window.location.replace(url);
+        }
+
+        window.onload = () => {
+            const lastId = localStorage.getItem('lastReadBook');
+            if (lastId) {
+                const el = document.getElementById('book-' + lastId);
+                if (el) el.classList.add('last-read');
+            }
+        };
+    </script>
+</body>
+</html>
