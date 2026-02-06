@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .quran-dynamic-section { margin: 10px 0 0 0; padding: 0; position: relative; }
+        .dynamic-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 5px; }
+        .dynamic-label { 
+            color: var(--gold); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; 
+            cursor: pointer; user-select: none;
+        }
+        
+        .slider-stop-btn { display: none; }
+        
+        .mehrab-frame { 
+            width: 100%; 
+            border: none; 
+            height: 255px; 
+            background: transparent; 
+            overflow: hidden;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- أيقونة القائمة --- */
+        .menu-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .menu-icon span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(197, 160, 89, 0.2);
+        }
+
+        /* --- تنسيق الهيدر المطور (حل مشكلة التداخل) --- */
+        .site-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 65px;
+            padding: 0 15px;
+            overflow: visible; 
+            margin-bottom: 40px; /* مسافة كافية للنص الإنجليزي تحت البار */
+        }
+
+        .header-center-titles {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .site-title {
+            font-size: 1.15rem;
+            margin: 0;
+            color: var(--gold);
+            font-weight: 900;
+            /* العربي في نهاية البار الكحلي */
+            transform: translateY(45px); 
+            pointer-events: auto;
+        }
+
+        .sub-title-eng {
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.65rem;
+            color: #8b7346; /* لون ذهبي داكن ليكون واضحاً على الخلفية الفاتحة */
+            font-weight: 700;
+            white-space: nowrap;
+            letter-spacing: 0.8px;
+            /* الإنجليزي أسفله خارج البار بمسافة واضحة */
+            margin-top: 54px; 
+            pointer-events: auto;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+        }
+
+        .floating-logo-left {
+            position: absolute;
+            left: 5px;
+            /* بروز 3/4 الشعار خارج البار */
+            top: 15px; 
+            height: 85px; 
+            width: auto;
+            z-index: 1000;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            pointer-events: none;
+        }
+
+        /* ضبط "جديدنا" ليكون أسفل النص الإنجليزي مباشرة */
+        .showcase-slider {
+            margin-top: 10px !important; 
+        }
+
+        /* --- تصميم بوابة المكتبة المطور 3D --- */
+        .library-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #0a2d53, #001529);
+            margin: 20px auto; 
+            width: 92%;
+            padding: 8px 20px; 
+            border-radius: 18px; 
+            text-decoration: none;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 15px rgba(197, 160, 89, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .library-entrance:active { transform: scale(0.98); }
+        .lib-text h3 { color: var(--gold); font-size: 1rem; margin-bottom: 0px; font-weight: 900; }
+        .lib-text p { color: #eee; font-size: 0.6rem; line-height: 1.2; max-width: 190px; margin: 0; }
+
+        .lib-3d-icon {
+            position: relative;
+            width: 90px;
+            height: 55px; 
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .mini-shelf {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            transform: rotateX(10deg) rotateY(-15deg);
+        }
+
+        .m-book {
+            width: 16px; 
+            border-radius: 2px 4px 4px 2px;
+            position: relative;
+            box-shadow: 3px 0 5px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .b1 { background: #1b4d3e; height: 38px; transform: rotateZ(-5deg); border-left: 2px solid #2d6a54; } 
+        .b2 { background: #7b1113; height: 46px; transform: translateY(-2px); border-left: 2px solid #a52a2a; } 
+        .b3 { background: #c5a059; height: 35px; transform: rotateZ(3deg); border-left: 2px solid #e2c08d; } 
+        .b4 { background: #003366; height: 42px; transform: rotateZ(1deg); border-left: 2px solid #0055aa; }
+
+        .m-book::before {
+            content: "";
+            position: absolute;
+            top: 10%;
+            left: 3px;
+            width: 2px;
+            height: 80%;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .library-entrance:hover .m-book { transform: translateY(-5px) rotateZ(0deg); }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="menu-icon" onclick="window.parent.postMessage('TOGGLE_MENU', '*')">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="header-center-titles">
+            <h1 class="site-title">نَفَحَاتٌ إِيمَانِيَّةٌ</h1>
+            <span class="sub-title-eng">Nafahat Imaniyah</span>
+        </div>
+
+        <img src="LogoNafahat.png" class="floating-logo-left" alt="Logo">
+    </header>
+
+    <div class="showcase-slider">
+        <div class="ticker-label">جديدنا</div>
+        <div class="slider-window">
+            <div class="slider-track" id="sliderTrack"><span class="slider-item">جاري تحميل النفحات...</span></div>
+        </div>
+        <div class="slider-controls"><button id="toggleSlider">⏸</button></div>
+    </div>
+
+    <div onclick="window.parent.postMessage('OPEN_MORE_PAGE', '*')" class="more-trigger">
+        <span class="more-icon">✨</span><span class="more-text">مَوَاقِيتُ الصَّلَاةِ وَإِضَافَاتٌ ذَكِيَّةٌ</span><span class="more-icon">🕋</span>
+    </div>
+
+    <div class="main-radio-box">
+        <img src="https://i.postimg.cc/vmyLcv33/copilot-image-1753881433233.png" class="radio-img" alt="إذاعة القرآن">
+        <div style="flex-grow: 1; z-index: 2;">
+            <strong style="font-size: 1rem; color: #fff; display: block;">إِذَاعَةُ الْقُرْآنِ الْكَرِيمِ</strong>
+            <span style="font-size: 0.65rem; color: var(--gold); font-weight: 700;">بث مباشر على مدار الساعة</span>
+        </div>
+        <button class="play-btn" onclick="toggleAudio('https://s34.radiolize.com/radio/8050/radio.mp3', this)">▶</button>
+    </div>
+
+    <section class="quran-dynamic-section">
+        <div class="dynamic-header">
+            <div class="dynamic-label" onclick="window.parent.postMessage('GO_MEHRAB', '*')">
+                <span>💎</span> تَأَمُّلَاتٌ إِيمَانِيَّةٌ
+            </div>
+        </div>
+        <iframe src="Mehrab.html?mode=home" id="mehrabIframe" class="mehrab-frame" scrolling="no" allowtransparency="true"></iframe>
+    </section>
+
+    <div class="glass-dashboard">
+        <a href="masbaha.html" class="glass-btn btn-masbaha"><span class="btn-icon">📿</span><span class="btn-label">المسبحة</span></a>
+        <a href="../Textbook/azkar.html" class="glass-btn btn-morning"><span class="btn-icon">☀️</span><span class="btn-label">الصباح</span></a>
+        <a href="../Textbook/azkarNight.html" class="glass-btn btn-evening"><span class="btn-icon">🌙</span><span class="btn-label">المساء</span></a>
+        <a href="khatma.html" class="glass-btn btn-khatma"><span class="btn-icon">📖</span><span class="btn-label">الختمة</span></a>
+    </div>
+
+    <div class="podium-container">
+        <div class="book-showcase-text">
+            <h2>مِائَةُ دُعَاءٍ مِنْ جَوَامِعِ الكَلِمِ وَصِحَاحِ السُّنةِ</h2>
+            <p>أدعية مختارة من مشكاة النبوة تجمع خير الدنيا والآخرة.</p>
+            <a href="../Textbook/hadith100.html" class="explore-btn">تصفح الكتاب</a>
+        </div>
+        <div class="floating-book">
+            <div class="book-side-pages"></div><div class="book-top-pages"></div>
+            <div class="book-cover-design">
+                <div style="color: #fff; font-size: 0.55rem; font-weight: 700; text-align: center; line-height: 1.4;"><span style="color: var(--gold); font-size: 0.7rem;">مِائَةُ دُعَاءٍ</span><br>مِنْ جَوَامِعِ الكَلِمِ</div>
+                <div style="width: 25px; height: 1px; background: var(--gold); margin-top: 8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="audio-section">
+        <div class="audio-strip s1"><div class="strip-header"><div class="strip-title">اَلْمُخْتَصَرُ فِي التَّفْسِيرِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/mukhtasartafsir', this)">▶</button></div><div class="strip-desc">تَفْسِيرٌ مُخْتَصَرٌ لِكُلِّ آيَةٍ.</div></div>
+        <div class="audio-strip s2"><div class="strip-header"><div class="strip-title">حَيَاةُ الصَّحَابَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/sahabah', this)">▶</button></div><div class="strip-desc">صُوَرٌ مِنْ حَيَاةِ الصَّحَابَةِ.</div></div>
+        <div class="audio-strip s3"><div class="strip-header"><div class="strip-title">فِي ظِلَالِ اَلسِّيرَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/fi_zilal_alsiyra', this)">▶</button></div><div class="strip-desc">سيرة نبينا محمد ﷺ.</div></div>
+        <div class="audio-strip s4"><div class="strip-header"><div class="strip-title">اَلرُّقْيَةُ الشَّرْعِيَّةُ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/roqiah', this)">▶</button></div><div class="strip-desc">آيَاتٌ مِنَ الْقُرْآنِ لِلتَّحْصِينِ.</div></div>
+        <div class="audio-strip s5"><div class="strip-header"><div class="strip-title">آيَاتُ السَّكِينَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/sakeenah', this)">▶</button></div><div class="strip-desc">آيَاتٌ تُرِيحُ الْقُلُوبَ.</div></div>
+        <div class="audio-strip s6"><div class="strip-header"><div class="strip-title">تِلَاوَاتٌ خَاشِعَةٌ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/salma', this)">▶</button></div><div class="strip-desc">تلاوات مؤثرة ومختارة.</div></div>
+    </div>
+
+    <a href="../Library/library.html" class="library-entrance">
+        <div class="lib-text">
+            <h3>📖 المَكْتَبَةُ الإِسْلَامِيَّةُ</h3>
+            <p>خَيْرُ جَلِيسٍ في الزَّمَانِ كِتَابُ .. وَمِنْهُ لِأَنْوَارِ الهُدَى أَبْوَابُ</p>
+        </div>
+        <div class="lib-3d-icon">
+            <div class="mini-shelf">
+                <div class="m-book b1"></div>
+                <div class="m-book b2"></div>
+                <div class="m-book b4"></div>
+                <div class="m-book b3"></div>
+            </div>
+        </div>
+    </a>
+
+    <footer class="final-footer"><div class="footer-content"><span>جميع الحقوق محفوظة لموقع</span> <span style="font-weight:900; color:var(--gold);">نَفَحَاتٌ إِيمَانِيَّةٌ</span> <span>| 2026</span></div></footer>
+
+    <audio id="globalAudio"></audio>
+
+    <script src="main.js" type="module"></script>
+    <script>
+        const audio = document.getElementById('globalAudio');
+        let lastBtn = null;
+        function toggleAudio(url, btn) { if (audio.src === url && !audio.paused) { audio.pause(); btn.innerText = "▶"; } else { if (lastBtn) lastBtn.innerText = "▶"; audio.src = url; audio.play(); btn.innerText = "⏸"; lastBtn = btn; } }
+    </script>
+</body>
+</html>

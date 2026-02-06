@@ -1,0 +1,107 @@
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;900&display=swap" rel="stylesheet">
+
+<div id="cinema-intro" style="display: flex; opacity: 0; z-index: 10004; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; align-items: center; justify-content: center; transition: opacity 1.5s ease;">
+    <div class="intro-content">
+        <img src="LogoNafahat.png" class="elegant-logo-img" alt="Logo">
+        
+        <div class="elegant-line"></div>
+        
+        <div class="elegant-sub-container">
+            <p class="elegant-sub">لَنْ يُصْلِحَ آخِرَ هَذِهِ الْأُمَّةِ إِلَّا مَا أَصْلَحَ أَوَّلَهَا</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    body, html { margin: 0; padding: 0; overflow: hidden; touch-action: none; background: #000; height: 100%; }
+    
+    .intro-content { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        width: 100%; 
+        gap: 15px; 
+        transform: translateY(0); /* تم ضبط التوسط بدقة بعد حذف الفيديو */
+    }
+    
+    .elegant-logo-img { 
+        width: 180px; 
+        height: auto; 
+        opacity: 0; 
+        filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+        margin-bottom: 5px;
+    }
+
+    .elegant-line { 
+        height: 1px; 
+        width: 0; 
+        background: linear-gradient(90deg, transparent, #d4af37, transparent); 
+    }
+
+    .elegant-sub { 
+        font-family: 'Cairo', sans-serif; 
+        font-weight: 400; 
+        font-size: 0.85rem; 
+        color: #cecece; 
+        opacity: 0; 
+        margin: 0; 
+        padding: 0 20px; 
+        text-shadow: 0 0 10px rgba(0,0,0,0.8); 
+        text-align: center;
+        line-height: 1.5;
+    }
+    
+    /* تفعيل الأنيميشن */
+    .run-logo { animation: fadeInLogoImg 2.5s ease-out forwards; }
+    .run-line { animation: growLine 2s 0.8s ease-out forwards; }
+    .run-sub { animation: fadeInSub 2.5s 1.5s ease-out forwards; }
+    
+    @keyframes fadeInLogoImg { 
+        0% { opacity: 0; transform: scale(0.9) translateY(10px); } 
+        100% { opacity: 1; transform: scale(1) translateY(0); } 
+    }
+    
+    @keyframes growLine { 
+        0% { width: 0; opacity: 0; } 
+        100% { width: 65%; opacity: 1; } 
+    }
+    
+    @keyframes fadeInSub { 
+        0% { opacity: 0; transform: translateY(10px); } 
+        100% { opacity: 1; transform: translateY(0); } 
+    }
+</style>
+
+<script>
+    // التأكد من بدء السكريبت فور الجلب
+    (function() {
+        // ننتظر قليلاً لضمان تحميل الصورة والخطوط
+        setTimeout(triggerPureCinemaSequence, 300);
+
+        function triggerPureCinemaSequence() {
+            // إبلاغ الصفحة الأب (index) بتشغيل الصوت
+            window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
+            
+            const cinema = document.getElementById('cinema-intro');
+            if(cinema) {
+                cinema.style.opacity = '1';
+                
+                // بدء حركات العناصر فوراً وبالتتابع
+                const logo = cinema.querySelector('.elegant-logo-img');
+                const line = cinema.querySelector('.elegant-line');
+                const sub = cinema.querySelector('.elegant-sub');
+                
+                if(logo) logo.classList.add('run-logo');
+                if(line) line.classList.add('run-line');
+                if(sub) sub.classList.add('run-sub');
+            }
+
+            // الانتقال للموقع بعد انتهاء العرض (7 ثوانٍ كافية جداً للشعار والنص)
+            setTimeout(() => {
+                if(cinema) cinema.style.opacity = '0';
+                window.parent.postMessage('START_SITE_NOW', '*');
+            }, 7500); 
+        }
+    })();
+</script>
