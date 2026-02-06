@@ -1,111 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>نَفَحَاتٌ إِيمَانِيَّةٌ - مسبحة الذاكرين</title>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="masbaha_style.css">
-</head>
-<body id="main-body" onmousedown="forceVibrationAccess()" ontouchstart="forceVibrationAccess()">
-
-    <button class="info-btn-3d" onclick="toggleModal('guide')">❓ الإرشادات</button>
-    <div class="user-rank-3d" id="current-rank" oncontextmenu="return false;">الرتبة: ✨ ذاكر</div>
-
-    <div class="modal" id="appModal" onclick="if(event.target == this) closeAllModals()">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title" style="color:var(--gold); font-weight:900;"></h3>
-            </div>
-            <div class="scrollable-area" id="modal-body"></div>
-            <div class="modal-footer">
-                <button style="background:var(--maroon); border:none; padding:12px; width:100%; border-radius:15px; font-weight:900; color:white; cursor:pointer;" onclick="closeAllModals()">إغلاق والعودة</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="tasbih-card">
-        <div class="progress-section">
-            <div class="progress-label"><span>التقدم نحو الرتبة التالية</span><span id="rank-percent">0%</span></div>
-            <div class="progress-bar-container"><div id="progress-fill"></div></div>
-        </div>
-        <div class="session-header">
-            <div class="session-title">أهداف الجلسات</div>
-            <div class="session-btns">
-                <button class="session-btn active" onclick="setSessionTarget(100)">100</button>
-                <button class="session-btn" onclick="setSessionTarget(500)">500</button>
-                <button class="session-btn" onclick="setSessionTarget(1000)">1000</button>
-            </div>
-        </div>
-        <div id="active-dhikr" style="color:var(--gold); font-weight:900; font-size:1.1rem; height: 1.5rem;">سبحان الله</div>
-        <div class="target-circle-container">
-            <svg class="svg-ring" width="160" height="160"><circle class="ring-bg" cx="80" cy="80" r="70"></circle><circle class="ring-fill" id="target-ring" cx="80" cy="80" r="70"></circle></svg>
-            <div class="bead-3d" id="main-bead" onpointerdown="doCount()" oncontextmenu="return false;"><div id="counter">0</div></div>
-        </div>
-
-        <div class="action-row">
-            <div class="fan-wrapper" id="fanWrapper">
-                <div class="fan-list">
-                    <div class="fan-item" onclick="shareTo('whatsapp')">واتساب</div>
-                    <div class="fan-item" onclick="shareTo('telegram')">تليجرام</div>
-                    <div class="fan-item" onclick="shareTo('twitter')">X</div>
-                </div>
-                <button class="fan-btn-main" onclick="document.getElementById('fanWrapper').classList.toggle('fan-active')">✨ انشر الخير</button>
-            </div>
-            <div class="session-info-box" id="session-display">هدف: 100 / 0</div>
-        </div>
-
-        <div class="global-stats-inner">
-            <h5>🌍 إجمالي تسبيحات العالم</h5>
-            <div class="stat-value-live">
-                <div class="live-dot"></div>
-                <span id="global-counter-display">0</span>
-            </div>
-        </div>
-
-        <div class="dhikr-grid">
-            <button class="opt-btn" onclick="setDhikr('سبحان الله')">سبحان الله</button>
-            <button class="opt-btn" onclick="setDhikr('الحمد لله')">الحمد لله</button>
-            <button class="opt-btn" onclick="setDhikr('لا اله الا الله')">لا اله الا الله</button>
-            <button class="opt-btn" onclick="setDhikr('الله أكبر')">الله أكبر</button>
-            <button class="opt-btn" onclick="setDhikr('لا حول ولا قوه الا بالله')">لا حول ولا قوه الا بالله</button>
-            <button class="opt-btn" onclick="setDhikr('سبحان الله وبحمده')">سبحان الله وبحمده</button>
-            <button class="opt-btn" onclick="setDhikr('سبحان الله العظيم')">سبحان الله العظيم</button>
-            <button class="opt-btn" onclick="setDhikr('اللهم صل علي محمد')">اللهم صل علي محمد</button>
-            <button class="opt-btn" style="grid-column: span 2; background:var(--maroon); color:white; border:none;" onclick="resetCount()">تصفير العداد</button>
-        </div>
-    </div>
-
-    <div class="treasures-section">
-        <div class="section-tag">💎 <span>كنز المسلم الجامع</span></div>
-        <div class="hisn-main-card" onclick="toggleModal('hisn')">
-            <div class="hisn-text">
-                <h4>🛡️ حصن المسلم الكامل</h4>
-                <p>الأذكار، الرقية الشرعية، وأدعية الكتاب والسنة</p>
-            </div>
-            <div class="hisn-badge">تصفح الآن</div>
-        </div>
-    </div>
-
-    <div class="chat-section" id="chat-section">
-        <div class="chat-header-area">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <div class="live-dot"></div>
-                <h2 style="font-size: 1.2rem; color: white; font-weight: 900; text-shadow: 0 2px 5px rgba(0,0,0,0.3);">ملتقى الذاكرين</h2>
-            </div>
-        </div>
-        <div id="chat-box"></div>
-        <div class="chat-inputs">
-            <div style="margin-bottom:10px;"><input type="text" id="uName" placeholder="اسمك الكريم.." style="width:100%; background:rgba(255,255,255,0.07); border:1px solid rgba(46,204,113,0.3); color:white; padding:10px; border-radius:12px; outline:none;"></div>
-            <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px;">
-                <textarea id="uMsg" rows="1" placeholder="اكتب رسالة إيمانية.." style="background:rgba(255,255,255,0.07); border:1px solid rgba(46,204,113,0.3); color:white; padding:10px; border-radius:12px; resize:none; outline:none;"></textarea>
-                <button class="send-btn" style="background: #2ecc71; border: none; padding: 10px 18px; border-radius: 12px; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" onclick="sendMsg()">🕊️</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="masbaha_script.js"></script>
-</body>
-</html>
