@@ -1,19 +1,19 @@
 {
-  "name": "نفحات إيمانية",
-  "short_name": "نفحات",
-  "description": "منهج أهل السنة والجماعة صوتا وكتابة",
-  "start_url": "index.html",
+  "name": "نَفَحَاتٌ إِيمَانِيَّةٌ",
+  "short_name": "نَفَحَاتٌ",
+  "description": "مَنْهَجُ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ صَوْتًا وَكِتَابَةً",
+  "start_url": "/e/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "leader/LogoNafahat.png",
+      "src": "/e/leader/LogoNafahat.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "leader/LogoNafahat.png",
+      "src": "/e/leader/LogoNafahat.png",
       "sizes": "512x512",
       "type": "image/png"
     }
