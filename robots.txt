@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /leader/admin.html
 
-Sitemap: https://myway1661.github.io/TASBIHAT/sitemap.xml
+Sitemap: https://e-nafahat.github.io/e/sitemap.xml
