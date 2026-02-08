@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مباشر - LIVE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-navy: #0a192f;
+            --royal-gold: #d4af37;
+            --neon-green: #39ff14;
+            --deep-dark: #050c16;
+            --text-silver: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--deep-dark);
+            background-image: linear-gradient(180deg, var(--royal-navy) 0%, var(--deep-dark) 100%);
+            color: var(--text-silver);
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-title { text-align: center; margin-bottom: 25px; width: 100%; }
+        .main-title h1 { 
+            font-size: 32px; 
+            margin: 0; 
+            color: var(--royal-gold); 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* لمبة الإشارة النابضة */
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #ff0000;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        .sub-title { font-size: 14px; color: #8892b0; margin-top: 5px; }
+
+        /* قسم الفيديو */
+        .video-wrapper { width: 100%; max-width: 650px; margin-bottom: 20px; }
+        .live-label { 
+            text-align: right; 
+            font-size: 13px; 
+            color: var(--royal-gold); 
+            margin-bottom: 8px; 
+            font-weight: bold;
+        }
+
+        .screen-frame {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            border: 3px solid var(--royal-gold);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+            background: #000;
+        }
+
+        .screen-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        .tv-btns { display: flex; gap: 15px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        
+        .btn-neon {
+            background: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-neon:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* عناوين الأقسام */
+        .section-title {
+            width: 100%;
+            max-width: 650px;
+            text-align: right;
+            margin: 45px 0 20px;
+            font-size: 18px;
+            color: var(--royal-gold);
+            border-right: 4px solid var(--royal-gold);
+            padding-right: 12px;
+            font-weight: bold;
+            clear: both;
+        }
+
+        /* شبكة الإذاعات */
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 20px;
+        }
+
+        .radio-card {
+            background: rgba(10, 25, 47, 0.7);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .radio-card h3 {
+            font-size: 13px;
+            margin: 0 0 12px 0;
+            color: var(--royal-gold);
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        audio { 
+            width: 100%; 
+            height: 30px; 
+            filter: invert(100%) hue-rotate(180deg) brightness(1.5);
+        }
+
+        /* المكتبة الصوتية المعدلة */
+        .audio-library-container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px dashed rgba(212, 175, 55, 0.2);
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .audio-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .audio-row:hover { background: rgba(212, 175, 55, 0.1); }
+        .audio-row:last-child { border-bottom: none; }
+        .audio-label { font-size: 14px; color: #ccd6f6; flex: 1; text-align: right; }
+        .play-icon { color: var(--neon-green); margin-left: 10px; font-size: 16px; }
+
+        .audio-library-container::-webkit-scrollbar { width: 6px; }
+        .audio-library-container::-webkit-scrollbar-thumb { background: var(--royal-gold); border-radius: 10px; }
+
+        /* تعديلات الهاتف لضمان عدم تداخل الأقسام */
+        @media (max-width: 600px) {
+            .radio-grid { grid-template-columns: 1fr; }
+            .main-title h1 { font-size: 26px; }
+            .btn-neon { padding: 8px 15px; font-size: 12px; }
+        }
+        
+/* هذا الكود يمنع ظهور الحدود أو التظليل عند الضغط على أي عنصر في الموقع */
+* {
+    -webkit-tap-highlight-color: transparent; /* يخفي الظل الملون عند اللمس في الهواتف */
+    outline: none; /* يخفي الإطار البرتقالي أو الأزرق */
+}
+
+/* إذا أردت تخصيص الكتب فقط */
+.book-wrapper:focus, .book-wrapper:active {
+    outline: none;
+    border: none;
+}
+    </style>
+</head>
+<body>
+
+    <div class="main-title">
+        <h1>مُبَاشِر <span class="live-dot"></span> LIVE</h1>
+        <div class="sub-title">بث مباشر للقرآن الكريم والعلوم النافعة</div>
+    </div>
+
+    <div class="video-wrapper">
+        <div class="live-label" id="current-title">🔴 البث المباشر لقناتي الحرمين</div>
+        <div class="screen-frame">
+            <iframe id="main-frame" src="https://www.youtube.com/embed/Cm1v4bteXbI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <div class="tv-btns">
+            <button class="btn-neon" onclick="playVid('Cm1v4bteXbI', 'بث مباشر: قناة القرآن', 0)">قناة القرآن</button>
+            <button class="btn-neon" onclick="playVid('1S36GFUqfYY', 'بث مباشر: قناة السنة', 6)">قناة السنة</button>
+        </div>
+    </div>
+
+    <div class="section-title">المنصات الإذاعية</div>
+
+    <div class="radio-grid">
+        <div class="radio-card"><h3>التفسير المطول</h3><audio controls preload="none"><source src="https://backup.qurango.net/radio/tafseer"></audio></div>
+        <div class="radio-card"><h3>نور على الدرب</h3><audio controls preload="none"><source src="https://backup.qurango.net/radio/fatwa"></audio></div>
+        <div class="radio-card"><h3>تفسير القرآن</h3><audio controls preload="none"><source src="https://qurango.net/radio/tafseer"></audio></div>
+        <div class="radio-card"><h3>السيرة والقصص</h3><audio controls preload="none"><source src="https://radio.alukah.net/sirah"></audio></div>
+        <div class="radio-card"><h3>ميراث الأنبياء</h3><audio controls preload="none"><source src="https://radio.al7eah.net/8010/stream"></audio></div>
+        <div class="radio-card"><h3>الحديث وعلومه</h3><audio controls preload="none"><source src="https://radio.alukah.net/hadith"></audio></div>
+    </div>
+
+    <div class="section-title">مكتبة الأناشيد المختارة</div>
+    
+    <div class="audio-library-container">
+        <div class="audio-row" onclick="playVid('id5b6AUTnzM', 'سلمت قلبي', 3)"><span class="play-icon">▶</span><div class="audio-label">سلمت قلبي</div></div>
+        <div class="audio-row" onclick="playVid('5Nksqh6cy90', 'يا مشعلاً للخير', 9)"><span class="play-icon">▶</span><div class="audio-label">يا مشعلاً للخير</div></div>
+        <div class="audio-row" onclick="playVid('9geNMOIYZek', 'تاج راسي', 2)"><span class="play-icon">▶</span><div class="audio-label">تاج راسي</div></div>
+        <div class="audio-row" onclick="playVid('5_KfblEGBzI', 'وإن ضعف المسير', 20)"><span class="play-icon">▶</span><div class="audio-label">وإن ضعف المسير</div></div>
+        <div class="audio-row" onclick="playVid('ribDtv5nZzs', 'أفكاري والمشاعر', 23)"><span class="play-icon">▶</span><div class="audio-label">أفكاري والمشاعر</div></div>
+        <div class="audio-row" onclick="playVid('3dMs3LNfgm4', 'دع الأيام', 10)"><span class="play-icon">▶</span><div class="audio-label">دع الأيام</div></div>
+        <div class="audio-row" onclick="playVid('_yrz2iCpsj0', 'الموت حق', 7)"><span class="play-icon">▶</span><div class="audio-label">الموت حق</div></div>
+        <div class="audio-row" onclick="playVid('mL4E-UCYrzE', 'أمي', 11)"><span class="play-icon">▶</span><div class="audio-label">أمي</div></div>
+        <div class="audio-row" onclick="playVid('6Cd-iP6-IYs', 'سرت والشوق طريقي', 16)"><span class="play-icon">▶</span><div class="audio-label">سرت والشوق طريقي</div></div>
+        <div class="audio-row" onclick="playVid('w0RO1nKOFbk', 'هذا أبي', 3)"><span class="play-icon">▶</span><div class="audio-label">هذا أبي</div></div>
+        <div class="audio-row" onclick="playVid('l2vQCEUw1zg', 'لجودك', 7)"><span class="play-icon">▶</span><div class="audio-label">لجودك</div></div>
+        <div class="audio-row" onclick="playVid('eRlRZiBvmZE', 'فرحة اللقاء', 9)"><span class="play-icon">▶</span><div class="audio-label">فرحة اللقاء</div></div>
+        <div class="audio-row" onclick="playVid('M_gqrFTIjiI', 'فداك العباد', 4)"><span class="play-icon">▶</span><div class="audio-label">فداك العباد</div></div>
+        <div class="audio-row" onclick="playVid('vkyLVpaPlws', 'أرى فجراً', 4)"><span class="play-icon">▶</span><div class="audio-label">أرى فجراً</div></div>
+        <div class="audio-row" onclick="playVid('n1kwLbR2opo', 'محمد يا سيدي', 3)"><span class="play-icon">▶</span><div class="audio-label">محمد يا سيدي</div></div>
+        <div class="audio-row" onclick="playVid('U9ESf9lOQpY', 'سوي الله', 49)"><span class="play-icon">▶</span><div class="audio-label">سوي الله</div></div>
+        <div class="audio-row" onclick="playVid('bMbx90l8buo', 'سكن فؤادك', 20)"><span class="play-icon">▶</span><div class="audio-label">سكن فؤادك</div></div>
+        <div class="audio-row" onclick="playVid('SIIFo5Mt6R8', 'ولما قسا قلبي', 41)"><span class="play-icon">▶</span><div class="audio-label">ولما قسا قلبي</div></div>
+        <div class="audio-row" onclick="playVid('JYG2PNunVeo', 'الحزن فينا', 26)"><span class="play-icon">▶</span><div class="audio-label">الحزن فينا</div></div>
+        <div class="audio-row" onclick="playVid('VMGo5CMYm9U', 'طال ليلي', 35)"><span class="play-icon">▶</span><div class="audio-label">طال ليلي</div></div>
+        <div class="audio-row" onclick="playVid('AqZfVaKJQrU', 'إلى الله نشكو', 4)"><span class="play-icon">▶</span><div class="audio-label">إلى الله نشكو</div></div>
+        <div class="audio-row" onclick="playVid('KHVlhEkMB9M', 'أنا العبد', 2)"><span class="play-icon">▶</span><div class="audio-label">أنا العبد</div></div>
+        <div class="audio-row" onclick="playVid('wLk0mFuUTw0', 'غبت دهراً', 6)"><span class="play-icon">▶</span><div class="audio-label">غبت دهراً</div></div>
+        <div class="audio-row" onclick="playVid('e5ztojqbep8', 'أيقنت', 6)"><span class="play-icon">▶</span><div class="audio-label">أيقنت</div></div>
+        <div class="audio-row" onclick="playVid('1YhHeAxB0uk', 'أعلن توبتي', 12)"><span class="play-icon">▶</span><div class="audio-label">أعلن توبتي</div></div>
+        <div class="audio-row" onclick="playVid('WJwPdiwzrsY', 'من هنا كان اللقاء', 10)"><span class="play-icon">▶</span><div class="audio-label">من هنا كان اللقاء</div></div>
+        <div class="audio-row" onclick="playVid('giOFLYlntYQ', 'كسب القلوب', 15)"><span class="play-icon">▶</span><div class="audio-label">كسب القلوب</div></div>
+        <div class="audio-row" onclick="playVid('HQdimmkgMak', 'الفكر يا إنسان', 1)"><span class="play-icon">▶</span><div class="audio-label">الفكر يا إنسان</div></div>
+        <div class="audio-row" onclick="playVid('_dbDWXh5vWw', 'في حب', 9)"><span class="play-icon">▶</span><div class="audio-label">في حب</div></div>
+        <div class="audio-row" onclick="playVid('6ZD9MP6f_8w', 'غير الزمان', 35)"><span class="play-icon">▶</span><div class="audio-label">غير الزمان</div></div>
+        <div class="audio-row" onclick="playVid('m9lVpo68SRw', 'ليس الغريب', 1)"><span class="play-icon">▶</span><div class="audio-label">ليس الغريب</div></div>
+        <div class="audio-row" onclick="playVid('yOTk90nQIl0', 'كفى يا نفس', 2)"><span class="play-icon">▶</span><div class="audio-label">كفى يا نفس</div></div>
+        <div class="audio-row" onclick="playVid('8e8IpNZVIRQ', 'السبع الطوال', 16)"><span class="play-icon">▶</span><div class="audio-label">السبع الطوال</div></div>
+        <div class="audio-row" onclick="playVid('9Nkm5htaCl0', 'ما وهنا', 138)"><span class="play-icon">▶</span><div class="audio-label">ما وهنا</div></div>
+        <div class="audio-row" onclick="playVid('wTgQ7XbtXMs', 'فداك العباد', 4)"><span class="play-icon">▶</span><div class="audio-label">فداك العباد</div></div>
+        <div class="audio-row" onclick="playVid('gpLKjintr1I', 'سلام سلام', 20)"><span class="play-icon">▶</span><div class="audio-label">سلام سلام</div></div>
+        <div class="audio-row" onclick="playVid('F2C7SaqVOG4', 'إذا المرء لا يرعاك', 31)"><span class="play-icon">▶</span><div class="audio-label">إذا المرء لا يرعاك</div></div>
+    </div>
+
+    <script>
+        function playVid(id, title, start) {
+            document.getElementById('main-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1&start=${start}`;
+            document.getElementById('current-title').innerText = "▶ جاري تشغيل: " + title;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
