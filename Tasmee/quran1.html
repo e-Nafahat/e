@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المُصحح الذكي | نفحات إيمانية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --main-color: #2ecc71; --gold: #d4af37; --error: #e74c3c; --bg: #0a0a0a; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: white; margin: 0; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: var(--gold); font-size: 1.4rem; margin: 0; }
+
+        .quran-box { width: 100%; max-width: 500px; background: #111; padding: 25px; border-radius: 25px; border: 1px solid #222; border-top: 4px solid var(--main-color); box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: center; }
+        
+        /* تأثير إخفاء الآية للمنع من الغش */
+        .aya-text { font-size: 1.7rem; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 2; margin-bottom: 20px; color: #fff; padding: 20px; background: #000; border-radius: 15px; border: 1px solid #1a1a1a; }
+        
+        .hidden-text { filter: blur(8px); opacity: 0.3; user-select: none; transition: 0.5s; }
+        .visible-text { filter: blur(0); opacity: 1; color: var(--main-color); }
+
+        canvas { width: 100%; height: 60px; background: #000; border-radius: 30px; margin-bottom: 20px; }
+
+        .controls { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .btn-3d { width: 100%; padding: 16px; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.1s; }
+        .btn-record { background: var(--main-color); color: #000; box-shadow: 0 5px #27ae60; }
+        .btn-hint { background: #444; color: #fff; font-size: 0.9rem; padding: 10px; }
+        
+        #result-log { margin-top: 15px; font-size: 0.9rem; font-weight: bold; color: var(--gold); }
+        .status-dot { width: 12px; height: 12px; background: #333; border-radius: 50%; display: inline-block; margin-left: 8px; }
+        .status-active { background: var(--main-color); box-shadow: 0 0 10px var(--main-color); }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>اختبار الحفظ الغيبي</h1>
+    <p style="color: #666; font-size: 0.8rem;">سورة النبأ - التسميع من الذاكرة</p>
+</div>
+
+<div class="quran-box">
+    <div style="color: var(--gold); font-weight: bold; margin-bottom: 10px;">سورة النبأ</div>
+    
+    <div class="aya-text" id="ayaContainer">
+        <span id="ayaDisplay" class="hidden-text">عَمَّ يَتَسَاءَلُونَ (1)</span>
+    </div>
+    
+    <canvas id="viz"></canvas>
+    
+    <div class="controls">
+        <button class="btn-3d btn-record" id="micBtn">إبدأ التسميع الآن</button>
+        <button class="btn-3d btn-hint" onclick="showHint()">إظهار تلميح (للمساعدة)</button>
+    </div>
+
+    <div id="result-log"><span class="status-dot" id="statusDot"></span> جاهز للاستماع...</div>
+</div>
+
+<script>
+    // السورة كاملة للمقارنة (بدون تشكيل لزيادة دقة التعرف)
+    const ayasCompare = [
+        "عم يتساءلون", "عن النبإ العظيم", "الذي هم فيه مختلفون", "كلا سيعلمون", "ثم كلا سيعلمون", "ألم نجعل الأرض مهادا", "والجبال أوتادا", "وخلقناكم أزواجا", "وجعلنا نومكم سباتا", "وجعلنا الليل لباسا", "وجعلنا النهار معاشا", "وبنينا فوقكم سبعا شدادا", "وجعلنا سراجا وهاجا", "وأنزلنا من المعصرات ماء ثجاجا", "لنخرج به حبا ونباتا", "وجنات ألفافا", "إن يوم الفصل كان ميقاتا", "يوم ينفخ في الصور فتأتون أفواجا", "وفتحت السماء فكانت أبوابا", "وسيرت الجبال فكانت سرابا", "إن جهنم كانت مرصادا", "للطاغين مآبا", "لابثين فيها أحقابا", "لا يذوقون فيها بردا ولا شرابا", "إلا حميما وغساقا", "جزاء وفاقا", "إنهم كانوا لا يرجون حسابا", "وكذبوا بآياتنا كذابا", "وكل شيء أحصيناه كتابا", "فذوقوا فلن نزيدكم إلا عذابا", "إن للمتقين مفازا", "حدائق وأعنابا", "وكواعب أترابا", "وكأسا دهاقا", "لا يسمعون فيها لغوا ولا كذابا", "جزاء من ربك عطاء حسابا", "رب السماوات والأرض وما بينهما الرحمن لا يملكون منه خطابا", "يوم يقوم الروح والملائكة صفا لا يتكلمون إلا من أذن له الرحمن وقال صوابا", "ذلك اليوم الحق فمن شاء اتخذ إلى ربه مآبا", "إنا أنذرناكم عذابا قريبا يوم ينظر المرء ما قدمت يداه ويقول الكافر يا ليتني كنت ترابا"
+    ];
+
+    const ayasDisplay = [
+        "عَمَّ يَتَسَاءَلُونَ (1)", "عَنِ النَّبَإِ الْعَظِيمِ (2)", "الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ (3)", "كَلَّا سَيَعْلَمُونَ (4)", "ثُمَّ كَلَّا سَيَعْلَمُونَ (5)", "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا (6)", "وَالْجِبَالَ أَوْتَادًا (7)", "وَخَلَقْنَاكُمْ أَزْوَاجًا (8)", "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا (9)", "وَجَعَلْنَا اللَّيْلَ لِبَاسًا (10)", "وَجَعَلْنَا النَّهارَ مَعَاشًا (11)", "وَبَنَيْنَا فَوْقَكُمْ سَبْعًا شِدَادًا (12)", "وَجَعَلْنَا سِرَاجًا وَهَّاجًا (13)", "وَأَنزَلْنَا مِنَ الْمُعْصِرَاتِ مَاءً ثَجَّاجًا (14)", "لِّنُخْرِجَ بِهِ حَبًّا وَنَبَاتًا (15)", "وَجَنَّاتٍ أَلْفَافًا (16)", "إِنَّ يَوْمَ الْفَصْلِ كَانَ مِيَقَاتًا (17)", "يَوْمَ يُنفَخُ فِي الصُّورِ فَتَأْتُونَ أَفْوَاجًا (18)", "وَفُتِحَتِ السَّمَاءُ فَكَانَتْ أَبْوابًا (19)", "وَسُيِّرَتِ الْجِبَالُ فَكَانَتْ سَرَابًا (20)", "إِنَّ جَهَنَّمَ كَانَتْ مِرْصَادًا (21)", "لِّلطَّاغِينَ مَآبًا (22)", "لَّابِثِينَ فِيهَا أَحْقَابًا (23)", "لَّا يَذُوقُونَ فِيهَا بَرْدًا وَلَا شَرَابًا (24)", "إِلَّا حَمِيمًا وَغَسَّاقًا (25)", "جَزَاءً وِفَاقًا (26)", "إِنَّهُمْ كَانُوا لَا يَرْجُونَ حِسَابًا (27)", "وَكَذَّبُوا بِآياتِنَا كِذَّابًا (28)", "وَكُلَّ شَيْءٍ أَحْصَيْنَاهُ كِتَابًا (29)", "فَذُوقُوا فَلَن نَّزِيدَكُمْ إِلَّا عَذَابًا (30)", "إِنَّ لِلْمُتَّقِينَ مَفَازًا (31)", "حَدَائِقَ وَأَعْنَابًا (32)", "وَكَوَاعِبَ أَتْرَابًا (33)", "وَكَأْسًا دِهَاقًا (34)", "لَّا يَسْمَعُونَ فِيهَا لَغْوًا وَلَا كِذَّابًا (35)", "جَزَاءً مِّن رَّبِّكَ عَطَاءً حِسَابًا (36)", "رَّبِّ السَّمَاوَاتِ وَالْأَرْضِ وَمَا بَيْنَهُمَا الرَّحْمَنِ لَا يَمْلِكُونَ مِنْهُ خِطَابًا (37)", "يَوْمَ يَقُومُ الرُّوحُ وَالْمَلَائِكَةُ صَفًّا لَّا يَتَكَلَّمُونَ إِلَّا مَنْ أَذِنَ لَهُ الرَّحْمَنُ وَقَالَ صَوَابًا (38)", "ذَلِكَ الْيَوْمُ الْحَقُّ فَمَن شَاءَ اتَّخَذَ إِلَى رَبِّهِ مَآبًا (39)", "إِنَّا أَنذَرْنَاكُمْ عَذَابًا قَرِيبًا يَوْمَ يَنظُرُ الْمَرْءُ مَا قَدَّمَتْ يَدَاهُ وَيَقُولُ الْكَافِرُ يَا لَيْتَنِي كُنتُ تُرَابًا (40)"
+    ];
+
+    let currentIdx = 0;
+    const ayaDisplay = document.getElementById('ayaDisplay');
+    const resultLog = document.getElementById('result-log');
+    const micBtn = document.getElementById('micBtn');
+    const statusDot = document.getElementById('statusDot');
+
+    // إعداد التعرف على الكلام
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'ar-SA';
+    recognition.interimResults = true;
+    recognition.continuous = true;
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[event.results.length - 1][0].transcript.trim();
+        resultLog.innerHTML = `سمعتك تقول: <span style="color:#fff">${transcript}</span>`;
+        
+        // مقارنة ذكية: إذا نطق الطالب جزءاً كبيراً من الآية صح
+        if (transcript.includes(ayasCompare[currentIdx].substring(0, 5))) {
+            showSuccess();
+        }
+    };
+
+    function showSuccess() {
+        ayaDisplay.classList.remove('hidden-text');
+        ayaDisplay.classList.add('visible-text');
+        resultLog.innerText = "ممتاز! انتقل للآية التالية";
+        statusDot.classList.add('status-active');
+    }
+
+    function showHint() {
+        ayaDisplay.classList.remove('hidden-text');
+        setTimeout(() => {
+            if (!statusDot.classList.contains('status-active')) {
+                ayaDisplay.classList.add('hidden-text');
+            }
+        }, 1500); // إظهار الآية لثانية واحدة ثم إخفاؤها
+    }
+
+    function nextAya() {
+        if (currentIdx < ayasDisplay.length - 1) {
+            currentIdx++;
+            ayaDisplay.innerText = ayasDisplay[currentIdx];
+            ayaDisplay.className = "hidden-text";
+            statusDot.classList.remove('status-active');
+            resultLog.innerText = "اسمعك.. اقرأ الآية التالية";
+        } else {
+            resultLog.innerText = "هنيئاً لك ختم سورة النبأ غيباً!";
+        }
+    }
+
+    micBtn.onclick = () => {
+        try {
+            recognition.start();
+            micBtn.innerText = "النظام يستمع الآن...";
+            micBtn.style.background = "#444";
+            startVisualizer();
+        } catch(e) {
+            recognition.stop();
+            micBtn.innerText = "إبدأ التسميع الآن";
+            micBtn.style.background = "var(--main-color)";
+        }
+    };
+
+    // كود المحرك البصري (الموجات)
+    function startVisualizer() {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            const audioCtx = new AudioContext();
+            const analyser = audioCtx.createAnalyser();
+            const source = audioCtx.createMediaStreamSource(stream);
+            source.connect(analyser);
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+            const canvas = document.getElementById('viz');
+            const ctx = canvas.getContext('2d');
+
+            function draw() {
+                requestAnimationFrame(draw);
+                analyser.getByteFrequencyData(dataArray);
+                ctx.fillStyle = "#000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                let barWidth = (canvas.width / dataArray.length) * 2.5;
+                let x = 0;
+                for(let i=0; i<dataArray.length; i++) {
+                    let barHeight = dataArray[i]/2;
+                    ctx.fillStyle = `rgb(46, ${barHeight + 100}, 113)`;
+                    ctx.fillRect(x, (canvas.height - barHeight)/2, barWidth, barHeight);
+                    x += barWidth + 1;
+                }
+            }
+            draw();
+        });
+    }
+
+    // ربط زر "الآية التالية" بـ Enter للسهولة
+    document.addEventListener('keydown', (e) => { if(e.key === "Enter") nextAya(); });
+</script>
+
+</body>
+</html>
