@@ -121,6 +121,14 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); transition: transform 0.2s;
         }
 
+        /* تنسيق زر التسميع الجديد */
+        .btn-smart-tasmee {
+            background: #2ecc71; color: #000; border: none; padding: 15px; border-radius: 20px;
+            font-weight: 900; width: 100%; cursor: pointer; margin-top: 10px;
+            box-shadow: 0 6px #27ae60; transition: 0.1s; font-family: 'Cairo';
+        }
+        .btn-smart-tasmee:active { transform: translateY(4px); box-shadow: 0 2px #27ae60; }
+
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.95); display: none;
@@ -161,6 +169,17 @@
             font-feature-settings: "cv01", "cv02", "ss01", "locl";
         }
         .dua-content b { color: var(--gold-secondary); font-weight: 400; }
+
+        /* تنسيق مربع كلمة السر الراقي */
+        .pass-input {
+            width: 80%; background: var(--navy-light); border: 2px solid var(--gold-primary);
+            border-radius: 12px; padding: 12px; color: var(--white); text-align: center;
+            font-size: 1.2rem; margin: 15px 0; letter-spacing: 5px; font-weight: 900;
+        }
+        .admin-note {
+            font-size: 0.7rem; color: #94a3b8; background: rgba(0,0,0,0.2);
+            padding: 8px; border-radius: 10px; margin-top: 10px; border: 1px solid rgba(179, 147, 89, 0.1);
+        }
         
         * {
             -webkit-tap-highlight-color: transparent;
@@ -174,6 +193,20 @@
     </style>
 </head>
 <body id="mainBody">
+
+<div class="modal-overlay" id="passModal">
+    <div class="achievement-card" id="passCard">
+        <div class="card-icon">🔐</div>
+        <div class="card-title txt" style="font-weight: 900; color: var(--gold-primary);">دُخُولُ الْمُبَرْمِجِينَ</div>
+        <div class="card-body txt" style="font-size: 0.85rem; color: #cbd5e1; margin-top: 5px;">هَذِهِ الْمِيزَةُ تَحْتَ التَّطْوِيرِ وَمَحْمِيَّةٌ لِأَغْرَاضِ الضَّبْطِ التِّقَنِيِّ.</div>
+        <input type="password" id="adminPass" class="pass-input" placeholder="****">
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="toggle-btn btn-dua" style="padding: 10px 20px;" onclick="validatePass()">تَحَقُّق</button>
+            <button class="toggle-btn" style="padding: 10px 20px;" onclick="closeModal('passModal')">إِلْغَاء</button>
+        </div>
+        <div class="admin-note txt">⚠️ تَنْبِيهٌ: الْوُصُولُ لِهَذِهِ الصَّفْحَةِ مَحْصُورٌ فَقَطْ لِفَرِيقِ التَّطْوِيرِ (المبرمجين).</div>
+    </div>
+</div>
 
 <div class="modal-overlay" id="saveModal">
     <div class="achievement-card" id="saveCard">
@@ -197,7 +230,7 @@
             <br><br>
             <b>اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَسْأَلَةِ،</b> وَخَيْرَ الدُّعَاءِ، وَخَيْرَ النَّجَاحِ، وَخَيْرَ الْعِلْمِ، وَخَيْرَ الْعَمَلِ، وَخَيْرَ الثَّوَابِ، وَخَيْرَ الْحَيَاةِ، وَخَيْرَ الْمَمَاتِ، وَثَبِّتْنِي وَثَقِّلْ مَوَازِينِي، وَحَقِّقْ إِيمَانِي، وَارْفَعْ دَرَجَتِي، وَتَقَبَّلْ صَلَاتِي، وَاغْفِرْ خَطِيئَاتِي، وَأَسْأَلُكَ الْعُلَا مِنَ الْجَنَّةِ. 
             <br><br>
-            <b>اللَّهُمَّ اقْسِمْ لَنَا مِنْ خَشْيَتِكَ</b> مَا تَحُولُ بِهِ بَيْنَنَا وَبَيْنَ مَعْصِيَتِكَ، وَمِنْ طَاعَتِكَ مَا تُبَلِّغُنَا بِهَا جَنَّتَكَ، وَمِنَ الْيَقِينِ مَا تُهَوُّنُ بِهِ عَلَيْنَا مَصَائِبَ الدُّنْيَا، وَمَتِّعْنَا بِأَسْمَاعِنَا وَأَبْصَارِنَا وَقُوَّتِنَا مَا أَحْيَيْتَنَا، وَاجْعَلْهُ الْوارِثَ مِنَّا.
+            <b>اللَّهُمَّ اقْسِمْ لَنَا مِنْ خَشْيَتِكَ</b> مَا تَحُولُ بِهِ بَيْنَنَا وَبَيْنَ مَعْصِيَتِكَ، وَمِنْ طَاعَتِكَ مَا تُبَلِّغُنَا بِهَا جَنَّتَكَ، وَمِنَ الْيَقِينِ مَا تُهَوُّنُ بِهِ عَلَيْنَا مَصَائِبَ الدُّنْيَا، وَمَتِّعْنَا بِأَسْمَاعِنَا وَأَبْصَارِنَا وَقُوَّتِنَا مَا أَحْيَيْتَنَا، وَاجْعَلِ الْوارِثَ مِنَّا.
             <br><br>
             <b>اللَّهُمَّ انْصُرِ الْإِسْلَامَ وَأَعِزَّ الْمُسْلِمِينَ،</b> اللَّهُمَّ كُنْ لِإِخْوَانِنَا الْمُسْتَضْعَفِينَ فِي كُلِّ مَكَانٍ، اللَّهُمَّ اجْبُرْ كَسْرَهُمْ، وَارْحَمْ ضَعْفَهُمْ، وَتَوَلَّ أَمْرَهُمْ، اللَّهُمَّ انْصُرْهُمْ عَلَى مَنْ عَادَاهُمْ، وَأَرِنَا فِي الظَّالِمِينَ عَجَائِبَ قُدْرَتِكَ، يَا قَوِيُّ يَا عَزِيزُ يَا رَبَّ الْعَالَمِينَ.
         </div>
@@ -224,7 +257,7 @@
         <p class="txt">أَهْلًا بِكَ يَا حَامِلَ الْقُرْآنِ فِي رِحْلَتِكَ نَحْوَ الْخَتْمِ. لِتَسْتَخْدِمَ هَذَا الْمُؤَشِّرَ بِدِقَّةٍ، إِلَيْكَ الْقَوَاعِدَ الْأَسَاسِيَّةَ لِتَقْسِيمِ الْمُصْحَفِ:</p>
         <div class="txt" style="font-size: 0.82rem; color: var(--gold-secondary); font-weight: 700; line-height: 1.8;">
             • <b>نِظَامُ الصَّفَحَاتِ:</b> يَتَكَوَّنُ الْمُصْحَفُ (طَبْعَةُ الْمَدِينَةِ) مِنْ <b>٦٠٤ صَفْحَة</b>. كُلُّ جُزْءٍ يَعْدِلُ <b>٢٠ صَفْحَة</b> تَقْرِيبًا.<br>
-            • <b>نِظَامُ الْأَرْبَاعِ:</b> يَنْقَسِمُ الْقُرْآنُ إِلَى <b>٦٠ حِزْبًا</b>، كُلُّ حِزْبٍ فِيهِ <b>٤ أَرْبَاعٍ</b>، إِذَنْ الْمُصْحَفُ كَامِلًا هُوَ <b>٢٤٠ رُبْعًا</b>.<br>
+            • <b>نِظَامُ الْأَرْبَاعِ:</b> يَنْقَسِمُ الْقُرْآنُ إِلَى <b>٦٠ حِزْبًا</b>، كُلُّ حِزْبٍ فِيهِ <b>٤ أَرْبَاعٍ</b>، إِذَنْ الْمُصْحَفُ كَامِلًا هُهُ <b>٢٤٠ رُبْعًا</b>.<br>
             • <b>كَيْفَ تَحْسِبُ؟</b> إِذَا قَرَأْتَ "رُبْعَ حِزْبٍ" وَاحِدٍ، فَقَدْ أَنْجَزْتَ <b>٠.٤٪</b> مِنَ الْقُرْآنِ.
         </div>
         <div class="divider"></div>
@@ -258,6 +291,8 @@
         </div>
     </div>
 
+    <button class="btn-smart-tasmee" onclick="openModal('passModal')">🎙️ اِخْتِبَارُ التَّسْمِيعِ الذَّكِيِّ (تَجْرِيبِي)</button>
+
     <button class="save-btn" onclick="save()">💾 حِفْظُ تَقَدُّمِي الْحَالِي</button>
 
     <div class="section-title txt">خُطَّةُ خَتْمِ الْقُرْآنِ ✨</div>
@@ -271,6 +306,17 @@
 
 <script>
     let currentUnit = 'page', maxVal = 604, isTashkeel = true, currentTheme = 'navy';
+
+    // دالة التحقق من كلمة السر المبرمجين
+    function validatePass() {
+        const pass = document.getElementById('adminPass').value;
+        if (pass === "FM1661") {
+            window.location.href = "../Tasmee/quran1.html";
+        } else {
+            alert("عذراً، كلمة السر خاصة بالمبرمجين فقط!");
+            document.getElementById('adminPass').value = "";
+        }
+    }
 
     function toggleTheme() {
         const body = document.getElementById('mainBody'), btn = document.getElementById('themeBtn');
@@ -286,6 +332,7 @@
     function closeModal(id) { 
         document.querySelector(`#${id} .achievement-card`).classList.remove('show'); 
         setTimeout(() => { document.getElementById(id).style.display = 'none'; }, 300); 
+        if(id === 'passModal') document.getElementById('adminPass').value = "";
     }
 
     function toggleTashkeel() {
