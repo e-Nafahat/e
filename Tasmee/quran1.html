@@ -15,11 +15,11 @@
 
         .quran-box { width: 100%; max-width: 500px; background: #111; padding: 25px; border-radius: 25px; border: 1px solid #222; border-top: 4px solid var(--main-color); box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: center; }
         
-        .aya-text { font-size: 1.6rem; min-height: 160px; display: flex; align-items: center; justify-content: center; line-height: 1.8; margin-bottom: 20px; padding: 20px; background: #000; border-radius: 15px; border: 1px solid #1a1a1a; }
+        .aya-text { font-size: 1.6rem; min-height: 160px; display: flex; align-items: center; justify-content: center; line-height: 1.8; margin-bottom: 20px; padding: 20px; background: #000; border-radius: 15px; border: 1px solid #1a1a1a; transition: 0.3s; }
         
-        /* بديل السواد: نص رمادي واضح للمبرمج يتحول للأخضر عند النجاح */
-        .waiting-text { color: #333; transition: 0.5s; }
-        .success-text { color: var(--main-color); text-shadow: 0 0 15px var(--main-color); transform: scale(1.05); }
+        /* تحسين الرؤية بناءً على الصور */
+        .waiting-text { color: #555; text-shadow: none; } 
+        .success-text { color: var(--main-color) !important; text-shadow: 0 0 15px var(--main-color); font-weight: 900; }
 
         canvas { width: 100%; height: 60px; background: #000; border-radius: 30px; margin-bottom: 20px; border: 1px solid #222; }
 
@@ -30,16 +30,15 @@
         .btn-hint { background: #222; color: #888; border: 1px solid #333; }
         
         #result-log { margin-top: 15px; font-size: 0.9rem; font-weight: bold; color: var(--gold); min-height: 25px; }
-        .status-dot { width: 10px; height: 10px; background: #333; border-radius: 50%; display: inline-block; margin-left: 8px; }
-        .status-active { background: var(--main-color); box-shadow: 0 0 10px var(--main-color); }
-        .dev-tag { font-size: 0.6rem; color: #444; margin-top: 20px; }
+        .status-dot { width: 12px; height: 12px; background: #333; border-radius: 50%; display: inline-block; margin-left: 8px; transition: 0.3s; }
+        .status-active { background: var(--main-color) !important; box-shadow: 0 0 15px var(--main-color); }
     </style>
 </head>
 <body>
 
 <div class="header">
     <h1>اخْتِبَارُ الْحِفْظِ الْغَيْبِيِّ</h1>
-    <p style="color: #666; font-size: 0.8rem;">سُورَةُ النَّبَأِ - النُّسْخَةُ الْمُصَحَّحَةُ</p>
+    <p style="color: #666; font-size: 0.8rem;">سُورَةُ النَّبَأِ - تَصْحِيحُ الْمَسَارِ</p>
 </div>
 
 <div class="quran-box">
@@ -59,18 +58,18 @@
     <div id="result-log"><span class="status-dot" id="statusDot"></span> جَاهِزٌ لِلِاسْتِمَاعِ...</div>
 </div>
 
-<div class="dev-tag">DEVELOPER MODE | TASBIHAT SYSTEM 2026</div>
-
 <script>
+    // مصفوفة الآيات كاملة (بدون اختصار)
     const ayasCompare = ["عم يتساءلون", "عن النبا العظيم", "الذي هم فيه مختلفون", "كلا سيعلمون", "ثم كلا سيعلمون", "الم نجعل الارض مهادا", "والجبال اوتادا", "وخلقناكم ازواجا", "وجعلنا نومكم سباتا", "وجعلنا الليل لباسا", "وجعلنا النهار معاشا", "وبنينا فوقكم سبعا شدادا", "وجعلنا سراجا وهاجا", "وانزلنا من المعصرات ماء ثجاجا", "لنخرج به حبا ونباتا", "وجنات الفافا", "ان يوم الفصل كان ميقاتا", "يوم ينفخ في الصور فتاتون افواجا", "وفتحت السماء فكانت ابوابا", "وسيرت الجبال فكانت سرابا", "ان جهنم كانت مرصادا", "للطاغين مآبا", "لابثين فيها احقابا", "لا يذوقون فيها بردا ولا شرابا", "الا حميما وغساقا", "جزاء وفاقا", "انهم كانوا لا يرجون حسابا", "وكذبوا بآياتنا كذابا", "وكل شيء احصيناه كتابا", "فذوقوا فلن نزيدكم إلا عذابا", "ان للمتقين مفازا", "حدائق واعنابا", "وكواعب اترابا", "وكأسا دهاقا", "لا يسمعون فيها لغوا ولا كذابا", "جزاء من ربك عطاء حسابا", "رب السماوات والارض وما بينهما الرحمن لا يملكون منه خطابا", "يوم يقوم الروح والملائكة صفا لا يتكلمون الا من اذن له الرحمن وقال صوابا", "ذلك اليوم الحق فمن شاء اتخذ الى ربه مآبا", "انا انذرناكم عذابا قريبا يوم ينظر المرء ما قدمت يداه ويقول الكافر يا ليتني كنت ترابا"];
 
-    const ayasDisplay = ["عَمَّ يَتَسَاءَلُونَ (1)", "عَنِ النَّبَإِ الْعَظِيمِ (2)", "الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ (3)", "كَلَّا سَيَعْلَمُونَ (4)", "ثُمَّ كَلَّا سَيَعْلَمُونَ (5)", "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا (6)", "وَالْجِبَالَ أَوْتَادًا (7)", "وَخَلَقْنَاكُمْ أَزْوَاجًا (8)", "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا (9)", "وَجَعَلْنَا اللَّيْلَ لِبَاسًا (10)", "وَجَعَلْنَا النَّهارَ مَعَاشًا (11)", "وَبَنَيْنَا فَوْقَكُمْ سَبْعًا شِدَادًا (12)", "وَجَعَلْنَا سِرَاجًا وَهَّاجًا (13)", "وَأَنزَلْنَا مِنَ الْمُعْصِرَاتِ مَاءً ثَجَّاجًا (14)", "لِّنُخْرِجَ بِهِ حَبًّا وَنَبَاتًا (15)", "وَجَنَّاتٍ أَلْفَافًا (16)", "إِنَّ يَوْمَ الْفَصْلِ كَانَ مِيَقَاتًا (17)", "يَوْمَ يُنفَخُ فِي الصُّورِ فَتَأْتُونَ أَفْوَاجًا (18)", "وَفُتِحَتِ السَّمَاءُ فَكَانَتْ أَبْوابًا (19)", "وَسُيِّرَتِ الْجِبَالُ فَكَانَتْ سَرَابًا (20)", "إِنَّ جَهَنَّمَ كَانَتْ مِرْصَادًا (21)", "لِّلطَّاغِينَ مَآبًا (22)", "لَّابِثِينَ فِيهَا أَحْقَابًا (23)", "لَّا يَذُوقُونَ فِيهَا بَرْدًا وَلَا شَرَابًا (24)", "إِلَّا حَمِيمًا وَغَسَّاقًا (25)", "جَجَاءً وِفَاقًا (26)", "إِنَّهُمْ كَانُوا لَا يَرْجُونَ حِسَابًا (27)", "وَكَذَّبُوا بِآياتِنَا كِذَّابًا (28)", "وَكُلَّ شَيْءٍ أَحْصَيْنَاهُ كِتَابًا (29)", "فَذُوقُوا فَلَن نَّزِيدَكُمْ إِلَّا عَذَابًا (30)", "إِنَّ لِلْمُتَّقِينَ مَفَازًا (31)", "حَدَائِقَ وَأَعْنَابًا (32)", "وَكَوَاعِبَ أَتْرَابًا (33)", "وَكَأْسًا دِهَاقًا (34)", "لَّا يَسْمَعُونَ فِيهَا لَغْوًا وَلَا كِذَّابًا (35)", "جَزَاءً مِّن رَّبِّكَ عطَاءً حِسَابًا (36)", "رَّبِّ السَّمَاوَاتِ وَالْأَرْضِ وَمَا بَيْنَهُمَا الرَّحْمَنِ لَا يَمْلِكُونَ مِنْهُ خِطَابًا (37)", "يَوْمَ يَقُومُ الرُّوحُ وَالْمَلَائِكَةُ صَفًّا لَّا يَتَكَلَّمُونَ إِلَّا مَنْ أَذِنَ لَهُ الرَّحْمَنُ وَقَالَ صَوَابًا (38)", "ذَلِكَ الْيَوْمُ الْحَقُّ فَمَن شَاءَ اتَّخَذَ إِلَى رَبِّهِ مَآبًا (39)", "إِنَّا أَنذَرْنَاكُمْ عَذَابًا قَرِيبًا يَوْمَ يَنظُرُ الْمَرْءُ مَا قَدَّمَتْ يَدَاهُ وَيَقُولُ الْكَافِرُ يَا لَيْتَنِي كُنتُ تُرَابًا (40)"];
+    const ayasDisplay = ["عَمَّ يَتَسَاءَلُونَ (1)", "عَنِ النَّبَإِ الْعَظِيمِ (2)", "الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ (3)", "كَلَّا سَيَعْلَمُونَ (4)", "ثُمَّ كَلَّا سَيَعْلَمُونَ (5)", "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا (6)", "وَالْجِبَالَ أَوْتَادًا (7)", "وَخَلَقْنَاكُمْ أَزْوَاجًا (8)", "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا (9)", "وَجَعَلْنَا اللَّيْلَ لِبَاسًا (10)", "وَجَعَلْنَا النَّهارَ مَعَاشًا (11)", "وَبَنَيْنَا فَوْقَكُمْ سَبْعًا شِدَادًا (12)", "وَجَعَلْنَا سِرَاجًا وَهَّاجًا (13)", "وَأَنزَلْنَا مِنَ الْمُعْصِرَاتِ مَاءً ثَجَّاجًا (14)", "لِّنُخْرِجَ بِهِ حَبًّا وَنَبَاتًا (15)", "وَجَنَّاتٍ أَلْفَافًا (16)", "إِنَّ يَوْمَ الْفَصْلِ كَانَ مِيَقَاتًا (17)", "يَوْمَ يُنفَخُ فِي الصُّورِ فَتَأْتُونَ أَفْوَاجًا (18)", "وَفُتِحَتِ السَّمَاءُ فَكَانَتْ أَبْوابًا (19)", "وَسُيِّرَتِ الْجِبَالُ فَكَانَتْ سَرَابًا (20)", "إِنَّ جَهَنَّمَ كَانَتْ مِرْصَادًا (21)", "لِّلطَّاغِينَ مَآبًا (22)", "لَّابِثِينَ فِيهَا أَحْقَابًا (23)", "لَّا يَذُوقُونَ فِيهَا بَرْدًا وَلَا شَرَابًا (24)", "إِلَّا حَمِيمًا وَغَسَّاقًا (25)", "جَزَاءً وِفَاقًا (26)", "إِنَّهُمْ كَانُوا لَا يَرْجُونَ حِسَابًا (27)", "وَكَذَّبُوا بِآياتِنَا كِذَّابًا (28)", "وَكُلَّ شَيْءٍ أَحْصَيْنَاهُ كِتَابًا (29)", "فَذُوقُوا فَلَن نَّزِيدَكُمْ إِلَّا عَذَابًا (30)", "إِنَّ لِلْمُتَّقِينَ مَفَازًا (31)", "حَدَائِقَ وَأَعْنَابًا (32)", "وَكَوَاعِبَ أَتْرَابًا (33)", "وَكَأْسًا دِهَاقًا (34)", "لَّا يَسْمَعُونَ فِيهَا لَغْوًا وَلَا كِذَّابًا (35)", "جَزَاءً مِّن رَّبِّكَ عَطَاءً حِسَابًا (36)", "رَّبِّ السَّمَاوَاتِ وَالْأَرْضِ وَمَا بَيْنَهُمَا الرَّحْمَنِ لَا يَمْلِكُونَ مِنْهُ خِطَابًا (37)", "يَوْمَ يَقُومُ الرُّوحُ وَالْمَلَائِكَةُ صَفًّا لَّا يَتَكَلَّمُونَ إِلَّا مَنْ أَذِنَ لَهُ الرَّحْمَنُ وَقَالَ صَوَابًا (38)", "ذَلِكَ الْيَوْمُ الْحَقُّ فَمَن شَاءَ اتَّخَذَ إِلَى رَبِّهِ مَآبًا (39)", "إِنَّا أَنذَرْنَاكُمْ عَذَابًا قَرِيبًا يَوْمَ يَنظُرُ الْمَرْءُ مَا قَدَّمَتْ يَدَاهُ وَيَقُولُ الْكَافِرُ يَا لَيْتَنِي كُنتُ تُرَابًا (40)"];
 
     let currentIdx = 0;
     let isListening = false;
     const ayaDisplay = document.getElementById('ayaDisplay');
     const resultLog = document.getElementById('result-log');
     const micBtn = document.getElementById('micBtn');
+    const statusDot = document.getElementById('statusDot');
 
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'ar-SA';
@@ -79,49 +78,62 @@
 
     recognition.onresult = (event) => {
         let transcript = event.results[event.results.length - 1][0].transcript.trim();
-        resultLog.innerHTML = `سَمِعْتُ: <span style="color:#fff">${transcript}</span>`;
+        resultLog.innerHTML = `<span class="status-dot status-active"></span> سَمِعْتُ: <span style="color:#fff">${transcript}</span>`;
         
-        let target = ayasCompare[currentIdx].replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
-        let spoken = transcript.replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
+        // تنظيف النص للمقارنة
+        let cleanTranscript = transcript.replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
+        let targetAya = ayasCompare[currentIdx].replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
 
-        // مقارنة ذكية: إذا نطق الطالب كلمتين صحيحتين على الأقل من الآية
-        if (spoken.includes(target) || target.split(' ').some(word => spoken.includes(word) && word.length > 2)) {
-            successProcess();
+        // منطق النجاح الجديد: البحث عن الكلمات الأساسية
+        let targetWords = targetAya.split(' ');
+        let matchCount = targetWords.filter(word => cleanTranscript.includes(word)).length;
+
+        if (cleanTranscript.includes(targetAya) || matchCount >= 2 || (targetWords.length === 1 && cleanTranscript.includes(targetAya))) {
+            triggerSuccess();
         }
     };
 
-    function successProcess() {
+    function triggerSuccess() {
+        if(ayaDisplay.className === "success-text") return; // منع التكرار
+        
         ayaDisplay.className = "success-text";
-        document.getElementById('statusDot').classList.add('status-active');
+        statusDot.className = "status-dot status-active";
         
         setTimeout(() => {
             if (currentIdx < ayasDisplay.length - 1) {
                 currentIdx++;
                 ayaDisplay.innerText = ayasDisplay[currentIdx];
                 ayaDisplay.className = "waiting-text";
-                document.getElementById('statusDot').classList.remove('status-active');
-                resultLog.innerText = "اقْرَأْ الْآيَةَ التَّالِيَةَ...";
+                statusDot.className = "status-dot";
+                resultLog.innerText = "أَحْسَنْتَ! اقْرَأْ الْآيَةَ التَّالِيَةَ...";
             } else {
-                resultLog.innerText = "تَمَّ الْخَتْمُ بِنَجَاحٍ!";
-                recognition.stop();
+                resultLog.innerText = "هَنِيئاً لَكَ خَتْمُ السُّورَةِ!";
+                micBtn.click();
             }
-        }, 2000);
+        }, 2500);
     }
 
     function showHint() {
+        // إظهار التلميح عبر تفتيح لون الآية الحالية مؤقتاً
+        let oldColor = ayaDisplay.style.color;
         ayaDisplay.style.color = "var(--gold)";
+        ayaDisplay.style.filter = "none";
         setTimeout(() => { 
-            if (ayaDisplay.className !== "success-text") ayaDisplay.style.color = "#333"; 
+            if(ayaDisplay.className !== "success-text") {
+                ayaDisplay.style.color = ""; 
+            }
         }, 2000);
     }
 
     micBtn.onclick = () => {
         if (!isListening) {
-            recognition.start();
-            isListening = true;
-            micBtn.innerText = "إِيقَافُ التَّسْمِيعِ";
-            micBtn.classList.add('active');
-            startVisualizer();
+            try {
+                recognition.start();
+                isListening = true;
+                micBtn.innerText = "إِيقَافُ التَّسْمِيعِ";
+                micBtn.classList.add('active');
+                startVisualizer();
+            } catch(e) { console.error("Mic Error"); }
         } else {
             recognition.stop();
             isListening = false;
@@ -132,13 +144,14 @@
 
     function startVisualizer() {
         navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            const audioCtx = new AudioContext();
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const analyser = audioCtx.createAnalyser();
             const source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
             const canvas = document.getElementById('viz');
             const ctx = canvas.getContext('2d');
+
             function draw() {
                 if(!isListening) return;
                 requestAnimationFrame(draw);
