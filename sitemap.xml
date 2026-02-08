@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://myway1661.github.io/TASBIHAT/index.html</loc>
+    <loc>https://e-nafahat.github.io/e/index.html</loc>
     <priority>1.0</priority>
   </url>
 
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/nawawi.html</loc><priority>0.9</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/hadith100.html</loc><priority>0.9</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/azkar.html</loc><priority>0.9</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/azkarNight.html</loc><priority>0.8</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/bayqonia.html</loc><priority>0.8</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/athkar-sleep.html</loc><priority>0.8</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/Textbook/AZKRONY.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/nawawi.html</loc><priority>0.9</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/hadith100.html</loc><priority>0.9</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/azkar.html</loc><priority>0.9</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/azkarNight.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/bayqonia.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/athkar-sleep.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Textbook/AZKRONY.html</loc><priority>0.8</priority></url>
 
   <url>
-    <loc>https://myway1661.github.io/TASBIHAT/Library/library.html</loc>
+    <loc>https://e-nafahat.github.io/e/Library/library.html</loc>
     <priority>0.8</priority>
   </url>
 
-  <url><loc>https://myway1661.github.io/TASBIHAT/leader/FrontSmart.html</loc><priority>0.7</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/leader/Mehrab.html</loc><priority>0.7</priority></url>
-  <url><loc>https://myway1661.github.io/TASBIHAT/leader/khatma.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/FrontSmart.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/Mehrab.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/khatma.html</loc><priority>0.7</priority></url>
 </urlset>
