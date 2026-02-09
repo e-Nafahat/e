@@ -2,7 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = { 
-    apiKey: "AIzaSyCLiOPn_j8XsO2zdpg3IxYPtXdw5S7h0pc", 
+    // تَمَّ حَذْفُ الْمِفْتَاحِ الْمُسَرَّبِ لِتَأْمِينِ الْمَوْقِعِ وَإِغْلَاقِ الثُّغْرَةِ
+    apiKey: "", 
     authDomain: "smart-web-3f6c3.firebaseapp.com", 
     projectId: "smart-web-3f6c3", 
     storageBucket: "smart-web-3f6c3.firebasestorage.app", 
