@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
+    <link rel="manifest" href="/e/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="نفحات">
+
     <meta name="google-site-verification" content="xxXB4Y8Tlx1hQQAUzb_KNMtpvvUyPhBt2SfB6yNBpuA" />
 
     <title>نفحات إيمانية | المنهج الصافي والذكر الحكيم</title>
@@ -16,7 +21,7 @@
     
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="نفحات إيمانية">
-    <meta property="og:title" content="نفحات إيمانية | ميراث نبوي يضيء حياتك">
+    <meta property="og:title" content="نَـفَـحَـاتٌ إِيـمَـانِـيَّـةٌ | مِـيـرَاثٌ نَـبَـوِيٌّ">
     <meta property="og:description" content="نفحات إيمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج أهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
     <meta property="og:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
     <meta property="og:url" content="https://e-nafahat.github.io/e/">
@@ -157,7 +162,13 @@
     </div>
 
     <script>
-        // السكريبت الخاص بك كاملاً كما هو لضمان بقاء الوظائف البرمجية
+        // إِضَافَةُ Service Worker لِتَمْكِينِ التَّثْبِيتِ كَتَطْبِيقٍ
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/e/sw.js').catch(err => console.log('SW registration failed:', err));
+            });
+        }
+
         let isAdmin = false;
         const globalIntroAudio = new Audio('leader/intro11.mp3');
         globalIntroAudio.preload = 'auto';
