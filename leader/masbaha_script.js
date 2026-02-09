@@ -1,5 +1,6 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyBl2Jm-KH1TXRWZKcdYLaRQ0LAJJXh6VpE",
+    // تم حذف المفتاح المسرب لحماية حسابك من التجميد
+    apiKey: "", 
     authDomain: "mywaysite-86618.firebaseapp.com",
     projectId: "mywaysite-86618",
     databaseURL: "https://mywaysite-86618-default-rtdb.firebaseio.com/",
