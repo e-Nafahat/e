@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المصحح الصارم | نفحات إيمانية</title>
+    <title>الْمُصَحِّحُ الصَّارِمُ | نَفَحَاتٌ إِيمَانِيَّةٌ</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --main-color: #2ecc71; --gold: #d4af37; --bg: #0a0a0a; --error: #e74c3c; }
@@ -12,12 +12,13 @@
 
         .quran-box { width: 100%; max-width: 500px; background: #111; padding: 25px; border-radius: 25px; border: 1px solid #222; border-top: 4px solid var(--main-color); text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
         
-        .aya-text { font-size: 1.8rem; min-height: 140px; display: flex; align-items: center; justify-content: center; line-height: 1.8; margin-bottom: 20px; padding: 20px; background: #000; border-radius: 15px; border: 2px solid #1a1a1a; color: #888; transition: 0.3s; }
+        .aya-text { font-size: 1.8rem; min-height: 140px; display: flex; align-items: center; justify-content: center; line-height: 1.8; margin-bottom: 20px; padding: 20px; background: #000; border-radius: 15px; border: 2px solid #1a1a1a; color: #fff; transition: 0.3s; font-weight: bold; }
         .success-flash { color: var(--main-color) !important; text-shadow: 0 0 20px var(--main-color); border-color: var(--main-color); }
 
-        canvas { width: 100%; height: 50px; background: #000; border-radius: 25px; margin-bottom: 20px; }
+        canvas { width: 100%; height: 60px; background: #000; border-radius: 25px; margin-bottom: 20px; }
 
-        .btn-record { width: 100%; padding: 18px; border: none; border-radius: 15px; font-family: 'Cairo'; font-weight: 900; cursor: pointer; font-size: 1.2rem; background: var(--main-color); color: #000; box-shadow: 0 6px #1e8449; }
+        .btn-record { width: 100%; padding: 18px; border: none; border-radius: 15px; font-family: 'Cairo'; font-weight: 900; cursor: pointer; font-size: 1.2rem; background: var(--main-color); color: #000; box-shadow: 0 6px #1e8449; transition: 0.2s; }
+        .btn-record:active { transform: translateY(3px); box-shadow: 0 3px #1e8449; }
         .btn-record.active { background: var(--error); color: #fff; box-shadow: 0 6px #c0392b; }
 
         #monitor { margin-top: 20px; padding: 15px; background: #000; border-radius: 12px; border: 1px dashed #333; text-align: right; }
@@ -25,6 +26,8 @@
         .yellow { background: #f1c40f; box-shadow: 0 0 10px #f1c40f; }
         .green { background: var(--main-color); box-shadow: 0 0 10px var(--main-color); }
         .red { background: var(--error); box-shadow: 0 0 10px var(--error); }
+        
+        .nav-back { margin-top: 15px; color: #666; text-decoration: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -47,10 +50,11 @@
     </div>
 </div>
 
+<a href="../Library/library.html" class="nav-back">الْعَوْدَةُ إِلَى الْمَكْتَبَةِ</a>
+
 <script>
-    // النصوص الأصلية والمبسطة (بدون تشكيل للمقارنة)
-    const ayasCompare = ["عم يتساءلون", "عن النبا العظيم", "الذي هم فيه مختلفون", "كلا سيعلمون", "ثم كلا سيعلمون"];
-    const ayasDisplay = ["عَمَّ يَتَسَاءَلُونَ (1)", "عَنِ النَّبَإِ الْعَظِيمِ (2)", "الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ (3)", "كَلَّا سَيَعْلَمُونَ (4)", "ثُمَّ كَلَّا سَيَعْلَمُونَ (5)"];
+    const ayasCompare = ["عم يتساءلون", "عن النبا العظيم", "الذي هم فيه مختلفون", "كلا سيعلمون", "ثم كلا سيعلمون", "الم نجعل الارض مهادا", "والجبال اوتادا", "وخلقناكم ازواجا", "وجعلنا نومكم سباتا", "وجعلنا الليل لباسا"];
+    const ayasDisplay = ["عَمَّ يَتَسَاءَلُونَ (1)", "عَنِ النَّبَإِ الْعَظِيمِ (2)", "الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ (3)", "كَلَّا سَيَعْلَمُونَ (4)", "ثُمَّ كَلَّا سَيَعْلَمُونَ (5)", "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا (6)", "وَالْجِبَالَ أَوْتَادًا (7)", "وَخَلَقْنَاكُمْ أَزْوَاجًا (8)", "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا (9)", "وَجَعَلْنَا اللَّيْلَ لِبَاسًا (10)"];
     
     let currentIdx = 0;
     let isListening = false;
@@ -60,17 +64,16 @@
     const spokenText = document.getElementById('spokenText');
     const micBtn = document.getElementById('micBtn');
 
-    // تفعيل Google Speech Services بأقصى إعدادات
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new Recognition();
 
     recognition.lang = 'ar-SA';
-    recognition.interimResults = true; // نتائج فورية لسرعة الاستجابة
+    recognition.interimResults = true;
     recognition.continuous = true;
 
     recognition.onstart = () => {
         statusDot.className = "status-dot yellow";
-        statusLabel.innerText = "متصل بخدمات Google.. اقرأ بدقة";
+        statusLabel.innerText = "جَارٍ الِاسْتِمَاعُ.. اقْرَأْ بِدِقَّةٍ";
     };
 
     recognition.onresult = (event) => {
@@ -81,19 +84,11 @@
         
         spokenText.innerText = transcript;
         
-        // تنظيف النص للمقارنة (إزالة الهمزات والتاء المربوطة)
-        let target = ayasCompare[currentIdx].replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
-        let spoken = transcript.replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
+        let cleanSpoken = transcript.replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/[\u064B-\u065F]/g, "").trim();
+        let cleanTarget = ayasCompare[currentIdx].replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').trim();
 
-        // شرط النجاح الصارم: يجب أن تحتوي الجملة على الآية الصحيحة
-        if (spoken.includes(target)) {
+        if (cleanSpoken.includes(cleanTarget)) {
             handleSuccess();
-        } else {
-            // إذا بدأ يتكلم كلاماً غريباً تظهر اللمبة الحمراء (تحذير من الخطأ)
-            if(transcript.length > target.length) {
-                statusDot.className = "status-dot red";
-                statusLabel.innerText = "خطأ في التلاوة.. أعد الآية";
-            }
         }
     };
 
@@ -102,7 +97,7 @@
 
         ayaDisplay.classList.add('success-flash');
         statusDot.className = "status-dot green";
-        statusLabel.innerText = "أحسنت! تلاوة صحيحة";
+        statusLabel.innerText = "أَحْسَنْتَ! تِلَاوَةٌ صَحِيحَةٌ";
 
         setTimeout(() => {
             if (currentIdx < ayasDisplay.length - 1) {
@@ -111,18 +106,19 @@
                 ayaDisplay.classList.remove('success-flash');
                 statusDot.className = "status-dot yellow";
                 spokenText.innerText = "...";
-                
-                // إعادة تشغيل المحرك لتنظيف الذاكرة وضمان عدم التداخل
-                recognition.stop();
+                recognition.stop(); 
             } else {
-                statusLabel.innerText = "تمت السورة بفضل الله";
+                statusLabel.innerText = "تَمَّ الِاخْتِبَارُ بِنَجَاحٍ";
+                isListening = false;
                 recognition.stop();
+                micBtn.innerText = "إِعَادَةُ التَّسْمِيعِ";
+                micBtn.classList.remove('active');
             }
-        }, 1500);
+        }, 1200);
     }
 
     recognition.onend = () => {
-        if (isListening) recognition.start(); // ضمان استمرار الاستماع
+        if (isListening) recognition.start();
     };
 
     micBtn.onclick = () => {
@@ -133,13 +129,13 @@
             micBtn.classList.add('active');
             startVisualizer();
         } else {
-            location.reload(); // إعادة تحميل للتصفير الكامل
+            location.reload();
         }
     };
 
     function startVisualizer() {
         navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            const audioCtx = new AudioContext();
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const analyser = audioCtx.createAnalyser();
             const source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
@@ -152,15 +148,17 @@
                 analyser.getByteFrequencyData(dataArray);
                 ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 let x = 0;
-                for(let i=0; i<dataArray.length; i+=12) {
+                for(let i=0; i<dataArray.length; i+=10) {
                     let barHeight = dataArray[i]/2;
                     ctx.fillStyle = "#2ecc71";
                     ctx.fillRect(x, (canvas.height - barHeight)/2, 3, barHeight);
-                    x += 6;
+                    x += 5;
                 }
             }
             draw();
-        }).catch(() => {});
+        }).catch(() => {
+            statusLabel.innerText = "تَعَذَّرَ فَتْحُ الْمِيكْرُوفُونِ";
+        });
     }
 </script>
 </body>
