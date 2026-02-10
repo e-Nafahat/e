@@ -3,163 +3,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الْمُصَحِّحُ الصَّارِمُ | نَفَحَاتٌ إِيمَانِيَّةٌ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>مُصَحِّحُ نَفَحَاتٍ | الِاخْتِبَارُ الشَّامِلُ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --main-color: #2ecc71; --gold: #d4af37; --bg: #0a0a0a; --error: #e74c3c; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); color: white; margin: 0; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
+        :root { 
+            --main: #2ecc71; 
+            --gold: #d4af37; 
+            --bg: #0a192f; 
+            --card: #112240; 
+            --red: #e74c3c; 
+            --blue: #3498db;
+            --purple: #9b59b6;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: white; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 
-        .quran-box { width: 100%; max-width: 500px; background: #111; padding: 25px; border-radius: 25px; border: 1px solid #222; border-top: 4px solid var(--main-color); text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+        .header { text-align: center; margin-bottom: 15px; }
+        .header img { width: 55px; filter: drop-shadow(0 0 5px var(--gold)); }
+        .header h1 { color: var(--gold); font-size: 1.1rem; margin-top: 5px; }
+
+        /* حاوية أدوات التحكم العلوية */
+        .top-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 450px;
+            margin-bottom: 15px;
+        }
+
+        .surah-selector { 
+            flex: 2;
+            background: rgba(52, 152, 219, 0.1); 
+            color: var(--blue); border: 2px solid var(--blue); 
+            padding: 8px 10px; border-radius: 12px; 
+            font-weight: 700 !important; font-size: 0.85rem;
+            text-align: center; cursor: pointer;
+            appearance: none; -webkit-appearance: none;
+            transition: 0.3s;
+        }
         
-        .aya-text { font-size: 1.8rem; min-height: 140px; display: flex; align-items: center; justify-content: center; line-height: 1.8; margin-bottom: 20px; padding: 20px; background: #000; border-radius: 15px; border: 2px solid #1a1a1a; color: #fff; transition: 0.3s; font-weight: bold; }
-        .success-flash { color: var(--main-color) !important; text-shadow: 0 0 20px var(--main-color); border-color: var(--main-color); }
+        .surah-selector option { background: var(--card); color: white; }
 
-        canvas { width: 100%; height: 60px; background: #000; border-radius: 25px; margin-bottom: 20px; }
+        .btn-view-quran-small { 
+            flex: 1;
+            background: rgba(212, 175, 55, 0.1); 
+            color: var(--gold); border: 2px solid var(--gold);
+            padding: 8px 10px; border-radius: 12px;
+            font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 5px; transition: 0.3s;
+        }
+        .btn-view-quran-small:active { transform: scale(0.95); background: var(--gold); color: #000; }
 
-        .btn-record { width: 100%; padding: 18px; border: none; border-radius: 15px; font-family: 'Cairo'; font-weight: 900; cursor: pointer; font-size: 1.2rem; background: var(--main-color); color: #000; box-shadow: 0 6px #1e8449; transition: 0.2s; }
-        .btn-record:active { transform: translateY(3px); box-shadow: 0 3px #1e8449; }
-        .btn-record.active { background: var(--error); color: #fff; box-shadow: 0 6px #c0392b; }
+        .heat-map { display: flex; width: 100%; max-width: 450px; height: 6px; background: #222; border-radius: 3px; margin-bottom: 15px; overflow: hidden; }
+        .heat-unit { flex: 1; border-right: 1px solid #000; transition: 0.5s; background: #333; }
 
-        #monitor { margin-top: 20px; padding: 15px; background: #000; border-radius: 12px; border: 1px dashed #333; text-align: right; }
-        .status-dot { width: 15px; height: 15px; background: #333; border-radius: 50%; display: inline-block; vertical-align: middle; margin-left: 8px; }
-        .yellow { background: #f1c40f; box-shadow: 0 0 10px #f1c40f; }
-        .green { background: var(--main-color); box-shadow: 0 0 10px var(--main-color); }
-        .red { background: var(--error); box-shadow: 0 0 10px var(--error); }
+        .quran-card {
+            width: 100%; max-width: 450px; background: var(--card); border-radius: 25px;
+            padding: 25px; border: 1px solid rgba(212, 175, 55, 0.2); position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5); border-bottom: 6px solid #0a1221;
+        }
+
+        .aya-display {
+            font-family: 'Amiri', serif;
+            font-size: 1.35rem; line-height: 2; min-height: 100px;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; margin-bottom: 20px; transition: 0.01s;
+            color: var(--main); font-weight: 700;
+        }
+        .is-hidden { opacity: 0 !important; }
+
+        .info-card-box { display: none; background: rgba(0,0,0,0.4); border: 1px solid var(--gold); border-radius: 12px; padding: 10px; margin-bottom: 15px; font-size: 0.75rem; color: #eee; text-align: center; line-height: 1.5; }
+
+        .tafseer-box { display: none; background: rgba(0,0,0,0.6); border: 1px solid var(--main); border-radius: 15px; padding: 15px; margin-bottom: 15px; font-size: 0.9rem; line-height: 1.6; color: #fff; text-align: justify; border-bottom: 4px solid var(--main); }
         
-        .nav-back { margin-top: 15px; color: #666; text-decoration: none; font-size: 0.9rem; }
+        .karim-box { display: none; background: rgba(52, 152, 219, 0.1); border: 1px solid var(--blue); border-radius: 15px; padding: 15px; margin-bottom: 15px; font-size: 0.85rem; line-height: 1.6; color: #fff; text-align: right; border-right: 5px solid var(--blue); }
+
+        .timer-box { font-size: 0.8rem; color: #666; margin-bottom: 10px; text-align: center; }
+
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: 900; font-size: 1rem; cursor: pointer; position: relative; transition: 0.1s; }
+        .btn-main { background: var(--main); color: #000; box-shadow: 0 5px #1e8449; }
+        .btn-main:active { top: 3px; box-shadow: 0 2px #1e8449; }
+        .btn-main:disabled { background: #555; box-shadow: none; color: #888; cursor: not-allowed; }
+        
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .btn-tool { padding: 10px; border-radius: 12px; border: none; font-weight: bold; font-size: 0.8rem; cursor: pointer; display: none; color: white; transition: 0.2s; }
+        .btn-saadi { background: #16a085; border-bottom: 3px solid #0e6655; }
+        .btn-karim { background: var(--blue); border-bottom: 3px solid #2471a3; }
+        .btn-tool:active { transform: translateY(2px); border-bottom: 1px solid transparent; }
+
+        /* ستايل المساعدة المطور */
+        .help-section { margin-top: 10px; text-align: center; }
+        .btn-help-trigger { background: var(--purple); color: white; border-radius: 15px; padding: 12px; font-weight: bold; border: none; width: 100%; cursor: pointer; box-shadow: 0 4px #7d3c98; }
+        .btn-help-trigger:active { transform: translateY(2px); box-shadow: 0 2px #7d3c98; }
+        .help-input-area { display: none; margin-top: 10px; background: rgba(155, 89, 182, 0.1); padding: 10px; border-radius: 15px; border: 1px solid var(--purple); }
+        .help-input-area input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--purple); background: var(--bg); color: white; text-align: center; margin-top: 5px; }
+
+        .btn-save { background: #333; color: white; padding: 12px; font-size: 0.8rem; border-radius: 12px; margin-top: 15px; width: 100%; border: 1px solid #444; cursor: pointer; }
+
+        .quran-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; flex-direction: column; overflow-y: auto; padding: 20px; }
+        .quran-modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; }
+        .quran-modal-content { font-family: 'Amiri', serif; font-size: 1.5rem; line-height: 2.5; text-align: justify; color: #f9f9f9; padding: 10px; direction: rtl; }
+        .close-modal { background: var(--red); color: white; border: none; border-radius: 10px; padding: 8px 15px; font-weight: bold; cursor: pointer; }
+
+        .nav-tools { width: 100%; max-width: 450px; margin-top: 20px; text-align: center; }
+        .nav-link { color: var(--gold); text-decoration: none; font-weight: bold; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div class="quran-box">
-    <h2 style="color:var(--gold); font-size:1.2rem; margin-top:0;">الْمُصَحِّحُ الصَّارِمُ (لَا لِلْغِشِّ)</h2>
-    
-    <div class="aya-text" id="ayaDisplay">عَمَّ يَتَسَاءَلُونَ (1)</div>
-    
-    <canvas id="viz"></canvas>
-    
-    <button class="btn-record" id="micBtn">بَدْءُ التَّسْمِيعِ الْآَنَ</button>
+<div class="header">
+    <img src="../leader/LogoNafahat.png" alt="Logo">
+    <h1>مُصَحِّحُ النَّفَحَاتِ الشَّامِلُ</h1>
+</div>
 
-    <div id="monitor">
-        <div style="margin-bottom:10px;">
-            <div class="status-dot" id="statusDot"></div>
-            <span id="statusLabel" style="font-size:0.9rem; font-weight:bold;">النظام متوقف</span>
+<div class="top-controls">
+    <select id="surahSelect" class="surah-selector">
+        <option value="">اختر السورة...</option>
+    </select>
+    
+    <button class="btn-view-quran-small" onclick="openQuranModal()">
+        📖 الصُّحُفُ
+    </button>
+</div>
+
+<div class="heat-map" id="heatMap"></div>
+
+<div class="quran-card">
+    <div class="timer-box">زَمَنُ الِاسْتِحْضَارِ: <span id="timer">0.0</span> ثانية</div>
+    
+    <div id="infoCardBox" class="info-card-box"></div>
+    
+    <div id="tafseerSaadi" class="tafseer-box"></div>
+    <div id="karimBox" class="karim-box"></div>
+
+    <div id="ayaText" class="aya-display is-hidden">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    
+    <div class="action-grid">
+        <button id="saadiBtn" class="btn-tool btn-saadi" onclick="getSaadiTafseer()">📖 التفسير التفاعلي</button>
+        <button id="karimBtn" class="btn-tool btn-karim" onclick="getKarimGuidance()">🎙️ إرشادات التلاوة</button>
+    </div>
+
+    <button id="actionBtn" class="btn btn-main">اِكْشِفِ الْآيَةَ</button>
+    
+    <div class="help-section" id="helpSection" style="display:none;">
+        <button id="helpBtn" class="btn-help-trigger" onclick="requestAyaHelp()">💡 طلب مساعدة (4)</button>
+        <div id="helpInputArea" class="help-input-area">
+            <small style="color:var(--purple)">اكتب الكلمة التالية لتستطيع الإكمال:</small>
+            <input type="text" id="helpWordInput" placeholder="..." oninput="validateHelpWord(this.value)">
         </div>
-        <div style="font-size:0.85rem; color:#666;">مَا سَمِعَهُ النِّظَامُ: <span id="spokenText" style="color:var(--gold); font-weight:bold;">...</span></div>
+    </div>
+    
+    <button id="saveProgressBtn" class="btn btn-save">💾 حِفْظُ التَّقَدُّمِ وَالتَّوَقُّفِ عِنْدَ هَذِهِ الْآيَةِ</button>
+</div>
+
+<div id="quranModal" class="quran-modal">
+    <div class="quran-modal-header">
+        <h2 id="modalTitle" style="color:var(--gold); margin:0; font-size:1.2rem;">المصحف الإلكتروني</h2>
+        <button class="close-modal" onclick="closeQuranModal()">إغلاق ✕</button>
+    </div>
+    <div id="quranTextContent" class="quran-modal-content">
+        يرجى اختيار سورة أولاً لعرضها هنا...
     </div>
 </div>
 
-<a href="../Library/library.html" class="nav-back">الْعَوْدَةُ إِلَى الْمَكْتَبَةِ</a>
+<div class="nav-tools">
+    <span id="saveStatus" style="color:var(--gold); font-weight:bold; font-size: 0.75rem;"></span><br>
+    <a href="../leader/home.html" class="nav-link">🏠 الْعَوْدَةُ لِلصَّفْحَةِ الرَّئِيسِيَّةِ</a>
+</div>
 
 <script>
-    const ayasCompare = ["عم يتساءلون", "عن النبا العظيم", "الذي هم فيه مختلفون", "كلا سيعلمون", "ثم كلا سيعلمون", "الم نجعل الارض مهادا", "والجبال اوتادا", "وخلقناكم ازواجا", "وجعلنا نومكم سباتا", "وجعلنا الليل لباسا"];
-    const ayasDisplay = ["عَمَّ يَتَسَاءَلُونَ (1)", "عَنِ النَّبَإِ الْعَظِيمِ (2)", "الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ (3)", "كَلَّا سَيَعْلَمُونَ (4)", "ثُمَّ كَلَّا سَيَعْلَمُونَ (5)", "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا (6)", "وَالْجِبَالَ أَوْتَادًا (7)", "وَخَلَقْنَاكُمْ أَزْوَاجًا (8)", "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا (9)", "وَجَعَلْنَا اللَّيْلَ لِبَاسًا (10)"];
-    
+    const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الخمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+    const select = document.getElementById('surahSelect');
+    surahNames.forEach((name, i) => {
+        let opt = document.createElement('option');
+        opt.value = i + 1;
+        opt.innerHTML = (i + 1) + ". " + name;
+        select.appendChild(opt);
+    });
+
+    let activeData = [{ full: "اختر سورة للبدء", meta: "" }];
     let currentIdx = 0;
-    let isListening = false;
-    const ayaDisplay = document.getElementById('ayaDisplay');
-    const statusDot = document.getElementById('statusDot');
-    const statusLabel = document.getElementById('statusLabel');
-    const spokenText = document.getElementById('spokenText');
-    const micBtn = document.getElementById('micBtn');
+    let isRevealed = false;
+    let startTime, timerInterval;
+    let helpCount = 4;
+    let isHelpActive = false;
 
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new Recognition();
+    const ayaText = document.getElementById('ayaText');
+    const actionBtn = document.getElementById('actionBtn');
+    const timerDisplay = document.getElementById('timer');
+    const infoCardBox = document.getElementById('infoCardBox');
+    const heatMap = document.getElementById('heatMap');
+    const saadiBtn = document.getElementById('saadiBtn');
+    const karimBtn = document.getElementById('karimBtn');
+    const tafseerSaadi = document.getElementById('tafseerSaadi');
+    const karimBox = document.getElementById('karimBox');
+    const helpSection = document.getElementById('helpSection');
+    const helpBtn = document.getElementById('helpBtn');
+    const helpInputArea = document.getElementById('helpInputArea');
+    const helpWordInput = document.getElementById('helpWordInput');
 
-    recognition.lang = 'ar-SA';
-    recognition.interimResults = true;
-    recognition.continuous = true;
+    select.onchange = async function(e, savedIdx = 0) {
+        if(!this.value) return;
+        actionBtn.innerText = "جاري التحميل...";
+        try {
+            const res = await fetch(`https://api.alquran.cloud/v1/surah/${this.value}`);
+            const json = await res.json();
+            const revelationType = json.data.revelationType === 'Meccan' ? 'مكية' : 'مدنية';
 
-    recognition.onstart = () => {
-        statusDot.className = "status-dot yellow";
-        statusLabel.innerText = "جَارٍ الِاسْتِمَاعُ.. اقْرَأْ بِدِقَّةٍ";
+            activeData = json.data.ayahs.map(a => ({
+                full: a.text,
+                meta: `✨ سورة ${revelationType} | الآية: ${a.numberInSurah} | الجزء: ${a.juz} | الحزب: ${a.hizbQuarter}`
+            }));
+            
+            currentIdx = savedIdx;
+            helpCount = 4;
+            initHeatMap();
+            resetAyaUI();
+            updateQuranModalContent(json.data);
+        } catch(err) {
+            actionBtn.innerText = "خطأ في الاتصال";
+        }
     };
 
-    recognition.onresult = (event) => {
-        let transcript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript;
-        }
-        
-        spokenText.innerText = transcript;
-        
-        let cleanSpoken = transcript.replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/[\u064B-\u065F]/g, "").trim();
-        let cleanTarget = ayasCompare[currentIdx].replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').trim();
-
-        if (cleanSpoken.includes(cleanTarget)) {
-            handleSuccess();
-        }
-    };
-
-    function handleSuccess() {
-        if(ayaDisplay.classList.contains('success-flash')) return;
-
-        ayaDisplay.classList.add('success-flash');
-        statusDot.className = "status-dot green";
-        statusLabel.innerText = "أَحْسَنْتَ! تِلَاوَةٌ صَحِيحَةٌ";
-
-        setTimeout(() => {
-            if (currentIdx < ayasDisplay.length - 1) {
-                currentIdx++;
-                ayaDisplay.innerText = ayasDisplay[currentIdx];
-                ayaDisplay.classList.remove('success-flash');
-                statusDot.className = "status-dot yellow";
-                spokenText.innerText = "...";
-                recognition.stop(); 
-            } else {
-                statusLabel.innerText = "تَمَّ الِاخْتِبَارُ بِنَجَاحٍ";
-                isListening = false;
-                recognition.stop();
-                micBtn.innerText = "إِعَادَةُ التَّسْمِيعِ";
-                micBtn.classList.remove('active');
+    function updateQuranModalContent(data) {
+        const content = document.getElementById('quranTextContent');
+        document.getElementById('modalTitle').innerText = "سورة " + data.name;
+        let fullHtml = `<div style="text-align:center; color:var(--gold); margin-bottom:20px;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
+        data.ayahs.forEach(aya => {
+            let text = aya.text;
+            if (aya.numberInSurah === 1 && data.number !== 1 && data.number !== 9) {
+                text = text.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ ", "");
             }
-        }, 1200);
+            fullHtml += `${text} <span style="color:var(--gold); font-family:sans-serif; font-size:1.1rem;">﴿${aya.numberInSurah}﴾</span> `;
+        });
+        content.innerHTML = fullHtml;
     }
 
-    recognition.onend = () => {
-        if (isListening) recognition.start();
-    };
+    function openQuranModal() {
+        if(!select.value) { alert("من فضلك اختر سورة أولاً"); return; }
+        document.getElementById('quranModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
 
-    micBtn.onclick = () => {
-        if (!isListening) {
-            recognition.start();
-            isListening = true;
-            micBtn.innerText = "إِيقَافُ التَّسْمِيعِ";
-            micBtn.classList.add('active');
-            startVisualizer();
-        } else {
-            location.reload();
-        }
-    };
+    function closeQuranModal() {
+        document.getElementById('quranModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 
-    function startVisualizer() {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const analyser = audioCtx.createAnalyser();
-            const source = audioCtx.createMediaStreamSource(stream);
-            source.connect(analyser);
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            const canvas = document.getElementById('viz');
-            const ctx = canvas.getContext('2d');
-            function draw() {
-                if(!isListening) return;
-                requestAnimationFrame(draw);
-                analyser.getByteFrequencyData(dataArray);
-                ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-                let x = 0;
-                for(let i=0; i<dataArray.length; i+=10) {
-                    let barHeight = dataArray[i]/2;
-                    ctx.fillStyle = "#2ecc71";
-                    ctx.fillRect(x, (canvas.height - barHeight)/2, 3, barHeight);
-                    x += 5;
-                }
-            }
-            draw();
-        }).catch(() => {
-            statusLabel.innerText = "تَعَذَّرَ فَتْحُ الْمِيكْرُوفُونِ";
+    function initHeatMap() {
+        heatMap.innerHTML = '';
+        activeData.forEach((_, idx) => {
+            const unit = document.createElement('div');
+            unit.className = 'heat-unit';
+            if(idx < currentIdx) unit.style.background = '#444';
+            heatMap.appendChild(unit);
         });
     }
+
+    function resetAyaUI() {
+        isRevealed = false;
+        isHelpActive = false;
+        ayaText.style.opacity = "0";
+        ayaText.classList.add('is-hidden');
+        
+        infoCardBox.style.display = 'none';
+        tafseerSaadi.style.display = 'none';
+        karimBox.style.display = 'none';
+        saadiBtn.style.display = 'none';
+        karimBtn.style.display = 'none';
+        
+        // إعادة ضبط المساعدة
+        helpSection.style.display = select.value ? 'block' : 'none';
+        helpInputArea.style.display = 'none';
+        helpWordInput.value = "";
+        helpBtn.innerText = `💡 طلب مساعدة (${helpCount})`;
+        helpBtn.disabled = helpCount <= 0;
+        actionBtn.disabled = false;
+
+        ayaText.innerText = activeData[currentIdx].full;
+        actionBtn.innerText = "اِكْشِفِ الْآيَةَ";
+        stopTimer();
+        timerDisplay.innerText = "0.0";
+    }
+
+    // دالة طلب المساعدة المضافة
+    function requestAyaHelp() {
+        if(helpCount <= 0 || isRevealed) return;
+        
+        const words = activeData[currentIdx].full.trim().split(/\s+/);
+        ayaText.innerText = words[0] + " ...";
+        ayaText.style.opacity = "1";
+        ayaText.classList.remove('is-hidden');
+        
+        isHelpActive = true;
+        helpInputArea.style.display = 'block';
+        helpBtn.disabled = true;
+        actionBtn.disabled = true; // قفل الزر الرئيسي حتى يكتب الكلمة
+        helpWordInput.focus();
+        
+        helpCount--;
+        helpBtn.innerText = `💡 طلب مساعدة (${helpCount})`;
+    }
+
+    // دالة التحقق من الكلمة المكتوبة
+    function validateHelpWord(val) {
+        const words = activeData[currentIdx].full.trim().split(/\s+/);
+        if (words.length < 2) { 
+            unlockAfterHelp(); // لو آية من كلمة واحدة
+            return;
+        }
+        
+        const target = words[1].replace(/[^\u0621-\u064A]/g, ''); // إزالة التشكيل
+        const user = val.trim().replace(/[^\u0621-\u064A]/g, '');
+
+        if (user === target) {
+            unlockAfterHelp();
+        }
+    }
+
+    function unlockAfterHelp() {
+        isHelpActive = false;
+        helpInputArea.style.display = 'none';
+        actionBtn.disabled = false;
+        actionBtn.innerText = "أحسنت! اِكْشِفِ الْآيَةَ الآن";
+    }
+
+    function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            timerDisplay.innerText = ((Date.now() - startTime) / 1000).toFixed(1);
+        }, 100);
+    }
+
+    function stopTimer() { clearInterval(timerInterval); timerInterval = null; }
+
+    actionBtn.onclick = function() {
+        if(isHelpActive) return;
+        if(!isRevealed) {
+            if(!timerInterval) startTimer();
+            reveal();
+        } else {
+            prepareNext();
+        }
+    };
+
+    function reveal() {
+        stopTimer();
+        isRevealed = true;
+        ayaText.innerText = activeData[currentIdx].full;
+        ayaText.style.opacity = "1";
+        ayaText.classList.remove('is-hidden');
+        actionBtn.innerText = "الْآيَةُ التَّالِيَةُ";
+        
+        helpSection.style.display = 'none'; // إخفاء المساعدة عند الكشف
+        saadiBtn.style.display = 'block';
+        karimBtn.style.display = 'block';
+        
+        infoCardBox.innerHTML = activeData[currentIdx].meta;
+        infoCardBox.style.display = 'block';
+
+        const units = document.querySelectorAll('.heat-unit');
+        if(units[currentIdx]) units[currentIdx].style.background = 'var(--main)';
+    }
+
+    async function getSaadiTafseer() {
+        karimBox.style.display = 'none';
+        if (tafseerSaadi.style.display === 'block') {
+            tafseerSaadi.style.display = 'none';
+            return;
+        }
+        tafseerSaadi.innerHTML = "جاري جلب التفسير...";
+        tafseerSaadi.style.display = 'block';
+        try {
+            const res = await fetch(`https://api.alquran.cloud/v1/ayah/${select.value}:${currentIdx + 1}/ar.muyassar`);
+            const json = await res.json();
+            tafseerSaadi.innerHTML = `<b>التفسير التفاعلي (الميسر):</b><br>${json.data.text}`;
+        } catch(e) {
+            tafseerSaadi.innerHTML = "عذراً، فشل جلب التفسير حالياً.";
+        }
+    }
+
+    function getKarimGuidance() {
+        tafseerSaadi.style.display = 'none';
+        if (karimBox.style.display === 'block') {
+            karimBox.style.display = 'none';
+            return;
+        }
+        karimBox.style.display = 'block';
+        
+        const text = activeData[currentIdx].full;
+        let guidance = `<b>🎙️ إرشادات كريم التفصيلية لتصحيح التلاوة:</b><hr style="border:0; border-top:1px solid var(--blue); margin:10px 0;">`;
+        guidance += `🔹 <b>موازين المدود:</b> احرص على تسوية المدود؛ فالمد الطبيعي حركتان، والمد المتصل والمنفصل 4 أو 5 حركات.<br><br>`;
+        if (text.includes('ن') || text.includes('م')) {
+            guidance += `🔹 <b>أحكام الغنة:</b> انتبه للنون والميم المشددتين، وراعِ مراتب الغنة في الإدغام والإخفاء.<br><br>`;
+        }
+        guidance += `🔹 <b>صفات الحروف:</b> أعطِ الحروف المستعلية حقها من التفخيم، والحروف المستفلة حقها من الترقيق.<br><br>`;
+        guidance += `🔹 <b>تنبيه من اللحن الجلي:</b> راقب الحركات الإعرابية بدقة؛ فاللحن فيها يغير المعنى.<br><br>`;
+        guidance += `🔹 <b>الوقف والابتداء:</b> قف عند رؤوس الآية أو حيث يتم المعنى، وتجنب الوقف القبيح.<br><br>`;
+        guidance += `<small>💡 هذه الإرشادات وضعت لتذكرك بأصول القراءة، والزم دائماً التلقي من أفواه المشايخ المتقنين.</small>`;
+        
+        karimBox.innerHTML = guidance;
+    }
+
+    function prepareNext() {
+        if (currentIdx < activeData.length - 1) {
+            ayaText.style.opacity = "0";
+            ayaText.classList.add('is-hidden'); 
+            
+            currentIdx++;
+            resetAyaUI();
+            startTimer();
+        } else {
+            alert("تمت السورة بحمد الله");
+        }
+    }
+
+    document.getElementById('saveProgressBtn').onclick = function() {
+        const data = { surah: select.value, pos: currentIdx };
+        localStorage.setItem('quran_save', JSON.stringify(data));
+        document.getElementById('saveStatus').innerText = `✅ تم الحفظ: ${surahNames[select.value-1]} - آية ${currentIdx + 1}`;
+        setTimeout(() => document.getElementById('saveStatus').innerText = "", 4000);
+    };
+
+    window.onload = function() {
+        const saved = localStorage.getItem('quran_save');
+        if (saved) {
+            const data = JSON.parse(saved);
+            select.value = data.surah;
+            select.onchange(null, data.pos);
+            document.getElementById('saveStatus').innerText = "📍 تم استعادة آخر مكان توقفت عنده";
+        }
+    };
 </script>
 </body>
 </html>
