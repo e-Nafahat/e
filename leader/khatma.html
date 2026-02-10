@@ -170,17 +170,6 @@
         }
         .dua-content b { color: var(--gold-secondary); font-weight: 400; }
 
-        /* تنسيق مربع كلمة السر الراقي */
-        .pass-input {
-            width: 80%; background: var(--navy-light); border: 2px solid var(--gold-primary);
-            border-radius: 12px; padding: 12px; color: var(--white); text-align: center;
-            font-size: 1.2rem; margin: 15px 0; letter-spacing: 5px; font-weight: 900;
-        }
-        .admin-note {
-            font-size: 0.7rem; color: #94a3b8; background: rgba(0,0,0,0.2);
-            padding: 8px; border-radius: 10px; margin-top: 10px; border: 1px solid rgba(179, 147, 89, 0.1);
-        }
-        
         * {
             -webkit-tap-highlight-color: transparent;
             outline: none;
@@ -193,20 +182,6 @@
     </style>
 </head>
 <body id="mainBody">
-
-<div class="modal-overlay" id="passModal">
-    <div class="achievement-card" id="passCard">
-        <div class="card-icon">🔐</div>
-        <div class="card-title txt" style="font-weight: 900; color: var(--gold-primary);">دُخُولُ الْمُبَرْمِجِينَ</div>
-        <div class="card-body txt" style="font-size: 0.85rem; color: #cbd5e1; margin-top: 5px;">هَذِهِ الْمِيزَةُ تَحْتَ التَّطْوِيرِ وَمَحْمِيَّةٌ لِأَغْرَاضِ الضَّبْطِ التِّقَنِيِّ.</div>
-        <input type="password" id="adminPass" class="pass-input" placeholder="****">
-        <div style="display: flex; gap: 10px; justify-content: center;">
-            <button class="toggle-btn btn-dua" style="padding: 10px 20px;" onclick="validatePass()">تَحَقُّق</button>
-            <button class="toggle-btn" style="padding: 10px 20px;" onclick="closeModal('passModal')">إِلْغَاء</button>
-        </div>
-        <div class="admin-note txt">⚠️ تَنْبِيهٌ: الْوُصُولُ لِهَذِهِ الصَّفْحَةِ مَحْصُورٌ فَقَطْ لِفَرِيقِ التَّطْوِيرِ (المبرمجين).</div>
-    </div>
-</div>
 
 <div class="modal-overlay" id="saveModal">
     <div class="achievement-card" id="saveCard">
@@ -291,7 +266,7 @@
         </div>
     </div>
 
-    <button class="btn-smart-tasmee" onclick="openModal('passModal')">🎙️ اِخْتِبَارُ التَّسْمِيعِ الذَّكِيِّ (تَجْرِيبِي)</button>
+    <button class="btn-smart-tasmee" onclick="window.location.href = '../Tasmee/quran1.html';">🎙️ اِخْتِبَارُ التَّسْمِيعِ الذَّكِيِّ (تَجْرِيبِي)</button>
 
     <button class="save-btn" onclick="save()">💾 حِفْظُ تَقَدُّمِي الْحَالِي</button>
 
@@ -307,17 +282,6 @@
 <script>
     let currentUnit = 'page', maxVal = 604, isTashkeel = true, currentTheme = 'navy';
 
-    // دالة التحقق من كلمة السر المبرمجين
-    function validatePass() {
-        const pass = document.getElementById('adminPass').value;
-        if (pass === "FM1661") {
-            window.location.href = "../Tasmee/quran1.html";
-        } else {
-            alert("عذراً، كلمة السر خاصة بالمبرمجين فقط!");
-            document.getElementById('adminPass').value = "";
-        }
-    }
-
     function toggleTheme() {
         const body = document.getElementById('mainBody'), btn = document.getElementById('themeBtn');
         if (currentTheme === 'navy') { body.classList.add('theme-green'); btn.innerText = "💙 ثِيم أَزْرَق"; currentTheme = 'green'; }
@@ -332,7 +296,6 @@
     function closeModal(id) { 
         document.querySelector(`#${id} .achievement-card`).classList.remove('show'); 
         setTimeout(() => { document.getElementById(id).style.display = 'none'; }, 300); 
-        if(id === 'passModal') document.getElementById('adminPass').value = "";
     }
 
     function toggleTashkeel() {
