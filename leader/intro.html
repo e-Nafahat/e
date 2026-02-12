@@ -1,36 +1,117 @@
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700&display=swap" rel="stylesheet">
 
-<div id="cinema-intro" style="display: flex; opacity: 0; z-index: 10004; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; align-items: center; justify-content: center; transition: opacity 1.5s ease;">
+<audio id="logo-sound" src="NfahatS.mp3" preload="auto"></audio>
+
+<div id="entry-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10005; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1.2s ease;">
+    
+    <div class="brand-header">
+        <h1 class="brand-arabic">نفحات إيمانية</h1>
+        <p class="brand-english">Nafahat Imaniyah</p>
+    </div>
+
+    <button id="start-btn" class="royal-gold-btn">مرحبا</button>
+
+    <div class="copyright-text">All Rights Reserved © 2026</div>
+</div>
+
+<div id="cinema-intro" style="display: none; opacity: 0; z-index: 10004; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; align-items: center; justify-content: center; transition: opacity 1.5s ease;">
     <div class="intro-content">
-        <img src="leader/LogoNafahat.png" class="elegant-logo-img" alt="Logo">
+        <img src="LogoNafahat.png" class="elegant-logo-img" alt="Logo">
         
         <div class="elegant-line"></div>
         
         <div class="elegant-sub-container">
-            <p class="elegant-sub">لَنْ يُصْلِحَ آخِرَ هَذِهِ الْأُمَّةِ إِلَّا مَا أَصْلَحَ أَوَّلَهَا</p>
+            <p class="elegant-sub">لن يصلح آخر هذه الأمة إلا ما أصلح أولها</p>
         </div>
     </div>
 </div>
 
 <style>
-    body, html { margin: 0; padding: 0; overflow: hidden; touch-action: none; background: #000; height: 100%; }
+    body, html { margin: 0; padding: 0; overflow: hidden; touch-action: none; background: #000; height: 100%; font-family: 'Cairo', sans-serif; }
     
+    /* أنيميشن الدخول السينمائي للنصوص والزر */
+    .brand-header {
+        text-align: center;
+        margin-bottom: 30px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: cinemaFadeUp 2s 0.5s ease-out forwards;
+    }
+
+    .brand-arabic {
+        color: #d4af37;
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: 0;
+        letter-spacing: 1px;
+    }
+
+    .brand-english {
+        color: #999;
+        font-size: 1rem;
+        font-weight: 200;
+        margin: 2px 0 0 0;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    /* الزر الذهبي الملكي البيضاوي النحيف - بلا حدود نهائيا */
+    .royal-gold-btn {
+        background: #d4af37;
+        color: #000;
+        border: none !important; 
+        outline: none !important; 
+        padding: 5px 45px;
+        font-family: 'Cairo', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transform: scale(0.9);
+        animation: cinemaFadeUp 1.5s 1.5s ease-out forwards;
+        transition: all 0.3s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .royal-gold-btn:hover {
+        background: #f1c40f;
+        transform: scale(1.05);
+    }
+
+    /* نص الحقوق بلمسة لونية مميزة */
+    .copyright-text {
+        position: absolute;
+        bottom: 20px;
+        font-size: 0.6rem;
+        color: rgba(212, 175, 55, 0.4); /* لون ذهبي خافت جدا ومميز */
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        opacity: 0;
+        animation: cinemaFadeUp 2s 2.5s ease-out forwards;
+    }
+
+    /* أنيميشن الصعود السينمائي */
+    @keyframes cinemaFadeUp {
+        0% { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
     .intro-content { 
         display: flex; 
         flex-direction: column; 
         align-items: center; 
         justify-content: center; 
         width: 100%; 
-        gap: 15px; 
-        transform: translateY(0);
+        gap: 20px; 
     }
     
     .elegant-logo-img { 
-        width: 180px; 
+        width: 170px; 
         height: auto; 
         opacity: 0; 
         filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
-        margin-bottom: 5px;
     }
 
     .elegant-line { 
@@ -52,19 +133,19 @@
         line-height: 1.5;
     }
     
-    /* تفعيل الأنيميشن */
+    /* أنيميشن الشعار (المرحلة الثانية) */
     .run-logo { animation: fadeInLogoImg 2.5s ease-out forwards; }
     .run-line { animation: growLine 2s 0.8s ease-out forwards; }
     .run-sub { animation: fadeInSub 2.5s 1.5s ease-out forwards; }
     
     @keyframes fadeInLogoImg { 
-        0% { opacity: 0; transform: scale(0.9) translateY(10px); } 
-        100% { opacity: 1; transform: scale(1) translateY(0); } 
+        0% { opacity: 0; transform: scale(0.95); } 
+        100% { opacity: 1; transform: scale(1); } 
     }
     
     @keyframes growLine { 
         0% { width: 0; opacity: 0; } 
-        100% { width: 65%; opacity: 1; } 
+        100% { width: 60%; opacity: 1; } 
     }
     
     @keyframes fadeInSub { 
@@ -74,34 +155,46 @@
 </style>
 
 <script>
-    // التأكد من بدء السكريبت فور الجلب
     (function() {
-        // ننتظر قليلاً لضمان تحميل الصورة والخطوط
-        setTimeout(triggerPureCinemaSequence, 300);
+        const startBtn = document.getElementById('start-btn');
+        const entryScreen = document.getElementById('entry-screen');
+        const cinema = document.getElementById('cinema-intro');
+        const logoAudio = document.getElementById('logo-sound');
 
-        function triggerPureCinemaSequence() {
-            // إبلاغ الصفحة الأب (index) بتشغيل الصوت
+        startBtn.addEventListener('click', () => {
+            // خروج شاشة الترحيب بسلاسة تامة
+            entryScreen.style.opacity = '0';
+            
+            setTimeout(() => { 
+                entryScreen.style.display = 'none'; 
+                cinema.style.display = 'flex';
+                
+                setTimeout(() => { 
+                    cinema.style.opacity = '1'; 
+                    
+                    // تشغيل الصوت بعد ضمان تفاعل المستخدم
+                    if(logoAudio) {
+                        logoAudio.play().catch(e => console.error("Audio Playback Error:", e));
+                    }
+
+                    // تفعيل أنيميشن الشعار
+                    const logo = cinema.querySelector('.elegant-logo-img');
+                    const line = cinema.querySelector('.elegant-line');
+                    const sub = cinema.querySelector('.elegant-sub');
+                    
+                    if(logo) logo.classList.add('run-logo');
+                    if(line) line.classList.add('run-line');
+                    if(sub) sub.classList.add('run-sub');
+                }, 50);
+
+            }, 800);
+
             window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
             
-            const cinema = document.getElementById('cinema-intro');
-            if(cinema) {
-                cinema.style.opacity = '1';
-                
-                // بدء حركات العناصر فوراً وبالتتابع
-                const logo = cinema.querySelector('.elegant-logo-img');
-                const line = cinema.querySelector('.elegant-line');
-                const sub = cinema.querySelector('.elegant-sub');
-                
-                if(logo) logo.classList.add('run-logo');
-                if(line) line.classList.add('run-line');
-                if(sub) sub.classList.add('run-sub');
-            }
-
-            // الانتقال للموقع بعد انتهاء العرض (7 ثوانٍ كافية جداً للشعار والنص)
             setTimeout(() => {
                 if(cinema) cinema.style.opacity = '0';
                 window.parent.postMessage('START_SITE_NOW', '*');
-            }, 7500); 
-        }
+            }, 8500); 
+        });
     })();
 </script>
