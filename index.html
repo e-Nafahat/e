@@ -8,16 +8,24 @@
 
     <title>نفحات إيمانية | المنهج الصافي والذكر الحكيم</title>
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="نفحات">
+
     <link rel="icon" type="image/png" href="leader/LogoNafahat.png">
-    <link rel="shortcut icon" href="leader/LogoNafahat.png">
+    <link rel="shortcut icon" type="image/png" href="leader/LogoNafahat.png">
     <link rel="apple-touch-icon" href="leader/LogoNafahat.png">
 
     <meta name="description" content="نفحات إيمانية هي بوابتكم اليومية لعيش أنوار السنة النبوية والمنهج الصافي. نقدم محتوى إسلامي موثق، إذاعة قرآن كريم، ومكتبة شاملة على منهج أهل السنة والجماعة. نحن نحفظ ميراثا نبويا يضيء حياتك.">
+    <meta name="keywords" content="نفحات ايمانية، المنهج الصافي، اهل السنة والجماعة، احاديث نبوية، مكتبة اسلامية،  مصحح القراءه ، اختبارات الإجازة ، لختمة، اذكار، تاملات ايمانية، كتب شرعية">
     
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="نفحات إيمانية">
     <meta property="og:title" content="نفحات إيمانية | ميراث نبوي يضيء حياتك">
     <meta property="og:description" content="نفحات إيمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج أهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
+    
     <meta property="og:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
     <meta property="og:url" content="https://e-nafahat.github.io/e/">
 
@@ -118,9 +126,20 @@
         }
         iframe.active { visibility: visible; opacity: 1; }
         #intro-holder { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: #000; overflow: hidden; }
+        
+        .seo-hidden-layer {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; 
+            overflow: hidden; clip: rect(0,0,0,0); border: 0;
+        }
     </style>
 </head>
 <body>
+
+    <div class="seo-hidden-layer">
+        <h1>نفحات ايمانية</h1>
+        <h2>المنهج الصافي والذكر الحكيم</h2>
+        <p>موقع نفحات ايمانية يقدم مواضيع اسلامية، مقالات شرعية، مكتبة الكتب، الختمة القرانية، وتاملات ايمانية على منهج اهل السنة والجماعة.</p>
+    </div>
 
     <div id="intro-holder"></div>
 
@@ -156,8 +175,14 @@
     </div>
 
     <script>
+        // تسجيل Service Worker لتمكين التحميل كتطبيق
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
+            });
+        }
+
         let isAdmin = false;
-        // تصحيح اسم ملف الصوت إلى NfahatS.mp3 ليتطابق مع الذاكرة
         const globalIntroAudio = new Audio('leader/NfahatS.mp3');
         globalIntroAudio.preload = 'auto';
 
@@ -201,7 +226,6 @@
         window.addEventListener('message', function(event) {
             if (event.data === 'START_SITE_NOW') executeSiteEntry();
             if (event.data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
-            // تشغيل صوت المقدمة المتفق عليه
             if (event.data === 'PLAY_INTRO_AUDIO') globalIntroAudio.play().catch(e => console.log("Audio play blocked"));
             
             if (event.data === 'OPEN_MORE_PAGE') switchPage('more-frame', document.getElementById('more-btn'));
@@ -231,7 +255,6 @@
                 .then(data => {
                     const holder = document.getElementById('intro-holder');
                     if(holder) {
-                        // تعديل مسارات الصور داخل محتوى intro.html لتعمل من المجلد الرئيسي
                         const correctedData = data.replace(/src="LogoNafahat.png"/g, 'src="leader/LogoNafahat.png"');
                         holder.innerHTML = correctedData;
                         
@@ -244,7 +267,6 @@
                     }
                 })
                 .catch(err => {
-                    console.warn("Intro file missing, entering site directly.");
                     executeSiteEntry();
                 });
         }
