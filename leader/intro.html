@@ -27,9 +27,9 @@
 </div>
 
 <style>
-    body, html { margin: 0; padding: 0; overflow: hidden; touch-action: none; background: #000; height: 100%; font-family: 'Cairo', sans-serif; }
+    body, html { margin: 0; padding: 0; overflow: hidden; touch-action: none; background: #000; height: 100%; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
     
-    /* أنيميشن الدخول السينمائي للنصوص والزر */
+    /* أنيميشن الدخول السينمائي للنصوص والزر عند فتح الصفحة */
     .brand-header {
         text-align: center;
         margin-bottom: 30px;
@@ -72,7 +72,6 @@
         transform: scale(0.9);
         animation: cinemaFadeUp 1.5s 1.5s ease-out forwards;
         transition: all 0.3s ease;
-        -webkit-tap-highlight-color: transparent;
     }
 
     .royal-gold-btn:hover {
