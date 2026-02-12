@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <link rel="manifest" href="/e/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="نفحات">
-
     <meta name="google-site-verification" content="xxXB4Y8Tlx1hQQAUzb_KNMtpvvUyPhBt2SfB6yNBpuA" />
 
     <title>نفحات إيمانية | المنهج الصافي والذكر الحكيم</title>
@@ -21,7 +16,7 @@
     
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="نفحات إيمانية">
-    <meta property="og:title" content="نَـفَـحَـاتٌ إِيـمَـانِـيَّـةٌ | مِـيـرَاثٌ نَـبَـوِيٌّ">
+    <meta property="og:title" content="نفحات إيمانية | ميراث نبوي يضيء حياتك">
     <meta property="og:description" content="نفحات إيمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج أهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
     <meta property="og:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
     <meta property="og:url" content="https://e-nafahat.github.io/e/">
@@ -30,7 +25,6 @@
     <meta name="twitter:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
     
     <style>
-        /* كود الـ CSS الخاص بك كما هو دون أي تغيير للحفاظ على تصميم الـ 3D والمنع من الاهتزاز */
         html, body { 
             background-color: #000000 !important; 
             overscroll-behavior: none; 
@@ -162,15 +156,9 @@
     </div>
 
     <script>
-        // إِضَافَةُ Service Worker لِتَمْكِينِ التَّثْبِيتِ كَتَطْبِيقٍ
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/e/sw.js').catch(err => console.log('SW registration failed:', err));
-            });
-        }
-
         let isAdmin = false;
-        const globalIntroAudio = new Audio('leader/intro11.mp3');
+        // تصحيح اسم ملف الصوت إلى NfahatS.mp3 ليتطابق مع الذاكرة
+        const globalIntroAudio = new Audio('leader/NfahatS.mp3');
         globalIntroAudio.preload = 'auto';
 
         function executeSiteEntry() {
@@ -213,7 +201,8 @@
         window.addEventListener('message', function(event) {
             if (event.data === 'START_SITE_NOW') executeSiteEntry();
             if (event.data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
-            if (event.data === 'PLAY_INTRO_AUDIO') globalIntroAudio.play().catch(e => {});
+            // تشغيل صوت المقدمة المتفق عليه
+            if (event.data === 'PLAY_INTRO_AUDIO') globalIntroAudio.play().catch(e => console.log("Audio play blocked"));
             
             if (event.data === 'OPEN_MORE_PAGE') switchPage('more-frame', document.getElementById('more-btn'));
             if (event.data === 'GO_HOME') switchPage('home-frame', document.getElementById('home-btn'));
@@ -242,7 +231,10 @@
                 .then(data => {
                     const holder = document.getElementById('intro-holder');
                     if(holder) {
-                        holder.innerHTML = data;
+                        // تعديل مسارات الصور داخل محتوى intro.html لتعمل من المجلد الرئيسي
+                        const correctedData = data.replace(/src="LogoNafahat.png"/g, 'src="leader/LogoNafahat.png"');
+                        holder.innerHTML = correctedData;
+                        
                         const scripts = holder.querySelectorAll('script');
                         scripts.forEach(oldScript => {
                             const newScript = document.createElement('script');
