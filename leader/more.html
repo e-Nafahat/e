@@ -181,7 +181,6 @@
             image-rendering: -webkit-optimize-contrast;
         }
 
-        /* تنسيق زر دعم الاستضافة المضاف */
         .host-support-btn {
             background: rgba(179, 147, 89, 0.15);
             border: 2px solid var(--gold);
@@ -252,11 +251,11 @@
             <img src="LogoNafahat.png" alt="Logo" class="site-logo-header">
             
             <h1>إِضَافَاتٌ ذَكِيَّةٌ</h1>
-            <div id="city-name" style="color:white; font-size:0.7rem; opacity:0.8;">جَارٍ تَحْدِيدُ مَوْقِعِكَ...</div>
+            <div id="city-name" style="color:white; font-size:0.7rem; opacity:0.8;">جَارٍ حِسَابُ الْمَوَاقِيتِ...</div>
             
             <div class="location-switcher">
-                <button id="btn-auto" class="switch-btn active" onclick="getPrayers('auto')">📍 حَسَبَ مَوْقِعِي</button>
-                <button id="btn-makkah" class="switch-btn" onclick="getPrayers('makkah')">🕋 مَكَّةُ الْمُكَرَّمَةُ</button>
+                <button id="btn-auto" class="switch-btn active" onclick="initLocation()">📍 حَسَبَ مَوْقِعِي</button>
+                <button id="btn-makkah" class="switch-btn" onclick="getPrayers(21.4225, 39.8262, '🕋 مَكَّةُ الْمُكَرَّمَةُ')">🕋 مَكَّةُ الْمُكَرَّمَةُ</button>
             </div>
 
             <div class="prayer-grid" id="prayer-times">
@@ -363,78 +362,95 @@
                 document.getElementById("r-hours").innerText = h;
                 document.getElementById("r-mins").innerText = m;
             } else {
-                document.querySelector(".ramadan-prep").innerHTML = "<span class='ramadan-title' style='font-size:1.1rem;'>🌙 رَمَضَانُ مُبَارَكٌ.. تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</span>";
+                const rBox = document.querySelector(".ramadan-prep");
+                if(rBox) rBox.innerHTML = "<span class='ramadan-title' style='font-size:1.1rem;'>🌙 رَمَضَانُ مُبَارَكٌ.. تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</span>";
             }
         }
 
-        async function getPrayers(type = 'auto') {
+        async function initLocation() {
+            document.getElementById('btn-auto').classList.add('active');
+            document.getElementById('btn-makkah').classList.remove('active');
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lon = pos.coords.longitude;
+                        getPrayers(lat, lon, "📍 مَوْقِعُكَ الْحَالِيُّ");
+                    },
+                    async () => {
+                        // في حال رفض المستخدم الإذن أو فشل الـ GPS، نلجأ للـ IP كخطة بديلة
+                        fallbackByIP();
+                    }
+                );
+            } else {
+                fallbackByIP();
+            }
+        }
+
+        async function fallbackByIP() {
             try {
-                document.getElementById('btn-auto').classList.toggle('active', type === 'auto');
-                document.getElementById('btn-makkah').classList.toggle('active', type === 'makkah');
-
-                let lat, lon, cityLabel;
-                if (type === 'makkah') {
-                    lat = 21.4225; lon = 39.8262;
-                    cityLabel = "🕋 مَكَّةُ الْمُكَرَّمَةُ";
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                if(data.latitude) {
+                    getPrayers(data.latitude, data.longitude, `📍 مَوْقِعُكَ: ${data.city}`);
                 } else {
-                    const res = await fetch('https://ipwho.is/');
-                    const data = await res.json();
-                    lat = data.latitude; lon = data.longitude;
-                    cityLabel = `📍 مَوْقِعُكَ: ${data.country}، ${data.city || data.region}`;
+                    throw new Error();
                 }
-                
-                document.getElementById('city-name').innerText = cityLabel;
+            } catch (e) {
+                getPrayers(21.4225, 39.8262, "🕋 مَكَّةُ (تَعَذَّرَ التَّحْدِيدُ)");
+            }
+        }
 
-                const pRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
-                const pData = await pRes.json();
+        async function getPrayers(lat, lon, label) {
+            try {
+                document.getElementById('city-name').innerText = label;
+                if(label.includes("مَكَّةُ")) {
+                    document.getElementById('btn-makkah').classList.add('active');
+                    document.getElementById('btn-auto').classList.remove('active');
+                }
+
+                const response = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
+                const result = await response.json();
                 
-                if(pData.data) {
-                    prayerTimings = pData.data.timings;
-                    const dateInfo = pData.data.date;
-                    const hDay = parseInt(dateInfo.hijri.day);
+                if (result.data) {
+                    prayerTimings = result.data.timings;
+                    const dateInfo = result.data.date;
                     
                     document.getElementById('hijri-date').innerText = `${dateInfo.hijri.day} ${dateInfo.hijri.month.ar} ${dateInfo.hijri.year} هـ`;
                     document.getElementById('gregorian-date').innerText = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year} مـ`;
 
+                    const hDay = parseInt(dateInfo.hijri.day);
                     const whiteDaysCard = document.getElementById('white-days-card');
-                    if ([11, 12, 13, 14, 15].includes(hDay)) {
-                        whiteDaysCard.style.display = 'block';
-                    } else {
-                        whiteDaysCard.style.display = 'none';
-                    }
+                    whiteDaysCard.style.display = ([13, 14, 15].includes(hDay)) ? 'block' : 'none';
 
+                    // حساب وقت القيام (الثلث الأخير)
                     const parse = (s) => { const [h,m] = s.split(':').map(Number); return h*60+m; };
                     const nightDuration = (parse(prayerTimings.Fajr) + 1440 - parse(prayerTimings.Maghrib)) % 1440;
                     const qiyamMinutes = (parse(prayerTimings.Fajr) + 1440 - (nightDuration / 3)) % 1440;
                     prayerTimings.Qiyam = `${String(Math.floor(qiyamMinutes/60)%24).padStart(2,'0')}:${String(Math.floor(qiyamMinutes%60)).padStart(2,'0')}`;
-                    
+
                     updateUI();
                     startCountdown();
                     updateRamadanCountdown();
                 }
-            } catch (e) { getPrayers('makkah'); }
+            } catch (error) {
+                console.error("API Error");
+            }
         }
 
         function updateUI() {
-            for (let key in prayerIds) { prayerIds[key].innerText = prayerTimings[key]; }
+            for (let key in prayerIds) {
+                if(prayerTimings[key]) prayerIds[key].innerText = prayerTimings[key];
+            }
         }
 
         function startCountdown() {
             if (countdownInterval) clearInterval(countdownInterval);
             countdownInterval = setInterval(() => {
+                if(!prayerTimings.Fajr) return;
                 const now = new Date();
-                const qDate = new Date();
-                const [qh, qm] = prayerTimings.Qiyam.split(':');
-                qDate.setHours(qh, qm, 0);
-                const fDate = new Date();
-                const [fh, fm] = prayerTimings.Fajr.split(':');
-                fDate.setHours(fh, fm, 0);
-                if (fDate < qDate) fDate.setDate(fDate.getDate() + 1);
-
-                const qiyamCard = document.getElementById('card-Qiyam');
-                if (now >= qDate && now < fDate) qiyamCard.style.boxShadow = "0 0 15px var(--gold)";
-                else qiyamCard.style.boxShadow = "none";
-
+                
                 const schedule = [
                     { id: 'card-Fajr', time: prayerTimings.Fajr },
                     { id: 'card-Dhuhr', time: prayerTimings.Dhuhr },
@@ -456,7 +472,8 @@
                 }
 
                 document.querySelectorAll('.prayer-item').forEach(el => el.classList.remove('active-now'));
-                if(nextId) document.getElementById(nextId).classList.add('active-now');
+                const nextEl = document.getElementById(nextId);
+                if(nextEl) nextEl.classList.add('active-now');
 
                 const diff = next - now;
                 const hh = Math.floor(diff / 3600000);
@@ -467,12 +484,13 @@
         }
 
         function copyLink() {
-            navigator.clipboard.writeText("https://myway1661.github.io/TASBIHAT/").then(() => {
+            navigator.clipboard.writeText("https://e-nafahat.github.io/e/").then(() => {
                 alert('تَمَّ نَسْخُ رَابِطِ الصَّدَقَةِ الْجَارِيَةِ.. نَفَعَ اللَّهُ بِكَ!');
             });
         }
 
-        getPrayers();
+        // بدء العمل عند تحميل الصفحة
+        initLocation();
         setInterval(updateRamadanCountdown, 60000);
     </script>
 </body>
