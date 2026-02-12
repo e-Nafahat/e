@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>اختبارات الإجازة | نفحات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #001f3f;
+            --gold: #b8860b;
+            --gold-light: #d4af37;
+            --main: #1a5d1a;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+            --red: #e74c3c;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: var(--navy); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+        /* تصغير الهيدر لتقليل الارتفاع */
+        .header { text-align: center; margin-bottom: 15px; }
+        .header img { width: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .header h1 { color: var(--navy); font-size: 1.2rem; margin: 5px 0 0; font-weight: 900; }
+        .header p { color: var(--gold); font-weight: 700; margin: 0; font-size: 0.8rem; }
+
+        .setup-container {
+            width: 100%; max-width: 450px; background: var(--white); border-radius: 15px;
+            padding: 15px; border-bottom: 4px solid var(--gold); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .section-title { color: var(--navy); font-weight: 900; margin-bottom: 10px; font-size: 1rem; border-right: 3px solid var(--gold); padding-right: 8px; text-align: right; }
+
+        .card-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .phase-card, .type-card {
+            background: var(--bg); border: 1px solid #eee; border-radius: 12px;
+            padding: 10px 15px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: space-between;
+            text-align: right;
+        }
+        .phase-card.active, .type-card.active { border-color: var(--gold); background: #fffcf0; box-shadow: inset 0 0 5px rgba(184,134,11,0.1); }
+        
+        .card-info h3 { margin: 0; font-size: 0.9rem; color: var(--navy); }
+        .card-info span { font-size: 0.7rem; color: #666; }
+
+        .start-btn {
+            width: 100%; height: 50px; background: var(--navy); color: var(--gold);
+            border: none; border-radius: 10px; font-weight: 900; font-size: 1rem;
+            cursor: pointer; box-shadow: 0 4px 0 #000b1a; transition: 0.2s;
+        }
+        .start-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #000b1a; }
+
+        #quiz-container { display: none; width: 100%; max-width: 450px; }
+
+        .quiz-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; background: var(--navy); color: white; padding: 8px 15px; border-radius: 12px;
+        }
+        .timer-circle {
+            width: 40px; height: 40px; border: 2px solid var(--gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem;
+        }
+
+        .question-card {
+            background: var(--white); border-radius: 15px; padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #e0d5b1;
+            margin-bottom: 15px; min-height: 160px; display: flex; flex-direction: column; justify-content: center;
+            position: relative;
+        }
+        .question-hint { font-size: 0.8rem; color: var(--gold); text-align: center; margin-bottom: 8px; font-weight: 700; }
+        .question-text {
+            font-family: 'Amiri', serif; font-size: 1.5rem; line-height: 1.6;
+            text-align: center; color: var(--navy); font-weight: 700; margin: 0;
+        }
+
+        .options-grid { display: flex; flex-direction: column; gap: 8px; }
+        .option-btn {
+            background: var(--white); border: 1px solid #ddd; padding: 12px;
+            border-radius: 10px; font-family: 'Amiri', serif; font-size: 1.1rem;
+            text-align: center; cursor: pointer; transition: 0.2s; font-weight: 700;
+            color: var(--navy); box-shadow: 0 2px 0 #eee;
+        }
+        
+        .write-input {
+            width: 100%; padding: 12px; border: 2px solid var(--gold); border-radius: 10px;
+            font-family: 'Amiri', serif; font-size: 1.2rem; text-align: center;
+            outline: none; background: var(--bg);
+        }
+        .submit-answer-btn {
+            width: 100%; height: 45px; background: var(--main); color: white;
+            border: none; border-radius: 10px; font-weight: 700; font-size: 1rem;
+            margin-top: 5px; cursor: pointer;
+        }
+        .submit-answer-btn:disabled { background: #ccc; }
+
+        .option-btn.correct, .write-input.correct { background: #d4edda !important; border-color: #28a745 !important; }
+        .option-btn.wrong, .write-input.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
+
+        #result-container {
+            display: none; width: 100%; max-width: 450px; background: var(--white);
+            border-radius: 20px; padding: 25px 15px; text-align: center;
+            border-bottom: 6px solid var(--navy); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .score-circle {
+            width: 100px; height: 100px; border: 5px solid var(--gold); border-radius: 50%;
+            margin: 0 auto 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .score-num { font-size: 2.2rem; font-weight: 900; color: var(--navy); margin: 0; }
+        
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: none; margin: 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .correct-answer-reveal {
+            margin-top: 8px; padding: 8px; background: #e8f5e9; border-radius: 8px;
+            color: #2e7d32; font-family: 'Amiri', serif; font-size: 0.9rem; font-weight: bold; display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="../leader/LogoNafahat.png" alt="Logo">
+    <h1>اختبارات الإجازة</h1>
+    <p>بوابتك لضبط المتشابهات والإتقان</p>
+</div>
+
+<div id="setup-container" class="setup-container">
+    <div class="section-title">المرحلة</div>
+    <div class="card-grid">
+        <div class="phase-card active" onclick="selectPhase(1, 10, this)">
+            <div class="card-info"><h3>المرحلة الأولى</h3><span>من 1 إلى 10</span></div>
+        </div>
+        <div class="phase-card" onclick="selectPhase(11, 20, this)">
+            <div class="card-info"><h3>المرحلة الثانية</h3><span>من 11 إلى 20</span></div>
+        </div>
+        <div class="phase-card" onclick="selectPhase(21, 30, this)">
+            <div class="card-info"><h3>المرحلة الثالثة</h3><span>من 21 إلى 30</span></div>
+        </div>
+    </div>
+
+    <div class="section-title">نوع الاختبار</div>
+    <div class="card-grid">
+        <div class="type-card active" onclick="selectType('completion', this)">
+            <div class="card-info"><h3>أكمل الآية</h3></div>
+        </div>
+        <div class="type-card" onclick="selectType('surahName', this)">
+            <div class="card-info"><h3>ما اسم السورة؟</h3></div>
+        </div>
+        <div class="type-card" onclick="selectType('terminator', this)">
+            <div class="card-info"><h3>ضبط الفواصل</h3></div>
+        </div>
+    </div>
+
+    <button class="start-btn" onclick="startQuiz()">بدء الاختبار</button>
+    <div id="mainLoader" class="loader"></div>
+</div>
+
+<div id="quiz-container">
+    <div class="quiz-header">
+        <div id="question-counter" style="font-size:0.9rem;">السؤال: 1 / 20</div>
+        <div class="timer-circle" id="timer-display">15</div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-hint" id="question-hint"></div>
+        <div class="question-text" id="question-text">جاري التحميل...</div>
+        <div id="reveal-box" class="correct-answer-reveal"></div>
+    </div>
+
+    <div class="options-grid" id="options-grid"></div>
+</div>
+
+<div id="result-container">
+    <h2 style="margin-top:0;">النتيجة</h2>
+    <div class="score-circle">
+        <p class="score-num" id="final-score">0</p>
+        <p style="font-size: 0.7rem; color: var(--gold);">من 20</p>
+    </div>
+    <div id="result-message" style="font-weight:700; margin-bottom:20px;"></div>
+    <button class="start-btn" onclick="location.reload()">اختبار جديد</button>
+</div>
+
+<script>
+    let currentPhase = { start: 1, end: 10 };
+    let quizType = 'completion';
+    let quizData = [];
+    let currentQuestionIdx = 0;
+    let score = 0;
+    let timeLeft = 15;
+    let timerInterval;
+    let isAnswering = false;
+    let surahNamesInPhase = [];
+
+    function selectPhase(start, end, element) {
+        currentPhase = { start, end };
+        document.querySelectorAll('.phase-card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function selectType(type, element) {
+        quizType = type;
+        document.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function normalizeArabic(text) {
+        return text.replace(/[\u064B-\u065F]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/\s+/g, " ").trim();
+    }
+
+    async function startQuiz() {
+        document.getElementById('mainLoader').style.display = 'block';
+        document.querySelector('.start-btn').style.display = 'none';
+        
+        try {
+            quizData = [];
+            surahNamesInPhase = [];
+            const juzRange = [];
+            while(juzRange.length < 5) {
+                let r = Math.floor(Math.random() * (currentPhase.end - currentPhase.start + 1)) + currentPhase.start;
+                if(!juzRange.includes(r)) juzRange.push(r);
+            }
+
+            for (const juzNum of juzRange) {
+                const res = await fetch(`https://api.alquran.cloud/v1/juz/${juzNum}/quran-simple`);
+                const json = await res.json();
+                const ayahs = json.data.ayahs;
+                ayahs.forEach(a => { if (!surahNamesInPhase.includes(a.surah.name)) surahNamesInPhase.push(a.surah.name); });
+
+                for(let k=0; k<4; k++) {
+                    let idx = Math.floor(Math.random() * (ayahs.length - 2));
+                    let target = ayahs[idx];
+                    if (quizType === 'terminator') {
+                        let words = target.text.split(' ');
+                        if(words.length < 5) { k--; continue; } 
+                        quizData.push({ q: words.slice(0, -2).join(' ') + " ...", ans: words.slice(-2).join(' '), hint: `فاصلة آية من سورة ${target.surah.name}:`, type: 'write' });
+                    } else if (quizType === 'surahName') {
+                        quizData.push({ q: target.text, ans: target.surah.name, hint: "في أي سورة وردت هذه الآية؟", type: 'choice', correctSurah: target.surah.name });
+                    } else {
+                        quizData.push({ q: target.text, ans: ayahs[idx+1].text, hint: `سورة ${target.surah.name} | آية ${target.numberInSurah}`, options: shuffle([ayahs[idx+1].text, ayahs[Math.floor(Math.random()*ayahs.length)].text, ayahs[Math.floor(Math.random()*ayahs.length)].text]), type: 'choice' });
+                    }
+                }
+            }
+
+            quizData.forEach(item => {
+                if (item.correctSurah) {
+                    let others = surahNamesInPhase.filter(s => s !== item.correctSurah);
+                    item.options = shuffle([item.correctSurah, ...shuffle(others).slice(0, 2)]);
+                    item.ans = item.correctSurah;
+                }
+            });
+
+            quizData = shuffle(quizData).slice(0, 20);
+            document.getElementById('setup-container').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            showQuestion();
+        } catch (e) {
+            alert("فشل في الاتصال بالشبكة");
+            location.reload();
+        }
+    }
+
+    function showQuestion() {
+        if (currentQuestionIdx >= quizData.length) return showResult();
+        isAnswering = false;
+        const data = quizData[currentQuestionIdx];
+        document.getElementById('reveal-box').style.display = 'none';
+        document.getElementById('question-counter').innerText = `السؤال: ${currentQuestionIdx + 1} / ${quizData.length}`;
+        document.getElementById('question-hint').innerText = data.hint;
+        document.getElementById('question-text').innerText = data.q;
+        const grid = document.getElementById('options-grid');
+        grid.innerHTML = '';
+        
+        if(data.type === 'write') {
+            timeLeft = 45; 
+            const input = document.createElement('input');
+            input.type = 'text'; input.className = 'write-input'; input.id = 'user-write-input';
+            const btn = document.createElement('button');
+            btn.className = 'submit-answer-btn'; btn.id = 'submit-btn-action'; btn.innerText = 'تأكيد الإجابة';
+            btn.onclick = () => check(input.value, input);
+            grid.appendChild(input); grid.appendChild(btn);
+            input.focus();
+        } else {
+            timeLeft = 15;
+            data.options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-btn'; btn.innerText = opt;
+                btn.onclick = () => check(opt, btn);
+                grid.appendChild(btn);
+            });
+        }
+        startTimer();
+    }
+
+    function startTimer() {
+        document.getElementById('timer-display').innerText = timeLeft;
+        document.getElementById('timer-display').style.borderColor = "var(--gold)";
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer-display').innerText = timeLeft;
+            if(timeLeft <= 5) document.getElementById('timer-display').style.borderColor = "var(--red)";
+            if(timeLeft <= 0) { clearInterval(timerInterval); if(!isAnswering) check("", null); }
+        }, 1000);
+    }
+
+    function check(userInput, element) {
+        if(isAnswering) return;
+        isAnswering = true;
+        clearInterval(timerInterval);
+        const subBtn = document.getElementById('submit-btn-action');
+        if(subBtn) subBtn.disabled = true;
+
+        const correct = quizData[currentQuestionIdx].ans;
+        const isCorrect = normalizeArabic(userInput || "") === normalizeArabic(correct);
+
+        if(isCorrect) {
+            score++;
+            if(element) element.classList.add('correct');
+        } else {
+            if(element) element.classList.add('wrong');
+            const reveal = document.getElementById('reveal-box');
+            reveal.innerText = "الصواب: " + correct;
+            reveal.style.display = 'block';
+        }
+
+        if(quizData[currentQuestionIdx].type === 'choice') {
+            document.querySelectorAll('.option-btn').forEach(b => {
+                b.style.pointerEvents = 'none';
+                if(b.innerText === correct) b.classList.add('correct');
+            });
+        }
+
+        setTimeout(() => { currentQuestionIdx++; showQuestion(); }, 2000);
+    }
+
+    function showResult() {
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('result-container').style.display = 'block';
+        document.getElementById('final-score').innerText = score;
+        let m = score >= 18 ? "مبارك! إتقان مذهل." : score >= 15 ? "جيد جداً، واصل المراجعة." : "تحتاج لمزيد من التركيز والضبط.";
+        document.getElementById('result-message').innerText = m;
+    }
+
+    function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+</script>
+</body>
+</html>
