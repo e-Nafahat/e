@@ -80,12 +80,12 @@
         transform: scale(1.05);
     }
 
-    /* نص الحقوق بلمسة لونية مميزة */
+    /* نص الحقوق بلمسة لونية مميزة في الأسفل */
     .copyright-text {
         position: absolute;
-        bottom: 20px;
-        font-size: 0.6rem;
-        color: rgba(212, 175, 55, 0.4); /* لون ذهبي خافت جدا ومميز */
+        bottom: 25px;
+        font-size: 0.65rem;
+        color: rgba(212, 175, 55, 0.35); 
         letter-spacing: 2px;
         text-transform: uppercase;
         opacity: 0;
@@ -162,7 +162,7 @@
         const logoAudio = document.getElementById('logo-sound');
 
         startBtn.addEventListener('click', () => {
-            // خروج شاشة الترحيب بسلاسة تامة
+            // خروج الواجهة الأولى بسلاسة
             entryScreen.style.opacity = '0';
             
             setTimeout(() => { 
@@ -172,12 +172,12 @@
                 setTimeout(() => { 
                     cinema.style.opacity = '1'; 
                     
-                    // تشغيل الصوت بعد ضمان تفاعل المستخدم
+                    // تشغيل الصوت (NfahatS.mp3)
                     if(logoAudio) {
                         logoAudio.play().catch(e => console.error("Audio Playback Error:", e));
                     }
 
-                    // تفعيل أنيميشن الشعار
+                    // تفعيل أنيميشن الشعار والأثر
                     const logo = cinema.querySelector('.elegant-logo-img');
                     const line = cinema.querySelector('.elegant-line');
                     const sub = cinema.querySelector('.elegant-sub');
@@ -189,8 +189,10 @@
 
             }, 800);
 
+            // إرسال رسالة لملف index.html ليعرف أن المقدمة بدأت
             window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
             
+            // التلاشي النهائي بعد اكتمال العرض السينمائي
             setTimeout(() => {
                 if(cinema) cinema.style.opacity = '0';
                 window.parent.postMessage('START_SITE_NOW', '*');
