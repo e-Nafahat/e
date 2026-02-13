@@ -469,7 +469,7 @@
         <div class="audio-strip s3"><div class="strip-header"><div class="strip-title">فِي ظِلَالِ اَلسِّيرَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/fi_zilal_alsiyra', this)">▶</button></div><div class="strip-desc">سيرة نبينا محمد ﷺ.</div></div>
         <div class="audio-strip s4"><div class="strip-header"><div class="strip-title">اَلرُّقْيَةُ الشَّرْعِيَّةُ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/roqiah', this)">▶</button></div><div class="strip-desc">آيَاتٌ مِنَ الْقُرْآنِ لِلتَّحْصِينِ.</div></div>
         <div class="audio-strip s5"><div class="strip-header"><div class="strip-title">آيَاتُ السَّكِينَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/sakeenah', this)">▶</button></div><div class="strip-desc">آيَاتٌ تُرِيحُ الْقُلُوبَ.</div></div>
-        <div class="audio-strip s6"><div class="strip-header"><div class="strip-title">تِلَاوَاتٌ خَاشِعَةٌ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/salma', this)">▶</button></div><div class="strip-desc">تلاوات مؤثرة ومختارة.</div></div>
+        <div class="audio-strip s6"><div class="strip-header"><div class="strip-title">تِلَاوَاتٌ خَاشِعَةٌ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/salma', this).">▶</button></div><div class="strip-desc">تلاوات مؤثرة ومختارة.</div></div>
     </div>
 
     <a href="../Library/library.html" class="library-entrance">
@@ -507,7 +507,7 @@
 
         async function executeKSearch() {
             const query = document.getElementById('kInput').value;
-            if(!query || query.length < 3) return;
+            if(!query || query.length < 2) return;
 
             const modal = document.getElementById('kModal');
             const loader = document.getElementById('kLoader');
@@ -518,12 +518,14 @@
             loader.style.display = 'block';
 
             try {
-                // الاتصال بخادم نيتليفاي الآمن بدلا من الاتصال المباشر بجوجل
+                // التعديل الجذري هنا لضمان وصول الطلب لنيتليفاي من داخل مجلد leader
                 const response = await fetch('/.netlify/functions/search', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query: query })
                 });
+
+                if (!response.ok) throw new Error('Network response was not ok');
 
                 const data = await response.json();
                 loader.style.display = 'none';
@@ -532,11 +534,24 @@
                     let result = data.candidates[0].content.parts[0].text;
                     answerArea.innerHTML = result.replace(/\n/g, '<br>');
                 } else {
-                    answerArea.innerHTML = "عذرا، لم يتم العثور على نتيجة دقيقة، يرجى المحاولة مرة أخرى بصياغة مختلفة.";
+                    answerArea.innerHTML = "لم اتمكن من جلب ملخص دقيق، حاول مرة اخرى.";
                 }
             } catch (error) {
                 loader.style.display = 'none';
-                answerArea.innerHTML = "نعتذر، حدث خطأ في الاتصال بالباحث المعرفي. تأكد من إعدادات الخادم.";
+                // محاولة ثانية بمسار نسبي بديل في حال فشل الاول
+                try {
+                     const responseAlt = await fetch('../.netlify/functions/search', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: query })
+                    });
+                    const dataAlt = await responseAlt.json();
+                    if(dataAlt.candidates) {
+                         answerArea.innerHTML = dataAlt.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                         return;
+                    }
+                } catch(e) {}
+                answerArea.innerHTML = "نعتذر، حدث خطأ في الاتصال بالباحث المعرفي. تأكد من استقرار خادم Netlify.";
             }
         }
 
