@@ -6,7 +6,7 @@
     
     <meta name="google-site-verification" content="xxXB4Y8Tlx1hQQAUzb_KNMtpvvUyPhBt2SfB6yNBpuA" />
 
-    <title>نفحات إيمانية | المنهج الصافي والذكر الحكيم</title>
+    <title>نفحات ايمانية | المنهج الصافي والذكر الحكيم</title>
 
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
@@ -18,13 +18,13 @@
     <link rel="shortcut icon" type="image/png" href="leader/LogoNafahat.png">
     <link rel="apple-touch-icon" href="leader/LogoNafahat.png">
 
-    <meta name="description" content="نفحات إيمانية هي بوابتكم اليومية لعيش أنوار السنة النبوية والمنهج الصافي. نقدم محتوى إسلامي موثق، إذاعة قرآن كريم، ومكتبة شاملة على منهج أهل السنة والجماعة. نحن نحفظ ميراثا نبويا يضيء حياتك.">
-    <meta name="keywords" content="نفحات ايمانية، المنهج الصافي، اهل السنة والجماعة، احاديث نبوية، مكتبة اسلامية،  مصحح القراءه ، اختبارات الإجازة ، لختمة، اذكار، تاملات ايمانية، كتب شرعية">
+    <meta name="description" content="نفحات ايمانية هي بوابتكم اليومية لعيش انوار السنة النبوية والمنهج الصافي. نقدم محتوى اسلامي موثق، اذاعة قران كريم، ومكتبة شاملة على منهج اهل السنة والجماعة. نحن نحفظ ميراثا نبويا يضيء حياتك.">
+    <meta name="keywords" content="نفحات ايمانية، المنهج الصافي، اهل السنة والجماعة، احاديث نبوية، مكتبة اسلامية، مصحح القراءه، اختبارات الاجازة، لختمة، اذكار، تاملات ايمانية، كتب شرعية">
     
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="نفحات إيمانية">
-    <meta property="og:title" content="نفحات إيمانية | ميراث نبوي يضيء حياتك">
-    <meta property="og:description" content="نفحات إيمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج أهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
+    <meta property="og:site_name" content="نفحات ايمانية">
+    <meta property="og:title" content="نفحات ايمانية | ميراث نبوي يضيء حياتك">
+    <meta property="og:description" content="نفحات ايمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج اهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
     
     <meta property="og:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
     <meta property="og:url" content="https://e-nafahat.github.io/e/">
@@ -158,7 +158,7 @@
             <button id="home-btn" class="glass-tab c-1 active" onclick="switchPage('home-frame', this)">الرئيسية</button>
             <button class="glass-tab c-2" onclick="switchPage('masbaha-frame', this)">المسبحة</button>
             <button id="posts-btn" class="glass-tab c-3" onclick="switchPage('FrontSmart-frame', this)">المقالات</button>
-            <button id="mehrab-btn" class="glass-tab c-mehrab" onclick="switchPage('mehrab-frame', this)">تَأَمُّلَاتٌ</button>
+            <button id="mehrab-btn" class="glass-tab c-mehrab" onclick="switchPage('mehrab-frame', this)">تأملات</button>
             <button id="khatma-btn" class="glass-tab c-khatma" onclick="switchPage('khatma-frame', this)">الختمة</button>
             <button id="lib-btn" class="glass-tab c-library" onclick="switchPage('library-frame', this)">المكتبة</button>
             <button id="more-btn" class="glass-tab c-4" onclick="switchPage('more-frame', this)">أخرى</button>
@@ -212,6 +212,7 @@
             document.querySelectorAll('.glass-tab').forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
             
+            // Logic Check: تحسين تجربة المستخدم عبر تغيير خلفية الـ Body لتناسب القسم المختار
             if (frameId === 'masbaha-frame') document.body.style.backgroundColor = "#000000";
             else if (frameId === 'library-frame') document.body.style.backgroundColor = "#b0b0b0";
             else if (frameId === 'khatma-frame') document.body.style.backgroundColor = "#0f172a"; 
