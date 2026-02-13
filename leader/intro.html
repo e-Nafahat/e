@@ -1,201 +1,75 @@
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html { 
+            margin: 0; padding: 0; overflow: hidden; background: #000; height: 100%; 
+            font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; 
+        }
+        #cinema-intro { 
+            display: flex; opacity: 1; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: #000; align-items: center; 
+            justify-content: center; transition: opacity 1.2s ease-in-out; 
+        }
+        .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 6px; }
+        .elegant-logo-img { width: 110px; height: auto; opacity: 0; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)); }
+        .elegant-line { height: 1px; width: 65%; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 2px 0; }
+        .elegant-sub { font-weight: 400; font-size: 0.9rem; color: #cecece; opacity: 0; margin: 0; padding: 0 15px; text-align: center; line-height: 1.2; }
+        .mini-btn-solid {
+            margin-top: 15px; padding: 8px 35px; font-size: 0.8rem; font-family: 'Cairo', sans-serif;
+            color: #000; background: #d4af37; border: none; border-radius: 4px;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease, opacity 0.5s ease; opacity: 0;
+        }
+        .fade-in-up { animation: fadeInUp 1.5s ease forwards; }
+        .fade-in { animation: fadeIn 1.5s ease forwards; }
+        .scale-x { animation: scaleX 1.2s ease forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleX { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+    </style>
+</head>
+<body>
 
-<audio id="logo-sound" src="NfahatS.mp3" preload="auto"></audio>
+    <audio id="logo-sound" preload="auto">
+        <source src="lindo.mp3" type="audio/mpeg">
+    </audio>
 
-<div id="entry-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10005; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1.2s ease;">
-    
-    <div class="brand-header">
-        <h1 class="brand-arabic">نفحات إيمانية</h1>
-        <p class="brand-english">Nafahat Imaniyah</p>
-    </div>
-
-    <button id="start-btn" class="royal-gold-btn">مرحبا</button>
-
-    <div class="copyright-text">All Rights Reserved © 2026</div>
-</div>
-
-<div id="cinema-intro" style="display: none; opacity: 0; z-index: 10004; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; align-items: center; justify-content: center; transition: opacity 1.5s ease;">
-    <div class="intro-content">
-        <img src="LogoNafahat.png" class="elegant-logo-img" alt="Logo">
-        
-        <div class="elegant-line"></div>
-        
-        <div class="elegant-sub-container">
-            <p class="elegant-sub">لن يصلح آخر هذه الأمة إلا ما أصلح أولها</p>
+    <div id="cinema-intro">
+        <div class="intro-content">
+            <img src="LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
+            <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
+            <p class="elegant-sub fade-in" style="animation-delay: 1.8s;">لن يصلح آخر هذه الأمة إلا بما صلح به أولها</p>
+            <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.5s;">دخول</button>
         </div>
     </div>
-</div>
 
-<style>
-    body, html { margin: 0; padding: 0; overflow: hidden; touch-action: none; background: #000; height: 100%; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
-    
-    /* أنيميشن الدخول السينمائي للنصوص والزر عند فتح الصفحة */
-    .brand-header {
-        text-align: center;
-        margin-bottom: 30px;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: cinemaFadeUp 2s 0.5s ease-out forwards;
-    }
+    <script>
+        (function() {
+            const startBtn = document.getElementById('start-btn');
+            const logoAudio = document.getElementById('logo-sound');
 
-    .brand-arabic {
-        color: #d4af37;
-        font-size: 1.5rem;
-        font-weight: 400;
-        margin: 0;
-        letter-spacing: 1px;
-    }
+            startBtn.addEventListener('click', function() {
+                // 1. أمر الملف الرئيسي (Index) بتشغيل الصوت من عنده لكي لا ينقطع عند حذف الإنترو
+                window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
 
-    .brand-english {
-        color: #999;
-        font-size: 1rem;
-        font-weight: 200;
-        margin: 2px 0 0 0;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-    }
+                // 2. تشغيل الصوت احتياطياً هنا أيضاً
+                if(logoAudio) {
+                    logoAudio.play().catch(e => console.log("Audio blocked"));
+                }
 
-    /* الزر الذهبي الملكي البيضاوي النحيف - بلا حدود نهائيا */
-    .royal-gold-btn {
-        background: #d4af37;
-        color: #000;
-        border: none !important; 
-        outline: none !important; 
-        padding: 5px 45px;
-        font-family: 'Cairo', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        opacity: 0;
-        transform: scale(0.9);
-        animation: cinemaFadeUp 1.5s 1.5s ease-out forwards;
-        transition: all 0.3s ease;
-    }
+                // 3. إرسال إشارة الدخول بعد تأخير بسيط جداً لضمان بدء الصوت
+                setTimeout(() => {
+                    window.parent.postMessage('START_SITE_NOW', '*');
+                }, 100);
 
-    .royal-gold-btn:hover {
-        background: #f1c40f;
-        transform: scale(1.05);
-    }
-
-    /* نص الحقوق بلمسة لونية مميزة في الأسفل */
-    .copyright-text {
-        position: absolute;
-        bottom: 25px;
-        font-size: 0.65rem;
-        color: rgba(212, 175, 55, 0.35); 
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        opacity: 0;
-        animation: cinemaFadeUp 2s 2.5s ease-out forwards;
-    }
-
-    /* أنيميشن الصعود السينمائي */
-    @keyframes cinemaFadeUp {
-        0% { opacity: 0; transform: translateY(20px); filter: blur(5px); }
-        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-    }
-
-    .intro-content { 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        width: 100%; 
-        gap: 20px; 
-    }
-    
-    .elegant-logo-img { 
-        width: 170px; 
-        height: auto; 
-        opacity: 0; 
-        filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
-    }
-
-    .elegant-line { 
-        height: 1px; 
-        width: 0; 
-        background: linear-gradient(90deg, transparent, #d4af37, transparent); 
-    }
-
-    .elegant-sub { 
-        font-family: 'Cairo', sans-serif; 
-        font-weight: 400; 
-        font-size: 0.85rem; 
-        color: #cecece; 
-        opacity: 0; 
-        margin: 0; 
-        padding: 0 20px; 
-        text-shadow: 0 0 10px rgba(0,0,0,0.8); 
-        text-align: center;
-        line-height: 1.5;
-    }
-    
-    /* أنيميشن الشعار (المرحلة الثانية) */
-    .run-logo { animation: fadeInLogoImg 2.5s ease-out forwards; }
-    .run-line { animation: growLine 2s 0.8s ease-out forwards; }
-    .run-sub { animation: fadeInSub 2.5s 1.5s ease-out forwards; }
-    
-    @keyframes fadeInLogoImg { 
-        0% { opacity: 0; transform: scale(0.95); } 
-        100% { opacity: 1; transform: scale(1); } 
-    }
-    
-    @keyframes growLine { 
-        0% { width: 0; opacity: 0; } 
-        100% { width: 60%; opacity: 1; } 
-    }
-    
-    @keyframes fadeInSub { 
-        0% { opacity: 0; transform: translateY(10px); } 
-        100% { opacity: 1; transform: translateY(0); } 
-    }
-</style>
-
-<script>
-    (function() {
-        const startBtn = document.getElementById('start-btn');
-        const entryScreen = document.getElementById('entry-screen');
-        const cinema = document.getElementById('cinema-intro');
-        const logoAudio = document.getElementById('logo-sound');
-
-        startBtn.addEventListener('click', () => {
-            // خروج الواجهة الأولى بسلاسة
-            entryScreen.style.opacity = '0';
-            
-            setTimeout(() => { 
-                entryScreen.style.display = 'none'; 
-                cinema.style.display = 'flex';
-                
-                setTimeout(() => { 
-                    cinema.style.opacity = '1'; 
-                    
-                    // تشغيل الصوت (NfahatS.mp3)
-                    if(logoAudio) {
-                        logoAudio.play().catch(e => console.error("Audio Playback Error:", e));
-                    }
-
-                    // تفعيل أنيميشن الشعار والأثر
-                    const logo = cinema.querySelector('.elegant-logo-img');
-                    const line = cinema.querySelector('.elegant-line');
-                    const sub = cinema.querySelector('.elegant-sub');
-                    
-                    if(logo) logo.classList.add('run-logo');
-                    if(line) line.classList.add('run-line');
-                    if(sub) sub.classList.add('run-sub');
-                }, 50);
-
-            }, 800);
-
-            // إرسال رسالة لملف index.html ليعرف أن المقدمة بدأت
-            window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
-            
-            // التلاشي النهائي بعد اكتمال العرض السينمائي
-            setTimeout(() => {
-                if(cinema) cinema.style.opacity = '0';
-                window.parent.postMessage('START_SITE_NOW', '*');
-            }, 8500); 
-        });
-    })();
-</script>
+                this.style.opacity = '0';
+                document.getElementById('cinema-intro').style.opacity = '0';
+            });
+        })();
+    </script>
+</body>
+</html>
