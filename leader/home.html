@@ -503,7 +503,18 @@
     <script>
         const audio = document.getElementById('globalAudio');
         let lastBtn = null;
-        function toggleAudio(url, btn) { if (audio.src === url && !audio.paused) { audio.pause(); btn.innerText = "▶"; } else { if (lastBtn) lastBtn.innerText = "▶"; audio.src = url; audio.play(); btn.innerText = "⏸"; lastBtn = btn; } }
+        function toggleAudio(url, btn) { 
+            if (audio.src === url && !audio.paused) { 
+                audio.pause(); 
+                btn.innerText = "▶"; 
+            } else { 
+                if (lastBtn) lastBtn.innerText = "▶"; 
+                audio.src = url; 
+                audio.play(); 
+                btn.innerText = "⏸"; 
+                lastBtn = btn; 
+            } 
+        }
 
         async function executeKSearch() {
             const query = document.getElementById('kInput').value;
@@ -518,40 +529,27 @@
             loader.style.display = 'block';
 
             try {
-                // التعديل الجذري هنا لضمان وصول الطلب لنيتليفاي من داخل مجلد leader
+                // المسار المباشر من مجلد leader للوصول الى وظائف Netlify في الجذر الرئيسي
                 const response = await fetch('/.netlify/functions/search', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query: query })
                 });
 
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error('Network error');
 
                 const data = await response.json();
                 loader.style.display = 'none';
                 
-                if(data.candidates && data.candidates[0].content.parts[0].text) {
+                if(data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
                     let result = data.candidates[0].content.parts[0].text;
                     answerArea.innerHTML = result.replace(/\n/g, '<br>');
                 } else {
-                    answerArea.innerHTML = "لم اتمكن من جلب ملخص دقيق، حاول مرة اخرى.";
+                    answerArea.innerHTML = "لم اتمكن من جلب نتيجة دقيقة، حاول صياغة سؤالك بشكل اوضح.";
                 }
             } catch (error) {
                 loader.style.display = 'none';
-                // محاولة ثانية بمسار نسبي بديل في حال فشل الاول
-                try {
-                     const responseAlt = await fetch('../.netlify/functions/search', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query: query })
-                    });
-                    const dataAlt = await responseAlt.json();
-                    if(dataAlt.candidates) {
-                         answerArea.innerHTML = dataAlt.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
-                         return;
-                    }
-                } catch(e) {}
-                answerArea.innerHTML = "نعتذر، حدث خطأ في الاتصال بالباحث المعرفي. تأكد من استقرار خادم Netlify.";
+                answerArea.innerHTML = "نعتذر، حدث خطأ في الاتصال بالباحث المعرفي. تأكد من استقرار خادم Netlify وتفعيل الـ API.";
             }
         }
 
