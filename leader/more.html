@@ -246,10 +246,8 @@
 <body>
 
     <div class="container">
-        
         <div class="main-card">
             <img src="LogoNafahat.png" alt="Logo" class="site-logo-header">
-            
             <h1>إِضَافَاتٌ ذَكِيَّةٌ</h1>
             <div id="city-name" style="color:white; font-size:0.7rem; opacity:0.8;">جَارٍ حِسَابُ الْمَوَاقِيتِ...</div>
             
@@ -292,20 +290,16 @@
             </div>
 
             <div class="smart-links-container">
-                <a href="https://whatsapp.com/channel/0029Vb6wpi38F2pFCivVaY03" target="_blank" class="smart-btn wa">
-                    <div class="smart-icon">
-                        <img src="LogoNafahat.png" alt="Logo">
-                    </div>
+                <a href="https://whatsapp.com/channel/0029Vb6WGUtEVccDnT65CL0A" target="_blank" class="smart-btn wa">
+                    <div class="smart-icon"><img src="LogoNafahat.png" alt="Logo"></div>
                     <div style="text-align:right">
-                        <strong style="display:block; color:var(--white); font-size:0.85rem;">قَنَاةُ الْوَاتْسَابِ</strong>
-                        <small style="color:rgba(255,255,255,0.6); font-size:0.65rem;">تَابِعْ آخِرَ النَّفَحَاتِ هُنَا.</small>
+                        <strong style="display:block; color:var(--white); font-size:0.85rem;">قَنَاةُ "MYWAY" (واتساب)</strong>
+                        <small style="color:rgba(255,255,255,0.6); font-size:0.65rem;">Siga o canal no WhatsApp.</small>
                     </div>
                 </a>
 
                 <a href="https://t.me/nfahat_com" target="_blank" class="smart-btn tg">
-                    <div class="smart-icon">
-                        <img src="LogoNafahat.png" alt="Logo">
-                    </div>
+                    <div class="smart-icon"><img src="LogoNafahat.png" alt="Logo"></div>
                     <div style="text-align:right">
                         <strong style="display:block; color:var(--white); font-size:0.85rem;">قَنَاةُ التِّيلِيجرَامِ</strong>
                         <small style="color:rgba(255,255,255,0.6); font-size:0.65rem;">مُسْتَوْدَعُ الْخَيْرِ وَالرَّقَائِقِ.</small>
@@ -325,20 +319,20 @@
                 <strong style="color:var(--gold); display:block; text-align:center; margin-bottom:5px;">❁ مَنْهَجُنَا الْأَصِيلُ ❁</strong>
                 نَحْنُ مَوْقِعٌ إِسْلَامِيٌّ سُنِّيٌّ، نَعْتَمِدُ عَلَى النُّصُوصِ الصَّحِيحَةِ وَالْآثَارِ الثَّابِتَةِ عَنِ النَّبِيِّ ﷺ وَصَحَابَتِهِ الْكِرَامِ. غَايَتُنَا صَفَاءُ الْعَقِيدَةِ وَتَزْكِيَةُ النُّفُوسِ.
                 <div class="poet-box">
-                    "تَزَوَّدْ مِنَ التَّقْوَى فَإِنَّكَ لَا تَدْرِي.. ِذَا جَنَّ لَيْلٌ هَلْ تَعِيشُ إِلَى الْفَجْرِ"<br>
+                    "تَزَوَّدْ مِنَ التَّقْوَى فَإِنَّكَ لَا تَدْرِي.. إِذَا جَنَّ لَيْلٌ هَلْ تَعِيشُ إِلَى الْفَجْرِ"<br>
                     <small>— الْإِمَامُ الشَّافِعِيُّ</small>
                 </div>
             </div>
 
             <button class="share-btn" onclick="copyLink()">📋 اِنْسَخْ رَابِطَ الْمَوْقِعِ وَانْشُرِ الْخَيْرَ</button>
         </div>
-
         <p class="footer-text">نَفَحَاتٌ إِيمَانِيَّةٌ | 2026 | جَمِيعُ الْحُقُوقِ مَحْفُوظَةٌ</p>
     </div>
 
     <script>
         let prayerTimings = {};
         let countdownInterval;
+        let hijriDataGlobal = null;
 
         const prayerIds = {
             Fajr: document.getElementById('fajr'),
@@ -350,56 +344,51 @@
         };
 
         function updateRamadanCountdown() {
-            const ramadanDate = new Date("Feb 18, 2026 00:00:00").getTime();
+            if (!hijriDataGlobal) return;
+
+            const hMonth = hijriDataGlobal.month.number;
+            const hDay = parseInt(hijriDataGlobal.day);
+            const hYear = parseInt(hijriDataGlobal.year);
+
+            const targetRamadanDate = new Date("Feb 18, 2026 00:00:00").getTime();
             const now = new Date().getTime();
-            const diff = ramadanDate - now;
+            const diff = targetRamadanDate - now;
+
+            if (hMonth === 9) {
+                const rBox = document.querySelector(".ramadan-prep");
+                if(rBox) rBox.innerHTML = "<span class='ramadan-title' style='font-size:1.1rem;'>🌙 رَمَضَانُ مُبَارَكٌ.. تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</span>";
+                return;
+            }
 
             if (diff > 0) {
                 const d = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
                 document.getElementById("r-days").innerText = d;
                 document.getElementById("r-hours").innerText = h;
                 document.getElementById("r-mins").innerText = m;
-            } else {
-                const rBox = document.querySelector(".ramadan-prep");
-                if(rBox) rBox.innerHTML = "<span class='ramadan-title' style='font-size:1.1rem;'>🌙 رَمَضَانُ مُبَارَكٌ.. تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</span>";
             }
         }
 
         async function initLocation() {
             document.getElementById('btn-auto').classList.add('active');
             document.getElementById('btn-makkah').classList.remove('active');
-            
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
-                        const lat = pos.coords.latitude;
-                        const lon = pos.coords.longitude;
-                        getPrayers(lat, lon, "📍 مَوْقِعُكَ الْحَالِيُّ");
-                    },
-                    async () => {
-                        // في حال رفض المستخدم الإذن أو فشل الـ GPS، نلجأ للـ IP كخطة بديلة
-                        fallbackByIP();
-                    }
+                    async (pos) => getPrayers(pos.coords.latitude, pos.coords.longitude, "📍 مَوْقِعُكَ الْحَالِيُّ"),
+                    async () => fallbackByIP()
                 );
-            } else {
-                fallbackByIP();
-            }
+            } else { fallbackByIP(); }
         }
 
         async function fallbackByIP() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
-                if(data.latitude) {
-                    getPrayers(data.latitude, data.longitude, `📍 مَوْقِعُكَ: ${data.city}`);
-                } else {
-                    throw new Error();
-                }
-            } catch (e) {
-                getPrayers(21.4225, 39.8262, "🕋 مَكَّةُ (تَعَذَّرَ التَّحْدِيدُ)");
-            }
+                if(data.latitude) getPrayers(data.latitude, data.longitude, `📍 مَوْقِعُكَ: ${data.city}`);
+                else throw new Error();
+            } catch (e) { getPrayers(21.4225, 39.8262, "🕋 مَكَّةُ (تَعَذَّرَ التَّحْدِيدُ)"); }
         }
 
         async function getPrayers(lat, lon, label) {
@@ -409,40 +398,33 @@
                     document.getElementById('btn-makkah').classList.add('active');
                     document.getElementById('btn-auto').classList.remove('active');
                 }
-
                 const response = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
                 const result = await response.json();
-                
                 if (result.data) {
                     prayerTimings = result.data.timings;
+                    hijriDataGlobal = result.data.date.hijri;
                     const dateInfo = result.data.date;
                     
-                    document.getElementById('hijri-date').innerText = `${dateInfo.hijri.day} ${dateInfo.hijri.month.ar} ${dateInfo.hijri.year} هـ`;
+                    document.getElementById('hijri-date').innerText = `${hijriDataGlobal.day} ${hijriDataGlobal.month.ar} ${hijriDataGlobal.year} هـ`;
                     document.getElementById('gregorian-date').innerText = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year} مـ`;
-
-                    const hDay = parseInt(dateInfo.hijri.day);
-                    const whiteDaysCard = document.getElementById('white-days-card');
-                    whiteDaysCard.style.display = ([13, 14, 15].includes(hDay)) ? 'block' : 'none';
-
-                    // حساب وقت القيام (الثلث الأخير)
+                    
+                    const hDay = parseInt(hijriDataGlobal.day);
+                    document.getElementById('white-days-card').style.display = (hijriDataGlobal.month.number !== 9 && [13, 14, 15].includes(hDay)) ? 'block' : 'none';
+                    
                     const parse = (s) => { const [h,m] = s.split(':').map(Number); return h*60+m; };
                     const nightDuration = (parse(prayerTimings.Fajr) + 1440 - parse(prayerTimings.Maghrib)) % 1440;
                     const qiyamMinutes = (parse(prayerTimings.Fajr) + 1440 - (nightDuration / 3)) % 1440;
                     prayerTimings.Qiyam = `${String(Math.floor(qiyamMinutes/60)%24).padStart(2,'0')}:${String(Math.floor(qiyamMinutes%60)).padStart(2,'0')}`;
-
-                    updateUI();
-                    startCountdown();
+                    
+                    updateUI(); 
+                    startCountdown(); 
                     updateRamadanCountdown();
                 }
-            } catch (error) {
-                console.error("API Error");
-            }
+            } catch (error) { console.error("API Error"); }
         }
 
         function updateUI() {
-            for (let key in prayerIds) {
-                if(prayerTimings[key]) prayerIds[key].innerText = prayerTimings[key];
-            }
+            for (let key in prayerIds) if(prayerTimings[key]) prayerIds[key].innerText = prayerTimings[key];
         }
 
         function startCountdown() {
@@ -450,7 +432,6 @@
             countdownInterval = setInterval(() => {
                 if(!prayerTimings.Fajr) return;
                 const now = new Date();
-                
                 const schedule = [
                     { id: 'card-Fajr', time: prayerTimings.Fajr },
                     { id: 'card-Dhuhr', time: prayerTimings.Dhuhr },
@@ -458,7 +439,6 @@
                     { id: 'card-Maghrib', time: prayerTimings.Maghrib },
                     { id: 'card-Isha', time: prayerTimings.Isha }
                 ];
-
                 let next = null, nextId = '';
                 for (let p of schedule) {
                     let [h, m] = p.time.split(':');
@@ -470,11 +450,8 @@
                     next = new Date(); next.setDate(next.getDate() + 1);
                     next.setHours(h, m, 0); nextId = schedule[0].id;
                 }
-
                 document.querySelectorAll('.prayer-item').forEach(el => el.classList.remove('active-now'));
-                const nextEl = document.getElementById(nextId);
-                if(nextEl) nextEl.classList.add('active-now');
-
+                if(document.getElementById(nextId)) document.getElementById(nextId).classList.add('active-now');
                 const diff = next - now;
                 const hh = Math.floor(diff / 3600000);
                 const mm = Math.floor((diff % 3600000) / 60000);
@@ -489,7 +466,6 @@
             });
         }
 
-        // بدء العمل عند تحميل الصفحة
         initLocation();
         setInterval(updateRamadanCountdown, 60000);
     </script>
