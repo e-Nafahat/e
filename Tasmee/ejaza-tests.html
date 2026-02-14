@@ -19,7 +19,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Cairo', sans-serif; }
         body { background: var(--bg); color: var(--navy); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 
-        /* تصغير الهيدر لتقليل الارتفاع */
         .header { text-align: center; margin-bottom: 15px; }
         .header img { width: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .header h1 { color: var(--navy); font-size: 1.2rem; margin: 5px 0 0; font-weight: 900; }
@@ -93,7 +92,6 @@
             border: none; border-radius: 10px; font-weight: 700; font-size: 1rem;
             margin-top: 5px; cursor: pointer;
         }
-        .submit-answer-btn:disabled { background: #ccc; }
 
         .option-btn.correct, .write-input.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .option-btn.wrong, .write-input.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
@@ -127,16 +125,18 @@
 </div>
 
 <div id="setup-container" class="setup-container">
-    <div class="section-title">المرحلة</div>
-    <div class="card-grid">
-        <div class="phase-card active" onclick="selectPhase(1, 10, this)">
-            <div class="card-info"><h3>المرحلة الأولى</h3><span>من 1 إلى 10</span></div>
-        </div>
-        <div class="phase-card" onclick="selectPhase(11, 20, this)">
-            <div class="card-info"><h3>المرحلة الثانية</h3><span>من 11 إلى 20</span></div>
-        </div>
-        <div class="phase-card" onclick="selectPhase(21, 30, this)">
-            <div class="card-info"><h3>المرحلة الثالثة</h3><span>من 21 إلى 30</span></div>
+    <div id="phase-section">
+        <div class="section-title">المرحلة</div>
+        <div class="card-grid">
+            <div class="phase-card active" onclick="selectPhase(1, 10, this)">
+                <div class="card-info"><h3>المرحلة الأولى</h3><span>من الجزء الأول حتى الجزء العاشر</span></div>
+            </div>
+            <div class="phase-card" onclick="selectPhase(11, 20, this)">
+                <div class="card-info"><h3>المرحلة الثانية</h3><span>من الجزء الحادي عشر حتى الجزء العشرين</span></div>
+            </div>
+            <div class="phase-card" onclick="selectPhase(21, 30, this)">
+                <div class="card-info"><h3>المرحلة الثالثة</h3><span>من الجزء الحادي والعشرين حتى الجزء الثلاثين</span></div>
+            </div>
         </div>
     </div>
 
@@ -150,6 +150,9 @@
         </div>
         <div class="type-card" onclick="selectType('terminator', this)">
             <div class="card-info"><h3>ضبط الفواصل</h3></div>
+        </div>
+        <div class="type-card" onclick="selectType('culture', this)">
+            <div class="card-info"><h3>ثقافة قرآنية</h3><span>فرائد ومعلومات عامة</span></div>
         </div>
     </div>
 
@@ -191,7 +194,53 @@
     let timeLeft = 15;
     let timerInterval;
     let isAnswering = false;
-    let surahNamesInPhase = [];
+
+    const culturalQuestionsBank = [
+        // المجموعة الأصلية
+        { q: "ما هي أطول آية في القرآن الكريم؟", ans: "آية الدين", hint: "أرقام قرآنية", explain: "وهي الآية رقم 282 من سورة البقرة.", alt: ["آية الكرسي", "آية المداينة"] },
+        { q: "ما هي أطول كلمة في القرآن الكريم؟", ans: "فأسقيناكموه", hint: "لطائف لغوية", explain: "تتكون من 11 حرفا ووردت في سورة الحجر.", alt: ["ليستخلفنهم", "أنلزمكموها"] },
+        { q: "من هو الصحابي الملقب بـ (ترجمان القرآن)؟", ans: "عبد الله بن عباس", hint: "أعلام القرآن", explain: "ابن عم النبي ﷺ وحبر الأمة.", alt: ["عبد الله بن مسعود", "زيد بن ثابت"] },
+        { q: "ما هو أكبر عدد ذكر صراحة في القرآن الكريم؟", ans: "مئة ألف", hint: "أرقام قرآنية", explain: "في قوله تعالى: {وأرسلناه إلى مائة ألف أو يزيدون}.", alt: ["سبعون ألفا", "ألف شهر"] },
+        { q: "ما هي أقصر آية في القرآن الكريم؟", ans: "مدهامتان", hint: "فرائد قرآنية", explain: "وردت في سورة الرحمن وهي كلمة واحدة.", alt: ["حم", "طه"] },
+        { q: "أي من هذه السور تنتهي باسمها؟", ans: "المسد", hint: "لطائف السور", explain: "تنتهي بكلمة (مسد).", alt: ["الفاتحة", "البقرة"] },
+        { q: "كم عدد سور (الحواميم)؟", ans: "7", hint: "إحصائيات", explain: "غافر، فصلت، الشورى، الزخرف، الدخان، الجاثية، الأحقاف.", alt: ["5", "10"] },
+        { q: "ما هي السورة التي تسمى (الفاضحة)؟", ans: "التوبة", hint: "أسماء السور", explain: "لأنها فضحت المنافقين.", alt: ["المنافقون", "الأحزاب"] },
+        { q: "سورة تسمى (سنام القرآن)، ما هي؟", ans: "البقرة", hint: "فضائل السور", explain: "لعظم قدرها وطولها.", alt: ["آل عمران", "النساء"] },
+        { q: "ما هي السورة التي تسمى (قلب القرآن)؟", ans: "يس", hint: "لطائف قرآنية", explain: "كما ورد في المشهور من الآثار.", alt: ["الرحمن", "الإخلاص"] },
+        { q: "السورة التي تنتهي جميع آياتها بحرف (الراء) هي؟", ans: "الكوثر", hint: "إعجاز الرسم", explain: "الكوثر، وانحر، والأبتر.", alt: ["العصر", "القدر"] },
+        { q: "السورة التي تنتهي جميع آياتها بحرف (الدال) هي؟", ans: "الإخلاص", hint: "إعجاز الرسم", explain: "أحد، الصمد، يولد، كفوا أحد.", alt: ["الفلق", "الناس"] },
+        { q: "ما هي السورة التي بدأت وانتهت بالتسبيح؟", ans: "الحشر", hint: "بدايات السور", explain: "بدأت بـ (سبح لله) وانتهت بـ (يسبح له).", alt: ["الأعلى", "الجمعة"] },
+        { q: "سورة تحتوي على سجدتين، ما هي؟", ans: "الحج", hint: "السجدات", explain: "هي السورة الوحيدة التي انفردت بسجدتين.", alt: ["النجم", "العلق"] },
+        { q: "السورة الوحيدة التي بدأت بكلمة (سورة) هي؟", ans: "النور", hint: "بدايات السور", explain: "{سورة أنزلناها وفرضناها}.", alt: ["الأحزاب", "الفرقان"] },
+        { q: "ما هي السورة التي تسمى سورة (بني إسرائيل)؟", ans: "الإسراء", hint: "أسماء السور", explain: "لوجود قصة بني إسرائيل في مطلعها.", alt: ["القصص", "النمل"] },
+        { q: "آخر سورة نزلت كاملة من القرآن هي؟", ans: "النصر", hint: "نزول القرآن", explain: "{إذا جاء نصر الله والفتح}.", alt: ["المائدة", "الفاتحة"] },
+        { q: "أطول سورة مكية في القرآن الكريم هي؟", ans: "الأعراف", hint: "إحصائيات", explain: "عدد آياتها 206 آيات.", alt: ["الأنعام", "هود"] },
+        { q: "ما هي الكلمة التي تعتبر مركز حروف القرآن الكريم؟", ans: "وليتلطف", hint: "لطائف قرآنية", explain: "وردت في سورة الكهف.", alt: ["فالتقمه", "سيجعل"] },
+        { q: "سورة وحيدة لا تبدأ بالبسملة، ما هي؟", ans: "التوبة", hint: "بدايات السور", explain: "وتسمى أيضا براءة.", alt: ["الأنفال", "الرعد"] },
+        { q: "ما هي السورة التي تحتوي على بسملتين؟", ans: "النمل", hint: "لطائف قرآنية", explain: "في البداية وفي قصة سليمان.", alt: ["هود", "النحل"] },
+        { q: "كم مرة ذكرت مكة باسمها الصريح في القرآن؟", ans: "مرة واحدة", hint: "أرقام قرآنية", explain: "في سورة الفتح.", alt: ["مرتان", "خمس مرات"] },
+        { q: "كم عدد السور التي بدأت بـ (الحمد لله)؟", ans: "5", hint: "إحصائيات", explain: "الفاتحة، الأنعام، الكهف، سبأ، فاطر.", alt: ["3", "7"] },
+
+        // المجموعة المضافة حديثاً
+        { q: "من هو النبي الذي ذكر في القرآن بأكبر عدد من المرات؟", ans: "موسى عليه السلام", hint: "أعلام القرآن", explain: "ذكر 136 مرة.", alt: ["إبراهيم عليه السلام", "محمد ﷺ"] },
+        { q: "كم عدد الأنبياء الذين ذكروا بأسمائهم في القرآن الكريم؟", ans: "25", hint: "إحصائيات قرآنية", explain: "ورد ذكر 25 نبيا ورسولا صراحة.", alt: ["15", "30"] },
+        { q: "ما هي السورة التي تسمى (سورة العقود)؟", ans: "المائدة", hint: "أسماء السور", explain: "لبدايتها بقوله تعالى {يا أيها الذين آمنوا أوفوا بالعقود}.", alt: ["النساء", "الفتح"] },
+        { q: "ما هي السورة التي تسمى (سورة النعم)؟", ans: "النحل", hint: "أسماء السور", explain: "لكثرة ما عدد الله فيها من نعمه على عباده.", alt: ["الكهف", "الرحمن"] },
+        { q: "سورة يطلق عليها (المنجية) أو (المانعة)، ما هي؟", ans: "الملك", hint: "فضائل السور", explain: "لقوله ﷺ عنها أنها المنجية من عذاب القبر.", alt: ["الواقعة", "يس"] },
+        { q: "سورة تسمى (سورة النساء الصغرى)، فما هي؟", ans: "الطلاق", hint: "أسماء السور", explain: "لاحتوائها على أحكام الأسرة مثل سورة النساء.", alt: ["الممتحنة", "التحريم"] },
+        { q: "كم عدد السور التي تبدأ بكلمة (إنا)؟", ans: "4", hint: "لطائف البدايات", explain: "الفتح، نوح، القدر، الكوثر.", alt: ["3", "5"] },
+        { q: "ما هو الجبل الذي رست عليه سفينة نوح وذكر في القرآن؟", ans: "الجودي", hint: "قصص الأنبياء", explain: "{واستوت على الجودي} سورة هود.", alt: ["الطور", "أحد"] },
+        { q: "ما هي السورة التي انتهت بذكر اسم نبيين؟", ans: "الأعلى", hint: "خواتيم السور", explain: "{صحف إبراهيم وموسى}.", alt: ["الشمس", "الضحى"] },
+        { q: "طائر كان سببا في إسلام أمة كاملة، ما هو؟", ans: "الهدهد", hint: "لطائف قرآنية", explain: "هدهد سليمان عليه السلام مع ملكة سبأ.", alt: ["الغراب", "الطير الأبابيل"] },
+        { q: "كم عدد السور المدنية في القرآن الكريم؟", ans: "28", hint: "إحصائيات", explain: "28 سورة مدنية و86 سورة مكية.", alt: ["20", "32"] },
+        { q: "ما هي السورة التي يبلغ عدد آياتها 110 آيات؟", ans: "الكهف", hint: "أرقام قرآنية", explain: "سورة الكهف عدد آياتها 110.", alt: ["يوسف", "مريم"] },
+        { q: "كلمة (امرأت) رسمت بالتاء المفتوحة إذا أضيفت لزوجها في كم موضع؟", ans: "7", hint: "الرسم العثماني", explain: "وردت في 7 مواضع مثل امرأت فرعون وامرأت نوح.", alt: ["5", "10"] },
+        { q: "ما هي السورة التي بدأت باسم نوع من الفاكهة؟", ans: "التين", hint: "لطائف السور", explain: "سورة التين.", alt: ["الرمان", "الزيتون"] },
+        { q: "ما هو الحيوان الذي اتهم كذبا في قصة أحد الأنبياء؟", ans: "الذئب", hint: "قصص الأنبياء", explain: "في قصة يوسف عليه السلام.", alt: ["الحمار", "الناقة"] },
+        { q: "ما هي السورة التي تخلو تماما من حرف (الراء)؟", ans: "الإخلاص", hint: "لطائف الحروف", explain: "سورة الإخلاص لا يوجد بها حرف الراء.", alt: ["الفاتحة", "الكوثر"] },
+        { q: "كم عدد سجدات التلاوة في القرآن الكريم؟", ans: "15", hint: "أحكام القرآن", explain: "على القول المشهور في عدد السجدات.", alt: ["11", "14"] },
+        { q: "كم مرة وردت قصة (آدم وإبليس) في القرآن الكريم؟", ans: "7", hint: "متشابهات القصص", explain: "وردت في 7 مواضع مختلفة.", alt: ["5", "10"] }
+    ];
 
     function selectPhase(start, end, element) {
         currentPhase = { start, end };
@@ -203,10 +252,14 @@
         quizType = type;
         document.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
         element.classList.add('active');
+        const phaseSec = document.getElementById('phase-section');
+        phaseSec.style.opacity = (type === 'culture') ? '0.3' : '1';
+        phaseSec.style.pointerEvents = (type === 'culture') ? 'none' : 'auto';
     }
 
     function normalizeArabic(text) {
-        return text.replace(/[\u064B-\u065F]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/\s+/g, " ").trim();
+        if(!text) return "";
+        return text.toString().replace(/[\u064B-\u065F]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/\s+/g, " ").trim();
     }
 
     async function startQuiz() {
@@ -215,48 +268,68 @@
         
         try {
             quizData = [];
-            surahNamesInPhase = [];
-            const juzRange = [];
-            while(juzRange.length < 5) {
-                let r = Math.floor(Math.random() * (currentPhase.end - currentPhase.start + 1)) + currentPhase.start;
-                if(!juzRange.includes(r)) juzRange.push(r);
-            }
+            const surahRes = await fetch(`https://api.alquran.cloud/v1/surah`);
+            const allSurahs = (await surahRes.json()).data;
+            const surahNames = allSurahs.map(s => s.name);
 
-            for (const juzNum of juzRange) {
-                const res = await fetch(`https://api.alquran.cloud/v1/juz/${juzNum}/quran-simple`);
-                const json = await res.json();
-                const ayahs = json.data.ayahs;
-                ayahs.forEach(a => { if (!surahNamesInPhase.includes(a.surah.name)) surahNamesInPhase.push(a.surah.name); });
+            if (quizType === 'culture') {
+                let shuffledBank = shuffle([...culturalQuestionsBank]).slice(0, 20);
+                shuffledBank.forEach(item => {
+                    let options = shuffle([item.ans, ...item.alt]);
+                    quizData.push({ ...item, options, type: 'choice' });
+                });
+            } else {
+                const selectedJuzs = [];
+                let start = currentPhase.start;
+                let end = currentPhase.end;
+                while(selectedJuzs.length < 5) {
+                    let r = Math.floor(Math.random() * (end - start + 1)) + start;
+                    if(!selectedJuzs.includes(r)) selectedJuzs.push(r);
+                }
 
-                for(let k=0; k<4; k++) {
-                    let idx = Math.floor(Math.random() * (ayahs.length - 2));
-                    let target = ayahs[idx];
-                    if (quizType === 'terminator') {
-                        let words = target.text.split(' ');
-                        if(words.length < 5) { k--; continue; } 
-                        quizData.push({ q: words.slice(0, -2).join(' ') + " ...", ans: words.slice(-2).join(' '), hint: `فاصلة آية من سورة ${target.surah.name}:`, type: 'write' });
-                    } else if (quizType === 'surahName') {
-                        quizData.push({ q: target.text, ans: target.surah.name, hint: "في أي سورة وردت هذه الآية؟", type: 'choice', correctSurah: target.surah.name });
-                    } else {
-                        quizData.push({ q: target.text, ans: ayahs[idx+1].text, hint: `سورة ${target.surah.name} | آية ${target.numberInSurah}`, options: shuffle([ayahs[idx+1].text, ayahs[Math.floor(Math.random()*ayahs.length)].text, ayahs[Math.floor(Math.random()*ayahs.length)].text]), type: 'choice' });
+                for (const juzNum of selectedJuzs) {
+                    const res = await fetch(`https://api.alquran.cloud/v1/juz/${juzNum}/quran-simple`);
+                    const json = await res.json();
+                    const ayahs = json.data.ayahs;
+
+                    for(let k=0; k<4; k++) {
+                        let idx = Math.floor(Math.random() * (ayahs.length - 2));
+                        let target = ayahs[idx];
+                        
+                        if (quizType === 'terminator') {
+                            let words = target.text.split(' ');
+                            if(words.length < 5) { k--; continue; } 
+                            quizData.push({ q: words.slice(0, -2).join(' ') + " ...", ans: words.slice(-2).join(' '), hint: `فاصلة آية من سورة ${target.surah.name}:`, type: 'write' });
+                        } else if (quizType === 'surahName') {
+                            let wrongSurahs = shuffle(surahNames.filter(n => n !== target.surah.name)).slice(0, 2);
+                            quizData.push({ 
+                                q: target.text, 
+                                ans: target.surah.name, 
+                                hint: "في أي سورة وردت هذه الآية؟", 
+                                type: 'choice', 
+                                options: shuffle([target.surah.name, ...wrongSurahs]) 
+                            });
+                        } else {
+                            let nextAyah = ayahs[idx+1].text;
+                            let wrongAyahs = shuffle(ayahs.filter((_, i) => i !== idx+1)).slice(0, 2).map(a => a.text);
+                            quizData.push({ 
+                                q: target.text, 
+                                ans: nextAyah, 
+                                hint: `سورة ${target.surah.name} | آية ${target.numberInSurah}`, 
+                                options: shuffle([nextAyah, ...wrongAyahs]), 
+                                type: 'choice' 
+                            });
+                        }
                     }
                 }
             }
 
-            quizData.forEach(item => {
-                if (item.correctSurah) {
-                    let others = surahNamesInPhase.filter(s => s !== item.correctSurah);
-                    item.options = shuffle([item.correctSurah, ...shuffle(others).slice(0, 2)]);
-                    item.ans = item.correctSurah;
-                }
-            });
-
-            quizData = shuffle(quizData).slice(0, 20);
             document.getElementById('setup-container').style.display = 'none';
             document.getElementById('quiz-container').style.display = 'block';
             showQuestion();
         } catch (e) {
-            alert("فشل في الاتصال بالشبكة");
+            console.error(e);
+            alert("حدث خطأ في الاتصال بالبيانات.");
             location.reload();
         }
     }
@@ -277,7 +350,7 @@
             const input = document.createElement('input');
             input.type = 'text'; input.className = 'write-input'; input.id = 'user-write-input';
             const btn = document.createElement('button');
-            btn.className = 'submit-answer-btn'; btn.id = 'submit-btn-action'; btn.innerText = 'تأكيد الإجابة';
+            btn.className = 'submit-answer-btn'; btn.innerText = 'تأكيد الإجابة';
             btn.onclick = () => check(input.value, input);
             grid.appendChild(input); grid.appendChild(btn);
             input.focus();
@@ -294,14 +367,15 @@
     }
 
     function startTimer() {
-        document.getElementById('timer-display').innerText = timeLeft;
-        document.getElementById('timer-display').style.borderColor = "var(--gold)";
+        const display = document.getElementById('timer-display');
+        display.innerText = timeLeft;
+        display.style.borderColor = "var(--gold)";
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
             timeLeft--;
-            document.getElementById('timer-display').innerText = timeLeft;
-            if(timeLeft <= 5) document.getElementById('timer-display').style.borderColor = "var(--red)";
-            if(timeLeft <= 0) { clearInterval(timerInterval); if(!isAnswering) check("", null); }
+            display.innerText = timeLeft;
+            if(timeLeft <= 5) display.style.borderColor = "var(--red)";
+            if(timeLeft <= 0) { clearInterval(timerInterval); check("", null); }
         }, 1000);
     }
 
@@ -309,11 +383,9 @@
         if(isAnswering) return;
         isAnswering = true;
         clearInterval(timerInterval);
-        const subBtn = document.getElementById('submit-btn-action');
-        if(subBtn) subBtn.disabled = true;
 
         const correct = quizData[currentQuestionIdx].ans;
-        const isCorrect = normalizeArabic(userInput || "") === normalizeArabic(correct);
+        const isCorrect = normalizeArabic(userInput) === normalizeArabic(correct);
 
         if(isCorrect) {
             score++;
@@ -321,29 +393,42 @@
         } else {
             if(element) element.classList.add('wrong');
             const reveal = document.getElementById('reveal-box');
-            reveal.innerText = "الصواب: " + correct;
+            let exp = quizData[currentQuestionIdx].explain ? `<br><small style="color:#666">${quizData[currentQuestionIdx].explain}</small>` : "";
+            reveal.innerHTML = "الصواب: " + correct + exp;
             reveal.style.display = 'block';
         }
 
         if(quizData[currentQuestionIdx].type === 'choice') {
             document.querySelectorAll('.option-btn').forEach(b => {
+                if(normalizeArabic(b.innerText) === normalizeArabic(correct)) b.classList.add('correct');
                 b.style.pointerEvents = 'none';
-                if(b.innerText === correct) b.classList.add('correct');
             });
         }
 
-        setTimeout(() => { currentQuestionIdx++; showQuestion(); }, 2000);
+        setTimeout(() => { 
+            currentQuestionIdx++; 
+            if(currentQuestionIdx < quizData.length) showQuestion();
+            else showResult();
+        }, 2500);
     }
 
     function showResult() {
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('result-container').style.display = 'block';
         document.getElementById('final-score').innerText = score;
-        let m = score >= 18 ? "مبارك! إتقان مذهل." : score >= 15 ? "جيد جداً، واصل المراجعة." : "تحتاج لمزيد من التركيز والضبط.";
+        let m = score >= 18 ? "إتقان مذهل ومبارك!" : score >= 15 ? "جيد جدا، استمر." : "تحتاج لمزيد من المراجعة.";
         document.getElementById('result-message').innerText = m;
     }
 
-    function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+    function shuffle(array) { 
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
 </script>
 </body>
 </html>
