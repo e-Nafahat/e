@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>اختبارات الإجازة | نفحات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #001f3f;
+            --gold: #b8860b;
+            --gold-light: #d4af37;
+            --main: #1a5d1a;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+            --red: #e74c3c;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: var(--navy); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+        .header { text-align: center; margin-bottom: 15px; }
+        .header img { width: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .header h1 { color: var(--navy); font-size: 1.2rem; margin: 5px 0 0; font-weight: 900; }
+        .header p { color: var(--gold); font-weight: 700; margin: 0; font-size: 0.8rem; }
+
+        .setup-container {
+            width: 100%; max-width: 450px; background: var(--white); border-radius: 15px;
+            padding: 15px; border-bottom: 4px solid var(--gold); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .section-title { color: var(--navy); font-weight: 900; margin-bottom: 10px; font-size: 1rem; border-right: 3px solid var(--gold); padding-right: 8px; text-align: right; }
+
+        .card-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .phase-card, .type-card {
+            background: var(--bg); border: 1px solid #eee; border-radius: 12px;
+            padding: 10px 15px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: space-between;
+            text-align: right;
+        }
+        .phase-card.active, .type-card.active { border-color: var(--gold); background: #fffcf0; box-shadow: inset 0 0 5px rgba(184,134,11,0.1); }
+        
+        .card-info h3 { margin: 0; font-size: 0.9rem; color: var(--navy); }
+        .card-info span { font-size: 0.7rem; color: #666; }
+
+        .start-btn {
+            width: 100%; height: 50px; background: var(--navy); color: var(--gold);
+            border: none; border-radius: 10px; font-weight: 900; font-size: 1rem;
+            cursor: pointer; box-shadow: 0 4px 0 #000b1a; transition: 0.2s;
+        }
+        .start-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #000b1a; }
+
+        #quiz-container { display: none; width: 100%; max-width: 450px; }
+
+        .quiz-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; background: var(--navy); color: white; padding: 8px 15px; border-radius: 12px;
+        }
+        .timer-circle {
+            width: 40px; height: 40px; border: 2px solid var(--gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem;
+        }
+
+        .question-card {
+            background: var(--white); border-radius: 15px; padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #e0d5b1;
+            margin-bottom: 15px; min-height: 160px; display: flex; flex-direction: column; justify-content: center;
+            position: relative;
+        }
+        .question-hint { font-size: 0.8rem; color: var(--gold); text-align: center; margin-bottom: 8px; font-weight: 700; }
+        .question-text {
+            font-family: 'Amiri', serif; font-size: 1.5rem; line-height: 1.6;
+            text-align: center; color: var(--navy); font-weight: 700; margin: 0;
+        }
+
+        .options-grid { display: flex; flex-direction: column; gap: 8px; }
+        .option-btn {
+            background: var(--white); border: 1px solid #ddd; padding: 12px;
+            border-radius: 10px; font-family: 'Amiri', serif; font-size: 1.1rem;
+            text-align: center; cursor: pointer; transition: 0.2s; font-weight: 700;
+            color: var(--navy); box-shadow: 0 2px 0 #eee;
+        }
+        
+        .write-input {
+            width: 100%; padding: 12px; border: 2px solid var(--gold); border-radius: 10px;
+            font-family: 'Amiri', serif; font-size: 1.2rem; text-align: center;
+            outline: none; background: var(--bg);
+        }
+        .submit-answer-btn {
+            width: 100%; height: 45px; background: var(--main); color: white;
+            border: none; border-radius: 10px; font-weight: 700; font-size: 1rem;
+            margin-top: 5px; cursor: pointer;
+        }
+
+        .option-btn.correct, .write-input.correct { background: #d4edda !important; border-color: #28a745 !important; }
+        .option-btn.wrong, .write-input.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
+
+        #result-container {
+            display: none; width: 100%; max-width: 450px; background: var(--white);
+            border-radius: 20px; padding: 25px 15px; text-align: center;
+            border-bottom: 6px solid var(--navy); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .score-circle {
+            width: 100px; height: 100px; border: 5px solid var(--gold); border-radius: 50%;
+            margin: 0 auto 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .score-num { font-size: 2.2rem; font-weight: 900; color: var(--navy); margin: 0; }
+        
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: none; margin: 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .correct-answer-reveal {
+            margin-top: 8px; padding: 8px; background: #e8f5e9; border-radius: 8px;
+            color: #2e7d32; font-family: 'Amiri', serif; font-size: 0.9rem; font-weight: bold; display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="../leader/LogoNafahat.png" alt="Logo">
+    <h1>اختبارات الإجازة</h1>
+    <p>بوابتك لضبط المتشابهات والإتقان</p>
+</div>
+
+<div id="setup-container" class="setup-container">
+    <div id="phase-section">
+        <div class="section-title">المرحلة</div>
+        <div class="card-grid">
+            <div class="phase-card active" onclick="selectPhase(1, 10, this)">
+                <div class="card-info"><h3>المرحلة الأولى</h3><span>من الجزء الأول حتى الجزء العاشر</span></div>
+            </div>
+            <div class="phase-card" onclick="selectPhase(11, 20, this)">
+                <div class="card-info"><h3>المرحلة الثانية</h3><span>من الجزء الحادي عشر حتى الجزء العشرين</span></div>
+            </div>
+            <div class="phase-card" onclick="selectPhase(21, 30, this)">
+                <div class="card-info"><h3>المرحلة الثالثة</h3><span>من الجزء الحادي والعشرين حتى الجزء الثلاثين</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">نوع الاختبار</div>
+    <div class="card-grid">
+        <div class="type-card active" onclick="selectType('completion', this)">
+            <div class="card-info"><h3>أكمل الآية</h3></div>
+        </div>
+        <div class="type-card" onclick="selectType('surahName', this)">
+            <div class="card-info"><h3>ما اسم السورة؟</h3></div>
+        </div>
+        <div class="type-card" onclick="selectType('terminator', this)">
+            <div class="card-info"><h3>ضبط الفواصل</h3></div>
+        </div>
+        <div class="type-card" onclick="selectType('culture', this)">
+            <div class="card-info"><h3>ثقافة قرآنية</h3><span>فرائد ومعلومات عامة</span></div>
+        </div>
+    </div>
+
+    <button class="start-btn" onclick="startQuiz()">بدء الاختبار</button>
+    <div id="mainLoader" class="loader"></div>
+</div>
+
+<div id="quiz-container">
+    <div class="quiz-header">
+        <div id="question-counter" style="font-size:0.9rem;">السؤال: 1 / 20</div>
+        <div class="timer-circle" id="timer-display">15</div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-hint" id="question-hint"></div>
+        <div class="question-text" id="question-text">جاري التحميل...</div>
+        <div id="reveal-box" class="correct-answer-reveal"></div>
+    </div>
+
+    <div class="options-grid" id="options-grid"></div>
+</div>
+
+<div id="result-container">
+    <h2 style="margin-top:0;">النتيجة</h2>
+    <div class="score-circle">
+        <p class="score-num" id="final-score">0</p>
+        <p style="font-size: 0.7rem; color: var(--gold);">من 20</p>
+    </div>
+    <div id="result-message" style="font-weight:700; margin-bottom:20px;"></div>
+    <button class="start-btn" onclick="location.reload()">اختبار جديد</button>
+</div>
+
+<script>
+    let currentPhase = { start: 1, end: 10 };
+    let quizType = 'completion';
+    let quizData = [];
+    let currentQuestionIdx = 0;
+    let score = 0;
+    let timeLeft = 15;
+    let timerInterval;
+    let isAnswering = false;
+
+    const culturalQuestionsBank = [
+        // المجموعة الأصلية
+        { q: "ما هي أطول آية في القرآن الكريم؟", ans: "آية الدين", hint: "أرقام قرآنية", explain: "وهي الآية رقم 282 من سورة البقرة.", alt: ["آية الكرسي", "آية المداينة"] },
+        { q: "ما هي أطول كلمة في القرآن الكريم؟", ans: "فأسقيناكموه", hint: "لطائف لغوية", explain: "تتكون من 11 حرفا ووردت في سورة الحجر.", alt: ["ليستخلفنهم", "أنلزمكموها"] },
+        { q: "من هو الصحابي الملقب بـ (ترجمان القرآن)؟", ans: "عبد الله بن عباس", hint: "أعلام القرآن", explain: "ابن عم النبي ﷺ وحبر الأمة.", alt: ["عبد الله بن مسعود", "زيد بن ثابت"] },
+        { q: "ما هو أكبر عدد ذكر صراحة في القرآن الكريم؟", ans: "مئة ألف", hint: "أرقام قرآنية", explain: "في قوله تعالى: {وأرسلناه إلى مائة ألف أو يزيدون}.", alt: ["سبعون ألفا", "ألف شهر"] },
+        { q: "ما هي أقصر آية في القرآن الكريم؟", ans: "مدهامتان", hint: "فرائد قرآنية", explain: "وردت في سورة الرحمن وهي كلمة واحدة.", alt: ["حم", "طه"] },
+        { q: "أي من هذه السور تنتهي باسمها؟", ans: "المسد", hint: "لطائف السور", explain: "تنتهي بكلمة (مسد).", alt: ["الفاتحة", "البقرة"] },
+        { q: "كم عدد سور (الحواميم)؟", ans: "7", hint: "إحصائيات", explain: "غافر، فصلت، الشورى، الزخرف، الدخان، الجاثية، الأحقاف.", alt: ["5", "10"] },
+        { q: "ما هي السورة التي تسمى (الفاضحة)؟", ans: "التوبة", hint: "أسماء السور", explain: "لأنها فضحت المنافقين.", alt: ["المنافقون", "الأحزاب"] },
+        { q: "سورة تسمى (سنام القرآن)، ما هي؟", ans: "البقرة", hint: "فضائل السور", explain: "لعظم قدرها وطولها.", alt: ["آل عمران", "النساء"] },
+        { q: "ما هي السورة التي تسمى (قلب القرآن)؟", ans: "يس", hint: "لطائف قرآنية", explain: "كما ورد في المشهور من الآثار.", alt: ["الرحمن", "الإخلاص"] },
+        { q: "السورة التي تنتهي جميع آياتها بحرف (الراء) هي؟", ans: "الكوثر", hint: "إعجاز الرسم", explain: "الكوثر، وانحر، والأبتر.", alt: ["العصر", "القدر"] },
+        { q: "السورة التي تنتهي جميع آياتها بحرف (الدال) هي؟", ans: "الإخلاص", hint: "إعجاز الرسم", explain: "أحد، الصمد، يولد، كفوا أحد.", alt: ["الفلق", "الناس"] },
+        { q: "ما هي السورة التي بدأت وانتهت بالتسبيح؟", ans: "الحشر", hint: "بدايات السور", explain: "بدأت بـ (سبح لله) وانتهت بـ (يسبح له).", alt: ["الأعلى", "الجمعة"] },
+        { q: "سورة تحتوي على سجدتين، ما هي؟", ans: "الحج", hint: "السجدات", explain: "هي السورة الوحيدة التي انفردت بسجدتين.", alt: ["النجم", "العلق"] },
+        { q: "السورة الوحيدة التي بدأت بكلمة (سورة) هي؟", ans: "النور", hint: "بدايات السور", explain: "{سورة أنزلناها وفرضناها}.", alt: ["الأحزاب", "الفرقان"] },
+        { q: "ما هي السورة التي تسمى سورة (بني إسرائيل)؟", ans: "الإسراء", hint: "أسماء السور", explain: "لوجود قصة بني إسرائيل في مطلعها.", alt: ["القصص", "النمل"] },
+        { q: "آخر سورة نزلت كاملة من القرآن هي؟", ans: "النصر", hint: "نزول القرآن", explain: "{إذا جاء نصر الله والفتح}.", alt: ["المائدة", "الفاتحة"] },
+        { q: "أطول سورة مكية في القرآن الكريم هي؟", ans: "الأعراف", hint: "إحصائيات", explain: "عدد آياتها 206 آيات.", alt: ["الأنعام", "هود"] },
+        { q: "ما هي الكلمة التي تعتبر مركز حروف القرآن الكريم؟", ans: "وليتلطف", hint: "لطائف قرآنية", explain: "وردت في سورة الكهف.", alt: ["فالتقمه", "سيجعل"] },
+        { q: "سورة وحيدة لا تبدأ بالبسملة، ما هي؟", ans: "التوبة", hint: "بدايات السور", explain: "وتسمى أيضا براءة.", alt: ["الأنفال", "الرعد"] },
+        { q: "ما هي السورة التي تحتوي على بسملتين؟", ans: "النمل", hint: "لطائف قرآنية", explain: "في البداية وفي قصة سليمان.", alt: ["هود", "النحل"] },
+        { q: "كم مرة ذكرت مكة باسمها الصريح في القرآن؟", ans: "مرة واحدة", hint: "أرقام قرآنية", explain: "في سورة الفتح.", alt: ["مرتان", "خمس مرات"] },
+        { q: "كم عدد السور التي بدأت بـ (الحمد لله)؟", ans: "5", hint: "إحصائيات", explain: "الفاتحة، الأنعام، الكهف، سبأ، فاطر.", alt: ["3", "7"] },
+
+        // المجموعة المضافة حديثاً
+        { q: "من هو النبي الذي ذكر في القرآن بأكبر عدد من المرات؟", ans: "موسى عليه السلام", hint: "أعلام القرآن", explain: "ذكر 136 مرة.", alt: ["إبراهيم عليه السلام", "محمد ﷺ"] },
+        { q: "كم عدد الأنبياء الذين ذكروا بأسمائهم في القرآن الكريم؟", ans: "25", hint: "إحصائيات قرآنية", explain: "ورد ذكر 25 نبيا ورسولا صراحة.", alt: ["15", "30"] },
+        { q: "ما هي السورة التي تسمى (سورة العقود)؟", ans: "المائدة", hint: "أسماء السور", explain: "لبدايتها بقوله تعالى {يا أيها الذين آمنوا أوفوا بالعقود}.", alt: ["النساء", "الفتح"] },
+        { q: "ما هي السورة التي تسمى (سورة النعم)؟", ans: "النحل", hint: "أسماء السور", explain: "لكثرة ما عدد الله فيها من نعمه على عباده.", alt: ["الكهف", "الرحمن"] },
+        { q: "سورة يطلق عليها (المنجية) أو (المانعة)، ما هي؟", ans: "الملك", hint: "فضائل السور", explain: "لقوله ﷺ عنها أنها المنجية من عذاب القبر.", alt: ["الواقعة", "يس"] },
+        { q: "سورة تسمى (سورة النساء الصغرى)، فما هي؟", ans: "الطلاق", hint: "أسماء السور", explain: "لاحتوائها على أحكام الأسرة مثل سورة النساء.", alt: ["الممتحنة", "التحريم"] },
+        { q: "كم عدد السور التي تبدأ بكلمة (إنا)؟", ans: "4", hint: "لطائف البدايات", explain: "الفتح، نوح، القدر، الكوثر.", alt: ["3", "5"] },
+        { q: "ما هو الجبل الذي رست عليه سفينة نوح وذكر في القرآن؟", ans: "الجودي", hint: "قصص الأنبياء", explain: "{واستوت على الجودي} سورة هود.", alt: ["الطور", "أحد"] },
+        { q: "ما هي السورة التي انتهت بذكر اسم نبيين؟", ans: "الأعلى", hint: "خواتيم السور", explain: "{صحف إبراهيم وموسى}.", alt: ["الشمس", "الضحى"] },
+        { q: "طائر كان سببا في إسلام أمة كاملة، ما هو؟", ans: "الهدهد", hint: "لطائف قرآنية", explain: "هدهد سليمان عليه السلام مع ملكة سبأ.", alt: ["الغراب", "الطير الأبابيل"] },
+        { q: "كم عدد السور المدنية في القرآن الكريم؟", ans: "28", hint: "إحصائيات", explain: "28 سورة مدنية و86 سورة مكية.", alt: ["20", "32"] },
+        { q: "ما هي السورة التي يبلغ عدد آياتها 110 آيات؟", ans: "الكهف", hint: "أرقام قرآنية", explain: "سورة الكهف عدد آياتها 110.", alt: ["يوسف", "مريم"] },
+        { q: "كلمة (امرأت) رسمت بالتاء المفتوحة إذا أضيفت لزوجها في كم موضع؟", ans: "7", hint: "الرسم العثماني", explain: "وردت في 7 مواضع مثل امرأت فرعون وامرأت نوح.", alt: ["5", "10"] },
+        { q: "ما هي السورة التي بدأت باسم نوع من الفاكهة؟", ans: "التين", hint: "لطائف السور", explain: "سورة التين.", alt: ["الرمان", "الزيتون"] },
+        { q: "ما هو الحيوان الذي اتهم كذبا في قصة أحد الأنبياء؟", ans: "الذئب", hint: "قصص الأنبياء", explain: "في قصة يوسف عليه السلام.", alt: ["الحمار", "الناقة"] },
+        { q: "ما هي السورة التي تخلو تماما من حرف (الراء)؟", ans: "الإخلاص", hint: "لطائف الحروف", explain: "سورة الإخلاص لا يوجد بها حرف الراء.", alt: ["الفاتحة", "الكوثر"] },
+        { q: "كم عدد سجدات التلاوة في القرآن الكريم؟", ans: "15", hint: "أحكام القرآن", explain: "على القول المشهور في عدد السجدات.", alt: ["11", "14"] },
+        { q: "كم مرة وردت قصة (آدم وإبليس) في القرآن الكريم؟", ans: "7", hint: "متشابهات القصص", explain: "وردت في 7 مواضع مختلفة.", alt: ["5", "10"] }
+    ];
+
+    function selectPhase(start, end, element) {
+        currentPhase = { start, end };
+        document.querySelectorAll('.phase-card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function selectType(type, element) {
+        quizType = type;
+        document.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+        const phaseSec = document.getElementById('phase-section');
+        phaseSec.style.opacity = (type === 'culture') ? '0.3' : '1';
+        phaseSec.style.pointerEvents = (type === 'culture') ? 'none' : 'auto';
+    }
+
+    function normalizeArabic(text) {
+        if(!text) return "";
+        return text.toString().replace(/[\u064B-\u065F]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/\s+/g, " ").trim();
+    }
+
+    async function startQuiz() {
+        document.getElementById('mainLoader').style.display = 'block';
+        document.querySelector('.start-btn').style.display = 'none';
+        
+        try {
+            quizData = [];
+            const surahRes = await fetch(`https://api.alquran.cloud/v1/surah`);
+            const allSurahs = (await surahRes.json()).data;
+            const surahNames = allSurahs.map(s => s.name);
+
+            if (quizType === 'culture') {
+                let shuffledBank = shuffle([...culturalQuestionsBank]).slice(0, 20);
+                shuffledBank.forEach(item => {
+                    let options = shuffle([item.ans, ...item.alt]);
+                    quizData.push({ ...item, options, type: 'choice' });
+                });
+            } else {
+                const selectedJuzs = [];
+                let start = currentPhase.start;
+                let end = currentPhase.end;
+                while(selectedJuzs.length < 5) {
+                    let r = Math.floor(Math.random() * (end - start + 1)) + start;
+                    if(!selectedJuzs.includes(r)) selectedJuzs.push(r);
+                }
+
+                for (const juzNum of selectedJuzs) {
+                    const res = await fetch(`https://api.alquran.cloud/v1/juz/${juzNum}/quran-simple`);
+                    const json = await res.json();
+                    const ayahs = json.data.ayahs;
+
+                    for(let k=0; k<4; k++) {
+                        let idx = Math.floor(Math.random() * (ayahs.length - 2));
+                        let target = ayahs[idx];
+                        
+                        if (quizType === 'terminator') {
+                            let words = target.text.split(' ');
+                            if(words.length < 5) { k--; continue; } 
+                            quizData.push({ q: words.slice(0, -2).join(' ') + " ...", ans: words.slice(-2).join(' '), hint: `فاصلة آية من سورة ${target.surah.name}:`, type: 'write' });
+                        } else if (quizType === 'surahName') {
+                            let wrongSurahs = shuffle(surahNames.filter(n => n !== target.surah.name)).slice(0, 2);
+                            quizData.push({ 
+                                q: target.text, 
+                                ans: target.surah.name, 
+                                hint: "في أي سورة وردت هذه الآية؟", 
+                                type: 'choice', 
+                                options: shuffle([target.surah.name, ...wrongSurahs]) 
+                            });
+                        } else {
+                            let nextAyah = ayahs[idx+1].text;
+                            let wrongAyahs = shuffle(ayahs.filter((_, i) => i !== idx+1)).slice(0, 2).map(a => a.text);
+                            quizData.push({ 
+                                q: target.text, 
+                                ans: nextAyah, 
+                                hint: `سورة ${target.surah.name} | آية ${target.numberInSurah}`, 
+                                options: shuffle([nextAyah, ...wrongAyahs]), 
+                                type: 'choice' 
+                            });
+                        }
+                    }
+                }
+            }
+
+            document.getElementById('setup-container').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            showQuestion();
+        } catch (e) {
+            console.error(e);
+            alert("حدث خطأ في الاتصال بالبيانات.");
+            location.reload();
+        }
+    }
+
+    function showQuestion() {
+        if (currentQuestionIdx >= quizData.length) return showResult();
+        isAnswering = false;
+        const data = quizData[currentQuestionIdx];
+        document.getElementById('reveal-box').style.display = 'none';
+        document.getElementById('question-counter').innerText = `السؤال: ${currentQuestionIdx + 1} / ${quizData.length}`;
+        document.getElementById('question-hint').innerText = data.hint;
+        document.getElementById('question-text').innerText = data.q;
+        const grid = document.getElementById('options-grid');
+        grid.innerHTML = '';
+        
+        if(data.type === 'write') {
+            timeLeft = 45; 
+            const input = document.createElement('input');
+            input.type = 'text'; input.className = 'write-input'; input.id = 'user-write-input';
+            const btn = document.createElement('button');
+            btn.className = 'submit-answer-btn'; btn.innerText = 'تأكيد الإجابة';
+            btn.onclick = () => check(input.value, input);
+            grid.appendChild(input); grid.appendChild(btn);
+            input.focus();
+        } else {
+            timeLeft = 15;
+            data.options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-btn'; btn.innerText = opt;
+                btn.onclick = () => check(opt, btn);
+                grid.appendChild(btn);
+            });
+        }
+        startTimer();
+    }
+
+    function startTimer() {
+        const display = document.getElementById('timer-display');
+        display.innerText = timeLeft;
+        display.style.borderColor = "var(--gold)";
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            display.innerText = timeLeft;
+            if(timeLeft <= 5) display.style.borderColor = "var(--red)";
+            if(timeLeft <= 0) { clearInterval(timerInterval); check("", null); }
+        }, 1000);
+    }
+
+    function check(userInput, element) {
+        if(isAnswering) return;
+        isAnswering = true;
+        clearInterval(timerInterval);
+
+        const correct = quizData[currentQuestionIdx].ans;
+        const isCorrect = normalizeArabic(userInput) === normalizeArabic(correct);
+
+        if(isCorrect) {
+            score++;
+            if(element) element.classList.add('correct');
+        } else {
+            if(element) element.classList.add('wrong');
+            const reveal = document.getElementById('reveal-box');
+            let exp = quizData[currentQuestionIdx].explain ? `<br><small style="color:#666">${quizData[currentQuestionIdx].explain}</small>` : "";
+            reveal.innerHTML = "الصواب: " + correct + exp;
+            reveal.style.display = 'block';
+        }
+
+        if(quizData[currentQuestionIdx].type === 'choice') {
+            document.querySelectorAll('.option-btn').forEach(b => {
+                if(normalizeArabic(b.innerText) === normalizeArabic(correct)) b.classList.add('correct');
+                b.style.pointerEvents = 'none';
+            });
+        }
+
+        setTimeout(() => { 
+            currentQuestionIdx++; 
+            if(currentQuestionIdx < quizData.length) showQuestion();
+            else showResult();
+        }, 2500);
+    }
+
+    function showResult() {
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('result-container').style.display = 'block';
+        document.getElementById('final-score').innerText = score;
+        let m = score >= 18 ? "إتقان مذهل ومبارك!" : score >= 15 ? "جيد جدا، استمر." : "تحتاج لمزيد من المراجعة.";
+        document.getElementById('result-message').innerText = m;
+    }
+
+    function shuffle(array) { 
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+</script>
+</body>
+</html>
