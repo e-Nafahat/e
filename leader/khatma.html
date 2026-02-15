@@ -115,7 +115,6 @@
         }
         .time-hint { font-size: 0.7rem; color: #94a3b8; font-weight: 400; }
 
-        /* زر الحفظ الجديد داخل الجدول */
         .save-btn {
             background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
             color: var(--navy-deep); border: none; padding: 14px; border-radius: 15px;
@@ -125,7 +124,6 @@
         }
         .save-btn:active { transform: scale(0.98); }
 
-        /* تنسيق زر التسميع الذكي الجديد */
         .btn-smart-tasmee {
             background: #0ea5e9; color: var(--white); border: none; padding: 16px; border-radius: 20px;
             font-weight: 900; width: 100%; cursor: pointer; margin-top: 5px;
@@ -135,7 +133,16 @@
         }
         .btn-smart-tasmee:active { transform: translateY(4px); box-shadow: 0 2px #0284c7; }
 
-        /* تنسيق زر اختبارات الإجازة الجديد */
+        /* تنسيق زر اختبارات الإجازة 1 الجديد */
+        .btn-ejaza-1 {
+            background: #8e44ad; color: var(--white); border: none; padding: 16px; border-radius: 20px;
+            font-weight: 900; width: 100%; cursor: pointer; margin-top: 10px;
+            box-shadow: 0 6px #703688; transition: 0.1s; font-family: 'Cairo';
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-size: 1rem;
+        }
+        .btn-ejaza-1:active { transform: translateY(4px); box-shadow: 0 2px #703688; }
+
         .btn-terminator-test {
             background: var(--accent-green); color: var(--white); border: none; padding: 16px; border-radius: 20px;
             font-weight: 900; width: 100%; cursor: pointer; margin-top: 10px;
@@ -182,21 +189,9 @@
             font-family: 'Amiri', serif; font-size: 1.35rem; line-height: 2.3; color: #f8fafc;
             background: rgba(15, 26, 42, 0.5); border-radius: 15px; border: 1px solid rgba(179, 147, 89, 0.2);
             font-weight: 400;
-            font-feature-settings: "cv01", "cv02", "ss01", "locl";
         }
         .dua-content b { color: var(--gold-secondary); font-weight: 400; }
 
-        /* تنسيق مربع كلمة السر الراقي */
-        .pass-input {
-            width: 80%; background: var(--navy-light); border: 2px solid var(--gold-primary);
-            border-radius: 12px; padding: 12px; color: var(--white); text-align: center;
-            font-size: 1.2rem; margin: 15px 0; letter-spacing: 5px; font-weight: 900;
-        }
-        .admin-note {
-            font-size: 0.7rem; color: #94a3b8; background: rgba(0,0,0,0.2);
-            padding: 8px; border-radius: 10px; margin-top: 10px; border: 1px solid rgba(179, 147, 89, 0.1);
-        }
-        
         * {
             -webkit-tap-highlight-color: transparent;
             outline: none;
@@ -229,7 +224,7 @@
             <br><br>
             <b>اللَّهُمَّ اقْسِمْ لَنَا مِنْ خَشْيَتِكَ</b> مَا تَحُولُ بِهِ بَيْنَنَا وَبَيْنَ مَعْصِيَتِكَ، وَمِنْ طَاعَتِكَ مَا تُبَلِّغُنَا بِهَا جَنَّتَكَ، وَمِنَ الْيَقِينِ مَا تُهَوُّنُ بِهِ عَلَيْنَا مَصَائِبَ الدُّنْيَا، وَمَتِّعْنَا بِأَسْمَاعِنَا وَأَبْصَارِنَا وَقُوَّتِنَا مَا أَحْيَيْتَنَا، وَاجْعَلِ الْوارِثَ مِنَّا.
             <br><br>
-            <b>اللَّهُمَّ انْصُرِ الْإِسْلَامَ وَأَعِزَّ الْمُسْلِمِينَ،</b> اللَّهُمَّ كُنْ لِإِخْوَانِنَا الْمُسْتَضْعَفِينَ فِي كُلِّ مَكَانٍ، اللَّهُمَّ اجْبُرْ كَسْرَهُمْ، وَارْحَمْ ضَعْفَهُمْ، وَتَوَلَّ أَمْرَهُمْ، اللَّهُمَّ انْصُرْهُمْ عَلَى مَنْ عَادَاهُمْ، وَأَرِنَا فِي الظَّالِمِينَ عَجَائِبَ قُدْرَتِكَ، يَا قَوِيُّ يَا عَزِيزُ يَا رَبَّ الْعَالَمِينَ.
+            <b>اللَّهُمَّ انْصُرِ الْإِسْلَامَ وَأَعِزَّ الْمُسْلِمِينَ،</b> اللَّهُمَّ كُنْ لِإِخْوَانِنَا الْمُسْتَضْعَفِينَ فِي كُلِّ مَكَانٍ، اللَّهُمَّ اجْبُرْ كَسْرَهُمْ، وَارْحَمْ ضَعْفَهُمْ، وَتَوَلَّ أَمْرَهُمْ، اللَّهُمَّ انْصُرْهُمْ عَلَى مَنْ عَادَاهُمْ، وَأَرِنَا فِي الظَّالِمِينَ عَجَائِبَ قُدْرَتِكَ، يَا قَوِيُّ يَا عَزِياُ يَا رَبَّ الْعَالَمِينَ.
         </div>
         <button class="toggle-btn" style="margin-top: 15px; width: 100%; padding: 12px; font-size: 0.8rem; font-family: 'Cairo';" onclick="closeModal('duaModal')">تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</button>
     </div>
@@ -254,7 +249,7 @@
         <p class="txt">أَهْلًا بِكَ يَا حَامِلَ الْقُرْآنِ فِي رِحْلَتِكَ نَحْوَ الْخَتْمِ. لِتَسْتَخْدِمَ هَذَا الْمُؤَشِّرَ بِدِقَّةٍ، إِلَيْكَ الْقَوَاعِدَ الْأَسَاسِيَّةَ لِتَقْسِيمِ الْمُصْحَفِ:</p>
         <div class="txt" style="font-size: 0.82rem; color: var(--gold-secondary); font-weight: 700; line-height: 1.8;">
             • <b>نِظَامُ الصَّفَحَاتِ:</b> يَتَكَوَّنُ الْمُصْحَفُ (طَبْعَةُ الْمَدِينَةِ) مِنْ <b>٦٠٤ صَفْحَة</b>. كُلُّ جُزْءٍ يَعْدِلُ <b>٢٠ صَفْحَة</b> تَقْرِيبًا.<br>
-            • <b>نِظَامُ الْأَرْبَاعِ:</b> يَنْقَسِمُ الْقُرْآنُ إِلَى <b>٦٠ حِزْبًا</b>، كُلُّ حِزْبٍ فِيهِ <b>٤ أَرْبَاعٍ</b>، إِذَنْ الْمُصْحَفُ كَامِلًا هُهُ <b>٢٤٠ رُبْعًا</b>.<br>
+            • <b>نِظَامُ الْأَرْبَاعِ:</b> يَنْقَسِمُ الْقُرْآنُ إِلَى <b>٦٠ حِزْبًا</b>، كُلُّ حِزْبٍ فِيهِ <b>٤ أَرْبَاعٍ</b>، إِذَنْ الْمُصْحَفُ كَامِلًا هُوَ <b>٢٤٠ رُبْعًا</b>.<br>
             • <b>كَيْفَ تَحْسِبُ؟</b> إِذَا قَرَأْتَ "رُبْعَ حِزْبٍ" وَاحِدٍ، فَقَدْ أَنْجَزْتَ <b>٠.٤٪</b> مِنَ الْقُرْآنِ.
         </div>
         <div class="divider"></div>
@@ -292,7 +287,9 @@
 
     <button class="btn-smart-tasmee" onclick="location.href='../Tasmee/quran1.html'">🎙️ اختبار التسميع الذكي</button>
     
-    <button class="btn-terminator-test" onclick="location.href='../Tasmee/ejaza-tests.html'">📜 اختبارات الإجازة</button>
+    <button class="btn-ejaza-1" onclick="location.href='../Tasmee/ejaza.html'">📜 اختبارات الإجازة 1</button>
+    
+    <button class="btn-terminator-test" onclick="location.href='../Tasmee/ejaza-tests.html'">📜 اختبارات الإجازة 2</button>
 
     <div class="section-title txt">خُطَّةُ خَتْمِ الْقُرْآنِ ✨</div>
     <div class="plan-card"><h3 class="txt">طَرِيقَةُ الْخَتْمَةِ الْوَاحِدَةِ (يَسِيرَةٌ جِدًّا):</h3><p class="txt">تَقْرَأُ ٤ صَفَحَاتٍ بَعْدَ كُلِّ صَلَاةٍ مَكْتُوبَةٍ. الْمَجْمُوعُ ٢٠ صَفْحَةً يَوْمِيًّا، وَبِذَلِكَ تَخْتِمُ فِي ٣٠ يَوْمًا.</p></div>
@@ -377,6 +374,11 @@
         document.getElementById('stopSurah').value = localStorage.getItem('k_surah_v2') || "";
         document.getElementById('stopAyah').value = localStorage.getItem('k_ayah_v2') || "";
         calculate();
+        
+        const lastSave = localStorage.getItem('k_last_save_v2');
+        if (lastSave && (new Date().getTime() - lastSave > 86400000)) {
+            document.getElementById('alert-box').style.display = 'block';
+        }
     }
 </script>
 </body>
