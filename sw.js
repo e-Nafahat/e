@@ -1,6 +1,6 @@
-const CACHE_NAME = 'nafahat-v1';
+const CACHE_NAME = 'nafahat-v2'; // تحديث الإصدار لإجبار المتصفح على التنشيط
 
-// القائمة الكاملة للموارد بناءً على هيكل مستودع "e"
+// القائمة المحدثة لتشمل الصفحات المفقودة (البحث، التأملات، المقالات)
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -8,8 +8,11 @@ const ASSETS_TO_CACHE = [
   '/e/robots.txt',
   '/e/sitemap.xml',
   
-  // مجلد leader - الأساسيات والوسائط
+  // مجلد leader - الأساسيات والوسائط (تم إضافة الصفحات الجديدة هنا)
   '/e/leader/home.html',
+  '/e/leader/Nresearch.html',    // صفحة البحث الذكي المفقودة
+  '/e/leader/articles.html',     // صفحة المقالات (تأكد من مطابقة الاسم)
+  '/e/leader/reflections.html',  // صفحة تأملات (تأكد من مطابقة الاسم)
   '/e/leader/admin.html',
   '/e/leader/FrontSmart.html',
   '/e/leader/more.html',
@@ -28,7 +31,7 @@ const ASSETS_TO_CACHE = [
   // مجلد Library
   '/e/Library/library.html',
   
-  // مجلد Textbook - الأذكار والكتب
+  // مجلد Textbook
   '/e/Textbook/nawawi.html',
   '/e/Textbook/hadith100.html',
   '/e/Textbook/azkarNight.html',
@@ -42,31 +45,32 @@ const ASSETS_TO_CACHE = [
   '/e/Tasmee/ejaza-tests.html'
 ];
 
-// مرحلة التثبيت وحفظ الملفات في الكاش
+// مرحلة التثبيت
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('تم حفظ كافة ملفات نفحات في الكاش بنجاح');
+      console.log('تم تحديث كاش نفحات بنجاح ليشمل الصفحات الجديدة');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
 });
 
-// استراتيجية جلب البيانات: محاولة الشبكة أولاً، ثم الكاش إذا انقطع الاتصال
+// استراتيجية الجلب (تحسين: الكاش أولاً للسرعة في وضع الأوفلاين)
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    fetch(e.request).catch(() => {
-      return caches.match(e.request);
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
     })
   );
 });
 
-// تنظيف الكاش القديم عند تحديث الإصدار
+// تنظيف الكاش القديم
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(keyList.map((key) => {
         if (key !== CACHE_NAME) {
+          console.log('جاري تنظيف الكاش القديم: ' + key);
           return caches.delete(key);
         }
       }));
