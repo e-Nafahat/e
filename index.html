@@ -6,7 +6,11 @@
     
     <meta name="google-site-verification" content="xxXB4Y8Tlx1hQQAUzb_KNMtpvvUyPhBt2SfB6yNBpuA" />
 
-    <title>نفحات ايمانية | المنهج الصافي والذكر الحكيم</title>
+    <title>نفحات إيمانية | المنهج الصافي والذكر الحكيم</title>
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
 
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
@@ -14,23 +18,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="نفحات">
 
-    <link rel="icon" type="image/png" href="leader/LogoNafahat.png">
-    <link rel="shortcut icon" type="image/png" href="leader/LogoNafahat.png">
-    <link rel="apple-touch-icon" href="leader/LogoNafahat.png">
-
-    <meta name="description" content="نفحات ايمانية هي بوابتكم اليومية لعيش انوار السنة النبوية والمنهج الصافي. نقدم محتوى اسلامي موثق، اذاعة قران كريم، ومكتبة شاملة على منهج اهل السنة والجماعة. نحن نحفظ ميراثا نبويا يضيء حياتك.">
-    <meta name="keywords" content="نفحات ايمانية، المنهج الصافي، اهل السنة والجماعة، احاديث نبوية، مكتبة اسلامية، مصحح القراءه، اختبارات الاجازة، لختمة، اذكار، تاملات ايمانية، كتب شرعية">
+    <meta name="description" content="نفحات إيمانية هي بوابتكم اليومية لعيش أنوار السنة النبوية والمنهج الصافي. نقدم محتوى إسلامي موثق، إذاعة قرآن كريم، ومكتبة شاملة على منهج أهل السنة والجماعة. نحن نحفظ ميراثا نبويا يضيء حياتك.">
+    <meta name="keywords" content="نفحات إيمانية، المنهج الصافي، أهل السنة والجماعة، أحاديث نبوية، مكتبة إسلامية، مصحح القراءة، اختبارات الإجازة، الختمة، أذكار، تأملات إيمانية، كتب شرعية">
     
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="نفحات ايمانية">
-    <meta property="og:title" content="نفحات ايمانية | ميراث نبوي يضيء حياتك">
-    <meta property="og:description" content="نفحات ايمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج اهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
-    
-    <meta property="og:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
+    <meta property="og:site_name" content="نفحات إيمانية">
+    <meta property="og:title" content="نفحات إيمانية | ميراث نبوي يضيء حياتك">
+    <meta property="og:description" content="نفحات إيمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج أهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتا وكتابة.">
+    <meta property="og:image" content="https://e-nafahat.github.io/e/favicon.png">
     <meta property="og:url" content="https://e-nafahat.github.io/e/">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
+    <meta name="twitter:title" content="نفحات إيمانية">
+    <meta name="twitter:image" content="https://e-nafahat.github.io/e/favicon.png">
     
     <style>
         html, body { 
@@ -48,6 +48,7 @@
             margin: 0; 
             font-family: 'Cairo', sans-serif; 
             display: block !important; 
+            transition: background-color 0.5s ease;
         }
 
         * {
@@ -66,6 +67,7 @@
             overflow: hidden;
         }
 
+        /* القائمة السحرية للتنقل السريع */
         .magic-nav {
             position: fixed; top: 75px; left: 50%; transform: translateX(-50%) translateY(-20px);
             background: rgba(10, 25, 41, 0.95); backdrop-filter: blur(15px); 
@@ -88,6 +90,7 @@
             box-shadow: 0 0 15px rgba(179, 147, 89, 0.5);
         }
 
+        /* شريط التبويبات العلوي بتصميم ثلاثي الأبعاد */
         .header-3d { 
             display: flex; justify-content: center; perspective: 1000px; 
             width: 100%; z-index: 2000; height: 55px; margin-bottom: 5px;
@@ -103,6 +106,7 @@
             box-shadow: 0 5px 10px rgba(0,0,0,0.3);
         }
         
+        /* ألوان الأقسام */
         .c-1 { background: linear-gradient(to bottom, rgba(0, 90, 80, 0.7), rgba(0, 40, 35, 0.9)); } 
         .c-2 { background: linear-gradient(to bottom, rgba(41, 128, 185, 0.7), rgba(20, 70, 110, 0.9)); } 
         .c-3 { background: linear-gradient(to bottom, rgba(184, 134, 11, 0.7), rgba(100, 70, 0, 0.9)); } 
@@ -118,6 +122,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 10px rgba(179, 147, 89, 0.3);
         }
 
+        /* حاوية العرض الأساسية */
         .main-display { flex-grow: 1; width: 100%; position: relative; padding: 10px; box-sizing: border-box; overflow: hidden; }
         iframe { 
             position: absolute; top: 10px; left: 10px; right: 10px; bottom: 0; width: calc(100% - 20px); height: calc(100% - 10px); 
@@ -127,6 +132,7 @@
         iframe.active { visibility: visible; opacity: 1; }
         #intro-holder { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: #000; overflow: hidden; }
         
+        /* طبقة تحسين محركات البحث المخفية */
         .seo-hidden-layer {
             position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; 
             overflow: hidden; clip: rect(0,0,0,0); border: 0;
@@ -136,9 +142,9 @@
 <body>
 
     <div class="seo-hidden-layer">
-        <h1>نفحات ايمانية</h1>
+        <h1>نفحات إيمانية</h1>
         <h2>المنهج الصافي والذكر الحكيم</h2>
-        <p>موقع نفحات ايمانية يقدم مواضيع اسلامية، مقالات شرعية، مكتبة الكتب، الختمة القرانية، وتاملات ايمانية على منهج اهل السنة والجماعة.</p>
+        <p>موقع نفحات إيمانية يقدم مواضيع إسلامية، مقالات شرعية، مكتبة الكتب، الختمة القرآنية، وتأملات إيمانية على منهج أهل السنة والجماعة.</p>
     </div>
 
     <div id="intro-holder"></div>
@@ -156,7 +162,7 @@
     <div id="main-site-content">
         <nav class="header-3d">
             <button id="home-btn" class="glass-tab c-1 active" onclick="switchPage('home-frame', this)">الرئيسية</button>
-            <button class="glass-tab c-2" onclick="switchPage('masbaha-frame', this)">المسبحة</button>
+            <button id="masbaha-btn" class="glass-tab c-2" onclick="switchPage('masbaha-frame', this)">المسبحة</button>
             <button id="posts-btn" class="glass-tab c-3" onclick="switchPage('FrontSmart-frame', this)">المقالات</button>
             <button id="mehrab-btn" class="glass-tab c-mehrab" onclick="switchPage('mehrab-frame', this)">تأملات</button>
             <button id="khatma-btn" class="glass-tab c-khatma" onclick="switchPage('khatma-frame', this)">الختمة</button>
@@ -175,7 +181,7 @@
     </div>
 
     <script>
-        // تسجيل Service Worker لتمكين التحميل كتطبيق
+        // تسجيل Service Worker لتمكين التحميل كتطبيق PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
@@ -186,6 +192,7 @@
         const globalIntroAudio = new Audio('leader/lindo.mp3');
         globalIntroAudio.preload = 'auto';
 
+        // دالة الدخول للموقع بعد المقدمة
         function executeSiteEntry() {
             const holder = document.getElementById('intro-holder');
             const mainContent = document.getElementById('main-site-content');
@@ -198,6 +205,7 @@
             setTimeout(() => { if(holder) holder.remove(); }, 1500);
         }
 
+        // دالة فتح مقال محدد من الخارج
         window.openPost = function(postId) {
             const postsBtn = document.getElementById('posts-btn');
             const iframe = document.getElementById('FrontSmart-frame');
@@ -207,23 +215,31 @@
             }, 600);
         };
 
+        // دالة التنقل بين الصفحات وتغيير حالة الأزرار والخلفيات
         function switchPage(frameId, btnElement) {
             document.getElementById('magicNav').classList.remove('active');
             document.querySelectorAll('.glass-tab').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
+            if(btnElement) btnElement.classList.add('active');
             
-            // Logic Check: تحسين تجربة المستخدم عبر تغيير خلفية الـ Body لتناسب القسم المختار
-            if (frameId === 'masbaha-frame') document.body.style.backgroundColor = "#000000";
-            else if (frameId === 'library-frame') document.body.style.backgroundColor = "#b0b0b0";
-            else if (frameId === 'khatma-frame') document.body.style.backgroundColor = "#0f172a"; 
-            else if (frameId === 'mehrab-frame') document.body.style.backgroundColor = "#001226"; 
-            else if (frameId === 'more-frame') document.body.style.backgroundColor = "#FDFBF0";
-            else document.body.style.backgroundColor = "#F5F5DC";
+            // مراجعة منطقية للألوان لتناسب الأقسام المحددة في الذاكرة
+            const bgColors = {
+                'masbaha-frame': "#000000",
+                'library-frame': "#b0b0b0",
+                'khatma-frame': "#0f172a",
+                'mehrab-frame': "#001226",
+                'more-frame': "#FDFBF0",
+                'home-frame': "#F5F5DC",
+                'FrontSmart-frame': "#F5F5DC"
+            };
+            
+            document.body.style.backgroundColor = bgColors[frameId] || "#F5F5DC";
             
             document.querySelectorAll('iframe').forEach(f => f.classList.remove('active'));
-            document.getElementById(frameId).classList.add('active');
+            const target = document.getElementById(frameId);
+            if(target) target.classList.add('active');
         }
 
+        // الاستماع للرسائل القادمة من صفحات الـ iFrame
         window.addEventListener('message', function(event) {
             if (event.data === 'START_SITE_NOW') executeSiteEntry();
             if (event.data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
@@ -240,9 +256,11 @@
             }
         });
 
+        // إظهار المحتوى الأولي
         document.body.style.visibility = 'visible';
         document.body.style.opacity = '1';
 
+        // فحص ما إذا كان المستخدم قد شاهد المقدمة مسبقاً
         if (sessionStorage.getItem('hasSeenIntro')) {
             const holder = document.getElementById('intro-holder');
             if(holder) holder.remove();
@@ -251,11 +269,13 @@
             mainContent.style.opacity = '1';
             document.body.style.backgroundColor = "#F5F5DC";
         } else {
+            // جلب المقدمة من مجلد leader المتفق عليه
             fetch('leader/intro.html')
                 .then(res => res.text())
                 .then(data => {
                     const holder = document.getElementById('intro-holder');
                     if(holder) {
+                        // تصحيح مسار الشعار عند حقن المقدمة
                         const correctedData = data.replace(/src="LogoNafahat.png"/g, 'src="leader/LogoNafahat.png"');
                         holder.innerHTML = correctedData;
                         
@@ -272,6 +292,7 @@
                 });
         }
 
+        // دالة إغلاق القائمة السحرية والانتقال للقسم المختار
         function closeMagicAndSwitch(frameId, btnIdx) {
             document.getElementById('magicNav').classList.remove('active');
             const tabs = document.querySelectorAll('.glass-tab');
