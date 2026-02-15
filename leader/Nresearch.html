@@ -2,346 +2,296 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>محرك نفحات الذكي - Nresearch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرك نفحات الذكي - للبحث في الوحيين</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary: #27ae60;
-            --secondary: #1e8449;
-            --gold: #c5a059;
-            --dark-gold: #a68445;
-            --bg: #f8faf9;
-            --text: #2c3e50;
-            --card-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            --primary-color: #2d6a4f; /* أخضر غابة دافئ */
+            --secondary-color: #40916c;
+            --accent-gold: #b7903c; /* ذهبي هادئ */
+            --bg-color: #f9fbf9;
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --border-color: #e9ecef;
+            --input-bg: #f8f9fa;
         }
 
-        body {
-            margin: 0;
-            padding: 10px 15px 30px 15px;
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --border-color: #333333;
+            --input-bg: #2d2d2d;
+            --accent-gold: #d4af37;
         }
 
-        /* --- زر العودة العلوي --- */
-        .top-nav {
-            width: 100%;
-            max-width: 480px;
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .back-home-btn {
-            background: #fff;
-            color: #e74c3c;
-            border: 2px solid #e74c3c;
-            padding: 8px 15px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .back-home-btn:active { transform: scale(0.95); background: #e74c3c; color: #fff; }
-
-        /* حاوية المحرك */
-        .container {
-            width: 100%;
-            max-width: 480px;
-            background: white;
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: var(--card-shadow);
-            box-sizing: border-box;
-            border: 1px solid rgba(39, 174, 96, 0.1);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .header { text-align: center; margin-bottom: 20px; }
-        .header img { 
-            width: 75px; 
-            margin-bottom: 12px; 
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-        }
-        .header h2 { 
-            color: var(--primary); 
-            margin: 0; 
-            font-size: 1.4rem; 
-            font-weight: 900;
-            letter-spacing: -0.5px;
-        }
-        .header p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; font-weight: 600; }
-
-        .search-box {
-            background: #fdfdfd;
-            padding: 18px;
-            border-radius: 22px;
-            border: 1px solid #f0f0f0;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #edf2f7;
-            border-radius: 15px;
-            font-size: 0.95rem;
-            text-align: center;
-            outline: none;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
-        }
-
-        input:focus { 
-            border-color: var(--primary); 
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
-        }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            margin: 12px 0;
-            border-radius: 12px;
-            border: 2px solid #edf2f7;
-            background: white;
-            font-size: 0.9rem;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
-            color: var(--text);
-            cursor: pointer;
-            outline: none;
-        }
-
-        .btn-main {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.2);
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3); }
-        .btn-main:active { transform: translateY(0); }
-
-        .notes-section {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px dashed #f0f0f0;
-        }
-
-        .notes-section h3 { 
-            font-size: 1rem; 
-            color: var(--secondary); 
-            margin-bottom: 12px; 
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 110px;
-            padding: 15px;
-            border: 1px solid #edf2f7;
-            border-radius: 18px;
-            resize: none;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            background: #fff;
-            line-height: 1.6;
-            transition: 0.3s;
-        }
-
-        textarea:focus { border-color: var(--gold); outline: none; background: #fffaf0; }
-
-        .tools { display: flex; gap: 10px; margin-top: 15px; }
-
-        .btn-tool {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            color: white;
-            font-family: 'Cairo', sans-serif;
-            transition: 0.3s;
-        }
-
-        .btn-card { background: var(--gold); }
-        .btn-card:hover { background: var(--dark-gold); }
-        .btn-copy { background: #34495e; }
-        .btn-copy:hover { background: #2c3e50; }
-
-        #captureArea { 
-            position: fixed; top: -20000px; left: 0; width: 540px; 
-            padding: 50px; background: white; border: 25px solid var(--primary);
-            text-align: center; font-family: 'Cairo', sans-serif;
-        }
-        .card-link { margin-top: 25px; color: var(--primary); font-weight: 800; font-size: 1.2rem; }
-
-        #searchOverlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9999; flex-direction: column;
-            backdrop-filter: blur(10px);
+        body { 
+            margin: 0; padding: 10px; background: var(--bg-color); 
+            font-family: 'Cairo', sans-serif; 
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; color: var(--text-color); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .overlay-header {
-            background: var(--primary); 
-            padding: 15px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .back-nav { width: 100%; max-width: 420px; margin-bottom: 15px; display: flex; }
+        .btn-back { 
+            background: var(--card-bg); border: 1px solid #ff7675; padding: 10px 20px; 
+            border-radius: 12px; cursor: pointer; color: #d63031; font-weight: 700; 
+            text-decoration: none; font-size: 13px; transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
 
-        .close-btn {
-            background: white; border: none; padding: 6px 15px; 
-            border-radius: 8px; color: var(--primary); 
-            font-weight: 800; cursor: pointer; font-family: 'Cairo';
-            font-size: 0.85rem;
+        .daily-card { 
+            width: 100%; max-width: 420px; 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            color: white; padding: 18px; border-radius: 22px; margin-bottom: 20px; 
+            text-align: center; font-size: 0.95em; box-sizing: border-box;
+            box-shadow: 0 10px 20px rgba(45, 106, 79, 0.2);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        @media (max-width: 400px) {
-            .container { padding: 15px; }
-            .header h2 { font-size: 1.2rem; }
-            .btn-main { padding: 12px; }
+        .smart-card { 
+            width: 100%; max-width: 420px; background: var(--card-bg); padding: 35px 25px; 
+            border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); 
+            border: 1px solid var(--border-color); text-align: center; margin-bottom: 20px; 
+            box-sizing: border-box; position: relative;
         }
+        
+        h2 { color: var(--primary-color); font-size: 1.6em; margin: 0; font-weight: 900; }
+        .sub-title { color: #636e72; font-size: 0.85em; margin-bottom: 25px; font-weight: 600; }
+        
+        input { 
+            width: 100%; padding: 16px; border: 2px solid var(--border-color); 
+            border-radius: 18px; font-size: 16px; box-sizing: border-box; outline: none; 
+            text-align: center; background: var(--input-bg); color: var(--text-color);
+            font-family: 'Cairo', sans-serif; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1); }
+
+        select { 
+            width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border-color); 
+            background: var(--card-bg); color: var(--text-color); margin: 15px 0; 
+            font-size: 15px; outline: none; text-align: center; font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+        }
+
+        .search-btn { 
+            width: 100%; padding: 18px; 
+            background: linear-gradient(135deg, var(--primary-color), #52b788); 
+            color: white; border: none; border-radius: 18px; font-size: 1.1em; 
+            font-weight: 800; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 8px 15px rgba(45, 106, 79, 0.2);
+        }
+        .search-btn:active { transform: scale(0.98); }
+
+        .notes-card { 
+            width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; 
+            border-right: 6px solid var(--accent-gold); margin-bottom: 25px; 
+            overflow: hidden; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+        .notes-header { background: var(--input-bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .notes-header h3 { margin: 0; font-size: 1rem; color: var(--primary-color); }
+        .note-tools { display: flex; gap: 8px; }
+        .tool-btn { 
+            background: var(--card-bg); border: 1px solid var(--border-color); 
+            padding: 8px 12px; border-radius: 10px; cursor: pointer; 
+            color: var(--text-color); font-size: 13px; font-weight: 700; transition: 0.2s;
+        }
+        .tool-btn:hover { background: var(--primary-color); color: white; }
+        .textarea-container { padding: 20px; }
+        textarea { 
+            width: 100%; height: 130px; border: none; font-family: 'Cairo', sans-serif; 
+            font-size: 1.05em; resize: none; outline: none; background: transparent; 
+            color: var(--text-color); line-height: 1.8; font-weight: 600;
+        }
+
+        /* منطقة البطاقة الدعوية - تحسينات التصميم */
+        #captureArea { 
+            position: fixed; top: -10000px; left: 0;
+            width: 500px; padding: 60px; background: #ffffff; 
+            border: 25px solid var(--primary-color); text-align: center; 
+            color: #333; z-index: -1; visibility: visible;
+            font-family: 'Cairo', sans-serif;
+        }
+        #captureArea .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 60px; color: rgba(0,0,0,0.02); white-space: nowrap; font-weight: 900; }
+        #captureArea h1 { color: var(--primary-color); font-size: 32px; margin-bottom: 5px; font-weight: 900; }
+        #captureArea .badge { display: inline-block; padding: 6px 20px; background: #f8f9fa; border-radius: 8px; font-size: 14px; color: var(--accent-gold); margin-bottom: 40px; font-weight: 800; border: 1px solid #eee; }
+        #captureArea p { font-size: 26px; line-height: 1.8; margin-bottom: 50px; white-space: pre-wrap; font-weight: 700; color: #2d3436; }
+        .strict-disclaimer { background: #fffaf0; border: 1.5px solid #fee2e2; padding: 20px; border-radius: 15px; text-align: right; margin-bottom: 30px; }
+        .strict-disclaimer p { font-size: 13px !important; color: #b91c1c !important; margin: 0 !important; line-height: 1.6 !important; font-weight: 800 !important; }
+        #captureArea .link { font-size: 20px; color: var(--primary-color); font-weight: 900; border-top: 3px solid var(--accent-gold); padding-top: 20px; display: inline-block; }
+
+        .theme-toggle { position: fixed; bottom: 25px; right: 25px; width: 55px; height: 55px; background: var(--primary-color); color: white; border-radius: 50%; border: none; cursor: pointer; z-index: 1000; font-size: 22px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        
+        #customAlert { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 20000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .alert-box { background: var(--card-bg); width: 85%; max-width: 340px; padding: 30px; border-radius: 30px; text-align: center; color: var(--text-color); box-shadow: 0 25px 50px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
+        .alert-close { background: var(--primary-color); color: white; border: none; padding: 12px 30px; border-radius: 15px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 25px; font-family: 'Cairo', sans-serif; }
+
+        #smartOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10000; flex-direction: column; }
+        .overlay-content { width: 96%; height: 94%; margin: auto; background: white; border-radius: 25px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
-<div class="top-nav">
-    <a href="home.html" class="back-home-btn">✖ إغلاق والعودة للرئيسية</a>
-</div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
 
-<div class="container">
-    <div class="header">
-        <img src="LogoNafahat.png" alt="Logo">
-        <h2>نَفَحَاتُ البَحْثِ الذَّكِيِّ</h2>
-        <p>غُص في أَعماقِ الوَحيينِ الشَّريفينِ</p>
-    </div>
-
-    <div class="search-box">
-        <input type="text" id="q" placeholder="أدخل موضوعاً أو كلمة للبحث...">
-        <select id="t">
-            <option value="h">📜 الأحاديث النبوية (الدرر السنية)</option>
-            <option value="q">📖 القرآن الكريم (موقع تنزيل)</option>
-        </select>
-        <button class="btn-main" onclick="doSearch()">استخرج النفحات الآن 🔍</button>
-    </div>
-
-    <div class="notes-section">
-        <h3>📝 فَيْضُ التَّأَمُّلِ</h3>
-        <textarea id="n" placeholder="ماذا فتح الله عليك بعد هذا البحث؟ اكتب تأملك هنا..."></textarea>
-        <div class="tools">
-            <button class="btn-tool btn-card" onclick="makeCard()">🖼️ توليد بطاقة</button>
-            <button class="btn-tool btn-copy" onclick="copyN()">📋 نسخ النص</button>
-        </div>
+<div id="customAlert">
+    <div class="alert-box">
+        <div id="alertIcon" style="font-size: 4em; margin-bottom: 15px;">✨</div>
+        <p id="alertMsg" style="font-weight: 800; font-size: 1.15em; line-height: 1.5;"></p>
+        <button class="alert-close" onclick="closeAlert()">استمر</button>
     </div>
 </div>
 
 <div id="captureArea">
-    <div style="font-size:60px; color:rgba(0,0,0,0.02); position:absolute; top:40%; left:10%; transform:rotate(-30deg); width:100%; text-align:center;">e-nafahat.github.io</div>
-    <h1 style="color:var(--primary); font-size:38px; font-weight:900; margin-bottom:10px;">🌿 نَفَحَاتٌ إِيمَانِيَّةٌ</h1>
-    <div style="border-bottom: 3px solid var(--gold); width: 120px; margin: 0 auto 35px;"></div>
-    <p id="textOut" style="font-size:28px; line-height:1.8; color:#2c3e50; min-height:120px; font-weight:600; padding: 0 20px;"></p>
+    <div class="watermark">e-nafahat.github.io</div>
+    <h1>🌿 نَفَحَاتُ الوَحْيَيْنِ</h1>
+    <div class="badge">تأملات إيمانية موثقة</div>
     
-    <div style="background:#fff5f5; border:1px solid #feb2b2; padding:18px; border-radius:15px; margin-top:40px; text-align:right;">
-        <p style="font-size:14px!important; color:#c53030!important; margin:0 0 5px 0!important; font-weight:900;">⚠️ إخلاء مسؤولية قانوني:</p>
-        <p style="font-size:13px!important; color:#c53030!important; margin:0!important; line-height:1.4;">هذا المحتوى يعبر عن "خاطرة شخصية" للمستخدم ولا يمثل الفتاوى الرسمية للموقع.</p>
+    <p id="targetText"></p>
+    
+    <div class="strict-disclaimer">
+        <p>⚠️ تذكرة هامة:</p>
+        <p>هذا المحتوى يعبر عن تأملات شخصية للمستخدم، ولا يعد فتوى شرعية رسمية. الموقع يخلي مسؤوليته عن أي سوء استخدام أو استشهاد غير دقيق.</p>
     </div>
-    <p class="card-link">e-nafahat.github.io/e</p>
+    
+    <div class="link">e-nafahat.github.io</div>
 </div>
 
-<div id="searchOverlay">
-    <div class="overlay-header">
-        <span style="font-weight:900; font-size:1rem;">✨ كُنوزُ الوَحيينِ</span>
-        <button class="close-btn" onclick="closeS()">إغلاق الشاشة ✖</button>
+<div class="back-nav">
+    <a href="../home.html" class="btn-back">✖ إغلاق والعودة</a>
+</div>
+
+<div class="daily-card" id="dailyCard"></div>
+
+<div class="smart-card">
+    <h2>🔎 الباحث الذكي</h2>
+    <p class="sub-title">استخرج درر الوحيين بلمسة واحدة</p>
+    <input type="text" id="userInput" placeholder="ما الذي يشغل قلبك اليوم؟">
+    <select id="searchType">
+        <option value="hadith">📜 كنوز السنة (الدرر السنية)</option>
+        <option value="quran">📖 أنوار القرآن (تنزيل)</option>
+    </select>
+    <button class="search-btn" onclick="openSearch()">استخراج النفحات 🚀</button>
+</div>
+
+<div class="notes-card">
+    <div class="notes-header">
+        <h3>📝 فَيْضُ الخَاطِرِ</h3>
+        <div class="note-tools">
+            <button class="tool-btn" onclick="exportAsImage()">🖼️ بطاقة</button>
+            <button class="tool-btn" onclick="copyNotes()">📋 نسخ</button>
+            <button class="tool-btn" onclick="shareNafahat()">💬 مشاركة</button>
+        </div>
     </div>
-    <iframe id="f" style="flex-grow:1; border:none; background:white;"></iframe>
+    <div class="textarea-container">
+        <textarea id="userNotes" placeholder="سجل هنا ما فاض به قلبك من هدي الوحيين..." oninput="saveNotes()"></textarea>
+    </div>
+</div>
+
+<div id="smartOverlay">
+    <div class="overlay-content">
+        <div style="background:var(--primary-color); color:white; padding:18px 25px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:900; font-size: 1.1em;">✨ رِياضُ العِلْمِ</span>
+            <button onclick="closeSearch()" style="background:#fff; border:none; padding:8px 20px; border-radius:12px; color:var(--primary-color); font-weight:900; cursor:pointer; font-family:'Cairo';">إغلاق ✖</button>
+        </div>
+        <iframe id="searchIframe" style="flex-grow:1; border:none; background: white;"></iframe>
+    </div>
 </div>
 
 <script>
-    function doSearch() {
-        const query = document.getElementById('q').value.trim();
-        const type = document.getElementById('t').value;
-        if(!query) return alert("يا شريكي، أخبرني عما تبحث أولاً!");
-        
-        let url = type === 'h' ? 
-            `https://dorar.net/hadith/search?q=${encodeURIComponent(query)}&st=p&d[]=1` : 
-            `https://tanzil.net/#search/quran/${encodeURIComponent(query)}`;
-            
-        document.getElementById('f').src = url;
-        document.getElementById('searchOverlay').style.display = 'flex';
+    const dailyReflections = [
+        "💡 تأمل اليوم: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ' - السكينة تبدأ من هنا.",
+        "💡 تأمل اليوم: 'وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا' - اليقين هو المفتاح.",
+        "💡 تأمل اليوم: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا' - ضوء الفرج يقترب دائماً.",
+        "💡 تأمل اليوم: 'وَأَحْسِنُوا إِنَّ اللَّهَ يُحِبُّ الْمُحْسِنِينَ' - الإحسان لغة لا تخطئها القلوب."
+    ];
+    
+    window.onload = function() {
+        document.getElementById('dailyCard').innerHTML = dailyReflections[Math.floor(Math.random() * dailyReflections.length)];
+        const saved = localStorage.getItem('nafahat_notes');
+        if(saved) document.getElementById('userNotes').value = saved;
+        if(localStorage.getItem('nafahat_theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
     }
 
-    function closeS() {
-        document.getElementById('searchOverlay').style.display = 'none';
-        document.getElementById('f').src = '';
+    function saveNotes() { localStorage.setItem('nafahat_notes', document.getElementById('userNotes').value); }
+
+    function showAlert(msg, icon = "✍️") {
+        document.getElementById('alertMsg').innerText = msg;
+        document.getElementById('alertIcon').innerText = icon;
+        document.getElementById('customAlert').style.display = 'flex';
     }
 
-    function copyN() {
-        const t = document.getElementById('n').value;
-        if(!t) return alert("المفكرة لم يُكتب فيها شيء بعد.");
-        navigator.clipboard.writeText(t);
-        alert("تم نسخ تأملك بنجاح ✅");
+    function closeAlert() { document.getElementById('customAlert').style.display = 'none'; }
+
+    function exportAsImage() {
+        const text = document.getElementById('userNotes').value.trim();
+        const forbiddenWords = ["فتوى", "حلال", "حرام"]; 
+        if(forbiddenWords.some(w => text.includes(w))) {
+            return showAlert("تنبيه: نعتذر عن استخدام مصطلحات الفتوى الرسمية في الخواطر الشخصية.", "🛑");
+        }
+        if(!text) return showAlert("المفكرة بانتظار كلماتك الجميلة أولاً!", "💡");
+
+        showAlert("لحظات... نصمم لك بطاقة تليق بتأملاتك", "⏳");
+        const target = document.getElementById('captureArea');
+        document.getElementById('targetText').innerText = text;
+
+        setTimeout(() => {
+            html2canvas(target, {
+                useCORS: true,
+                backgroundColor: "#ffffff",
+                scale: 2,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Nafahat_Card_' + Date.now() + '.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+                closeAlert();
+                showAlert("تم حفظ البطاقة بنجاح في معرض صورك.", "✅");
+            }).catch(e => {
+                closeAlert();
+                showAlert("حدث خطأ بسيط، يرجى إعادة المحاولة.");
+            });
+        }, 800);
     }
 
-    function makeCard() {
-        const t = document.getElementById('n').value.trim();
-        if(!t) return alert("اكتب فَيْض تأملك أولاً لتصميم البطاقة.");
-        
-        document.getElementById('textOut').innerText = t;
-        const area = document.getElementById('captureArea');
-        
-        alert("جاري تحضير بطاقتك الإيمانية... انتظر لحظة");
-        
-        html2canvas(area, { 
-            scale: 2,
-            useCORS: true,
-            logging: false
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'Nafahat_Reflection_Card.png';
-            link.href = canvas.toURL("image/png");
-            link.click();
-        }).catch(err => {
-            console.error("خطأ في توليد الصورة:", err);
-            alert("حدث خطأ بسيط أثناء توليد الصورة، يرجى المحاولة مرة أخرى.");
-        });
+    function copyNotes() {
+        const text = document.getElementById('userNotes').value.trim();
+        if(!text) return showAlert("لا يوجد نص لنسخه!");
+        navigator.clipboard.writeText(text);
+        showAlert("تم نسخ كلماتك إلى الحافظة بنجاح", "✅");
+    }
+
+    function shareNafahat() {
+        const text = document.getElementById('userNotes').value.trim();
+        if(!text) return showAlert("المفكرة فارغة!");
+        if (navigator.share) {
+            navigator.share({ text: text }).catch(() => {});
+        } else {
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+        }
+    }
+
+    function toggleTheme() {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('nafahat_theme', isDark ? 'light' : 'dark');
+    }
+
+    function openSearch() {
+        const query = document.getElementById('userInput').value.trim();
+        const type = document.getElementById('searchType').value;
+        if (!query) return showAlert("أخبرني.. عن ماذا تريد أن تبحث؟");
+        let targetUrl = type === "hadith" ? `https://dorar.net/hadith/search?q=${encodeURIComponent(query)}&st=p&d[]=1` : `https://tanzil.net/#search/quran/${encodeURIComponent(query)}`;
+        document.getElementById('searchIframe').src = targetUrl;
+        document.getElementById('smartOverlay').style.display = 'flex';
+    }
+
+    function closeSearch() { 
+        document.getElementById('smartOverlay').style.display = 'none'; 
+        document.getElementById('searchIframe').src = ''; 
     }
 </script>
 </body>
