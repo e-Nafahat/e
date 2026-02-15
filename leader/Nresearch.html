@@ -1,111 +1,348 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>محرك نفحات الذكي - Nresearch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
-        /* تصميم مخصص للهواتف */
-        .search-card {
-            background: #ffffff;
+        :root {
+            --primary: #27ae60;
+            --secondary: #1e8449;
+            --gold: #c5a059;
+            --dark-gold: #a68445;
+            --bg: #f8faf9;
+            --text: #2c3e50;
+            --card-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        body {
+            margin: 0;
+            padding: 10px 15px 30px 15px;
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* --- زر العودة العلوي --- */
+        .top-nav {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .back-home-btn {
+            background: #fff;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .back-home-btn:active { transform: scale(0.95); background: #e74c3c; color: #fff; }
+
+        /* حاوية المحرك */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            box-sizing: border-box;
+            border: 1px solid rgba(39, 174, 96, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .header img { 
+            width: 75px; 
+            margin-bottom: 12px; 
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+        .header h2 { 
+            color: var(--primary); 
+            margin: 0; 
+            font-size: 1.4rem; 
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+        .header p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; font-weight: 600; }
+
+        .search-box {
+            background: #fdfdfd;
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid #f0f0f0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #edf2f7;
             border-radius: 15px;
+            font-size: 0.95rem;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+        }
+
+        input:focus { 
+            border-color: var(--primary); 
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 12px;
+            border: 2px solid #edf2f7;
+            background: white;
+            font-size: 0.9rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .btn-main {
+            width: 100%;
             padding: 15px;
-            margin-bottom: 12px;
-            border: 1px solid #eee;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.2);
+            font-family: 'Cairo', sans-serif;
         }
-        .quran-theme { border-right: 5px solid #27ae60; background: #f9fffb; }
-        .hadith-theme { border-right: 5px solid #2980b9; background: #f5faff; }
-        
-        #searchInput:focus {
-            border-color: #27ae60 !important;
-            box-shadow: 0 0 8px rgba(39, 174, 96, 0.2);
+
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3); }
+        .btn-main:active { transform: translateY(0); }
+
+        .notes-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #f0f0f0;
+        }
+
+        .notes-section h3 { 
+            font-size: 1rem; 
+            color: var(--secondary); 
+            margin-bottom: 12px; 
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 15px;
+            border: 1px solid #edf2f7;
+            border-radius: 18px;
+            resize: none;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            background: #fff;
+            line-height: 1.6;
+            transition: 0.3s;
+        }
+
+        textarea:focus { border-color: var(--gold); outline: none; background: #fffaf0; }
+
+        .tools { display: flex; gap: 10px; margin-top: 15px; }
+
+        .btn-tool {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+        }
+
+        .btn-card { background: var(--gold); }
+        .btn-card:hover { background: var(--dark-gold); }
+        .btn-copy { background: #34495e; }
+        .btn-copy:hover { background: #2c3e50; }
+
+        #captureArea { 
+            position: fixed; top: -20000px; left: 0; width: 540px; 
+            padding: 50px; background: white; border: 25px solid var(--primary);
+            text-align: center; font-family: 'Cairo', sans-serif;
+        }
+        .card-link { margin-top: 25px; color: var(--primary); font-weight: 800; font-size: 1.2rem; }
+
+        #searchOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999; flex-direction: column;
+            backdrop-filter: blur(10px);
         }
         
-        /* تحسين مظهر التمرير على الموبايل */
-        #searchResults::-webkit-scrollbar { width: 4px; }
-        #searchResults::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+        .overlay-header {
+            background: var(--primary); 
+            padding: 15px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .close-btn {
+            background: white; border: none; padding: 6px 15px; 
+            border-radius: 8px; color: var(--primary); 
+            font-weight: 800; cursor: pointer; font-family: 'Cairo';
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 400px) {
+            .container { padding: 15px; }
+            .header h2 { font-size: 1.2rem; }
+            .btn-main { padding: 12px; }
+        }
     </style>
 </head>
-<body style="margin: 0; background-color: #f4f7f6;">
+<body>
 
-<div id="nafahat-search-container" style="max-width: 100%; margin: 10px; padding: 15px; border-radius: 20px; background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
-    
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #2c3e50; font-size: 1.4em; margin-bottom: 5px;">🔎 محرك البحث الإيماني</h2>
-        <p style="color: #7f8c8d; font-size: 0.85em;">ابحث في الوحيين (القرآن والسنة)</p>
+<div class="top-nav">
+    <a href="home.html" class="back-home-btn">✖ إغلاق والعودة للرئيسية</a>
+</div>
+
+<div class="container">
+    <div class="header">
+        <img src="LogoNafahat.png" alt="Logo">
+        <h2>نَفَحَاتُ البَحْثِ الذَّكِيِّ</h2>
+        <p>غُص في أَعماقِ الوَحيينِ الشَّريفينِ</p>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-        <input type="text" id="searchInput" placeholder="اكتب كلمة البحث هنا..." 
-               style="width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; outline: none; font-size: 16px; box-sizing: border-box;">
-        
-        <button onclick="performGlobalSearch()" 
-                style="width: 100%; padding: 14px; background: #27ae60; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.1em; active: transform: scale(0.98);">
-            بـحـث الآن
-        </button>
+    <div class="search-box">
+        <input type="text" id="q" placeholder="أدخل موضوعاً أو كلمة للبحث...">
+        <select id="t">
+            <option value="h">📜 الأحاديث النبوية (الدرر السنية)</option>
+            <option value="q">📖 القرآن الكريم (موقع تنزيل)</option>
+        </select>
+        <button class="btn-main" onclick="doSearch()">استخرج النفحات الآن 🔍</button>
     </div>
 
-    <div id="resultsLoader" style="display: none; text-align: center; padding: 15px; color: #27ae60;">
-        ✨ جاري البحث...
-    </div>
-
-    <div id="searchResults" style="margin-top: 10px;">
+    <div class="notes-section">
+        <h3>📝 فَيْضُ التَّأَمُّلِ</h3>
+        <textarea id="n" placeholder="ماذا فتح الله عليك بعد هذا البحث؟ اكتب تأملك هنا..."></textarea>
+        <div class="tools">
+            <button class="btn-tool btn-card" onclick="makeCard()">🖼️ توليد بطاقة</button>
+            <button class="btn-tool btn-copy" onclick="copyN()">📋 نسخ النص</button>
         </div>
+    </div>
+</div>
+
+<div id="captureArea">
+    <div style="font-size:60px; color:rgba(0,0,0,0.02); position:absolute; top:40%; left:10%; transform:rotate(-30deg); width:100%; text-align:center;">e-nafahat.github.io</div>
+    <h1 style="color:var(--primary); font-size:38px; font-weight:900; margin-bottom:10px;">🌿 نَفَحَاتٌ إِيمَانِيَّةٌ</h1>
+    <div style="border-bottom: 3px solid var(--gold); width: 120px; margin: 0 auto 35px;"></div>
+    <p id="textOut" style="font-size:28px; line-height:1.8; color:#2c3e50; min-height:120px; font-weight:600; padding: 0 20px;"></p>
+    
+    <div style="background:#fff5f5; border:1px solid #feb2b2; padding:18px; border-radius:15px; margin-top:40px; text-align:right;">
+        <p style="font-size:14px!important; color:#c53030!important; margin:0 0 5px 0!important; font-weight:900;">⚠️ إخلاء مسؤولية قانوني:</p>
+        <p style="font-size:13px!important; color:#c53030!important; margin:0!important; line-height:1.4;">هذا المحتوى يعبر عن "خاطرة شخصية" للمستخدم ولا يمثل الفتاوى الرسمية للموقع.</p>
+    </div>
+    <p class="card-link">e-nafahat.github.io/e</p>
+</div>
+
+<div id="searchOverlay">
+    <div class="overlay-header">
+        <span style="font-weight:900; font-size:1rem;">✨ كُنوزُ الوَحيينِ</span>
+        <button class="close-btn" onclick="closeS()">إغلاق الشاشة ✖</button>
+    </div>
+    <iframe id="f" style="flex-grow:1; border:none; background:white;"></iframe>
 </div>
 
 <script>
-async function performGlobalSearch() {
-    const query = document.getElementById('searchInput').value.trim();
-    const resultsContainer = document.getElementById('searchResults');
-    const loader = document.getElementById('resultsLoader');
-
-    if (!query) return;
-
-    resultsContainer.innerHTML = '';
-    loader.style.display = 'block';
-
-    try {
-        const quranUrl = `https://api.alquran.cloud/v1/search/${encodeURIComponent(query)}/all/ar`;
-        const hadithUrl = `https://hadis-api-id.vercel.app/hadith/search?query=${encodeURIComponent(query)}`;
-
-        const [quranRes, hadithRes] = await Promise.allSettled([
-            fetch(quranUrl).then(res => res.json()),
-            fetch(hadithUrl).then(res => res.json())
-        ]);
-
-        loader.style.display = 'none';
-        let html = '';
-
-        // نتائج القرآن - بطاقات خضراء
-        if (quranRes.status === 'fulfilled' && quranRes.value.data && quranRes.value.data.results.length > 0) {
-            html += `<h4 style="color: #27ae60; margin: 15px 5px 10px;">📖 نتائج القرآن الكريم:</h4>`;
-            quranRes.value.data.results.slice(0, 5).forEach(verse => {
-                html += `
-                    <div class="search-card quran-theme">
-                        <p style="font-size: 1.1em; color: #2c3e50; line-height: 1.6; margin: 0 0 10px 0;">${verse.text}</p>
-                        <div style="font-size: 0.8em; color: #27ae60; font-weight: bold;">سورة ${verse.surah.name} : آية ${verse.numberInSurah}</div>
-                    </div>`;
-            });
-        }
-
-        // نتائج السنة - بطاقات زرقاء
-        if (hadithRes.status === 'fulfilled' && hadithRes.value.items && hadithRes.value.items.length > 0) {
-            html += `<h4 style="color: #2980b9; margin: 20px 5px 10px;">📜 نتائج السنة النبوية:</h4>`;
-            hadithRes.value.items.slice(0, 5).forEach(item => {
-                html += `
-                    <div class="search-card hadith-theme">
-                        <p style="font-size: 1em; color: #34495e; line-height: 1.6; margin: 0 0 10px 0;">${item.arab}</p>
-                        <div style="font-size: 0.8em; color: #3498db;">المصدر: ${item.path}</div>
-                    </div>`;
-            });
-        }
-
-        resultsContainer.innerHTML = html || '<p style="text-align:center; padding: 20px;">لم نجد نتائج، حاول بكلمة أخرى.</p>';
-
-    } catch (e) {
-        loader.style.display = 'none';
-        resultsContainer.innerHTML = '<p style="color:red; text-align:center;">حدث خطأ، تأكد من اتصالك بالإنترنت.</p>';
+    function doSearch() {
+        const query = document.getElementById('q').value.trim();
+        const type = document.getElementById('t').value;
+        if(!query) return alert("يا شريكي، أخبرني عما تبحث أولاً!");
+        
+        let url = type === 'h' ? 
+            `https://dorar.net/hadith/search?q=${encodeURIComponent(query)}&st=p&d[]=1` : 
+            `https://tanzil.net/#search/quran/${encodeURIComponent(query)}`;
+            
+        document.getElementById('f').src = url;
+        document.getElementById('searchOverlay').style.display = 'flex';
     }
-}
+
+    function closeS() {
+        document.getElementById('searchOverlay').style.display = 'none';
+        document.getElementById('f').src = '';
+    }
+
+    function copyN() {
+        const t = document.getElementById('n').value;
+        if(!t) return alert("المفكرة لم يُكتب فيها شيء بعد.");
+        navigator.clipboard.writeText(t);
+        alert("تم نسخ تأملك بنجاح ✅");
+    }
+
+    function makeCard() {
+        const t = document.getElementById('n').value.trim();
+        if(!t) return alert("اكتب فَيْض تأملك أولاً لتصميم البطاقة.");
+        
+        document.getElementById('textOut').innerText = t;
+        const area = document.getElementById('captureArea');
+        
+        alert("جاري تحضير بطاقتك الإيمانية... انتظر لحظة");
+        
+        html2canvas(area, { 
+            scale: 2,
+            useCORS: true,
+            logging: false
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'Nafahat_Reflection_Card.png';
+            link.href = canvas.toURL("image/png");
+            link.click();
+        }).catch(err => {
+            console.error("خطأ في توليد الصورة:", err);
+            alert("حدث خطأ بسيط أثناء توليد الصورة، يرجى المحاولة مرة أخرى.");
+        });
+    }
 </script>
 </body>
 </html>
