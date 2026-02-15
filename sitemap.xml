@@ -5,6 +5,16 @@
     <priority>1.0</priority>
   </url>
 
+  <url><loc>https://e-nafahat.github.io/e/leader/home.html</loc><priority>0.9</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/Nresearch.html</loc><priority>0.9</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/masbaha.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/khatma.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/Mehrab.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/more.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/FrontSmart.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/intro.html</loc><priority>0.6</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/leader/live.html</loc><priority>0.6</priority></url>
+
   <url><loc>https://e-nafahat.github.io/e/Textbook/nawawi.html</loc><priority>0.9</priority></url>
   <url><loc>https://e-nafahat.github.io/e/Textbook/hadith100.html</loc><priority>0.9</priority></url>
   <url><loc>https://e-nafahat.github.io/e/Textbook/azkar.html</loc><priority>0.9</priority></url>
@@ -18,7 +28,7 @@
     <priority>0.8</priority>
   </url>
 
-  <url><loc>https://e-nafahat.github.io/e/leader/FrontSmart.html</loc><priority>0.7</priority></url>
-  <url><loc>https://e-nafahat.github.io/e/leader/Mehrab.html</loc><priority>0.7</priority></url>
-  <url><loc>https://e-nafahat.github.io/e/leader/khatma.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Tasmee/quran1.html</loc><priority>0.8</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Tasmee/ejaza.html</loc><priority>0.7</priority></url>
+  <url><loc>https://e-nafahat.github.io/e/Tasmee/ejaza-tests.html</loc><priority>0.7</priority></url>
 </urlset>
