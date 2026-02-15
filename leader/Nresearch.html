@@ -1,0 +1,103 @@
+<div id="nafahat-search-container" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: rtl; max-width: 800px; margin: 20px auto; padding: 25px; border-radius: 20px; background: #ffffff; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid #eee;">
+    
+    <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; margin-bottom: 10px;">🔎 محرك البحث الإيماني العالمي</h2>
+        <p style="color: #7f8c8d; font-size: 0.95em;">استخرج الدرر من القرآن الكريم والسنة النبوية</p>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <input type="text" id="searchInput" placeholder="ابحث عن: الصبر، الصلاة، الجنة..." 
+               style="flex: 1; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 16px;">
+        <button onclick="performGlobalSearch()" style="padding: 10px 30px; background: #27ae60; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: background 0.3s;">بـحـث</button>
+    </div>
+
+    <div id="resultsLoader" style="display: none; text-align: center; padding: 20px;">
+        <div style="color: #27ae60; font-weight: 500;">✨ جاري البحث في خزائن الوحي...</div>
+    </div>
+
+    <div id="searchResults" style="max-height: 500px; overflow-y: auto; padding: 5px;">
+        </div>
+</div>
+
+<script>
+async function performGlobalSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    const resultsContainer = document.getElementById('searchResults');
+    const loader = document.getElementById('resultsLoader');
+    const inputField = document.getElementById('searchInput');
+
+    if (!query) {
+        inputField.style.borderColor = '#e74c3c';
+        return;
+    } else {
+        inputField.style.borderColor = '#27ae60';
+    }
+
+    resultsContainer.innerHTML = '';
+    loader.style.display = 'block';
+
+    try {
+        // الروابط العالمية للبحث
+        const quranUrl = `https://api.alquran.cloud/v1/search/${encodeURIComponent(query)}/all/ar`;
+        const hadithUrl = `https://hadis-api-id.vercel.app/hadith/search?query=${encodeURIComponent(query)}`;
+
+        // تنفيذ البحث المتوازي لسرعة فائقة
+        const [quranRes, hadithRes] = await Promise.allSettled([
+            fetch(quranUrl).then(res => res.json()),
+            fetch(hadithUrl).then(res => res.json())
+        ]);
+
+        loader.style.display = 'none';
+        let finalHtml = '';
+
+        // 1. معالجة نتائج القرآن الكريم
+        if (quranRes.status === 'fulfilled' && quranRes.value.data && quranRes.value.data.count > 0) {
+            finalHtml += `<h3 style="color: #27ae60; border-right: 4px solid #27ae60; padding-right: 10px; margin-top: 10px;">📖 من القرآن الكريم</h3>`;
+            quranRes.value.data.results.slice(0, 5).forEach(verse => {
+                finalHtml += `
+                    <div style="background: #f8fdf9; padding: 18px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #e8f5e9; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <p style="font-size: 1.15em; color: #2c3e50; line-height: 1.8; margin-bottom: 8px;">${verse.text}</p>
+                        <div style="display:flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #27ae60; font-size: 0.85em; font-weight: bold;">سورة ${verse.surah.name} : آية ${verse.numberInSurah}</span>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // 2. معالجة نتائج السنة النبوية
+        if (hadithRes.status === 'fulfilled' && hadithRes.value.items && hadithRes.value.items.length > 0) {
+            finalHtml += `<h3 style="color: #2980b9; border-right: 4px solid #2980b9; padding-right: 10px; margin-top: 25px;">📜 من السنة النبوية</h3>`;
+            hadithRes.value.items.slice(0, 5).forEach(item => {
+                finalHtml += `
+                    <div style="background: #f4f8fb; padding: 18px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #e3f2fd; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <p style="font-size: 1.05em; color: #34495e; line-height: 1.7; margin-bottom: 8px;">${item.arab}</p>
+                        <span style="color: #3498db; font-size: 0.85em;">المصدر: ${item.path}</span>
+                    </div>`;
+            });
+        }
+
+        // في حال عدم وجود نتائج
+        if (!finalHtml) {
+            finalHtml = `
+                <div style="text-align:center; padding: 30px; color: #7f8c8d;">
+                    <p style="font-size: 1.2em;">لم نجد نتائج مطابقة لهذه الكلمة في خزائننا..</p>
+                    <p style="font-size: 0.9em;">حاول البحث عن كلمات مثل (الصلاة، الرحمة، المؤمنون)</p>
+                </div>`;
+        }
+
+        resultsContainer.innerHTML = finalHtml;
+
+    } catch (error) {
+        loader.style.display = 'none';
+        resultsContainer.innerHTML = `
+            <div style="color: #e74c3c; text-align: center; padding: 20px; background: #fdf2f2; border-radius: 10px;">
+                ⚠️ حدث خطأ في الاتصال. إذا كنت تستخدم المحاكي المحلي، جرب رفع الكود على GitHub Pages ليعمل بشكل سليم.
+            </div>`;
+    }
+}
+
+// تشغيل البحث عند الضغط على Enter
+document.getElementById('searchInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') performGlobalSearch();
+});
+</script>
