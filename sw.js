@@ -1,6 +1,7 @@
-const CACHE_NAME = 'nafahat-v3'; // رفعنا الإصدار لضمان تحديث شامل عند الزوار
+// اسم الإصدار - قم بتغييره عند كل تحديث رئيسي للملفات
+const CACHE_NAME = 'nafahat-v4'; 
 
-// القائمة المطابقة لهيكل مستودع "e" بالكامل
+// القائمة الكاملة للملفات المطلوب أرشفتها للعمل Offline
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -46,34 +47,46 @@ const ASSETS_TO_CACHE = [
   '/e/Tasmee/ejaza-tests.html'
 ];
 
-// تثبيت ملفات الموقع في ذاكرة الهاتف/المتصفح
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+// مرحلة التثبيت: أرشفة الملفات
+self.addEventListener('install', (event) => {
+  // إجبار النسخة الجديدة على التنشيط فوراً وتجاوز الانتظار
+  self.skipWaiting();
+  
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('تم أرشفة هيكل مستودع e بالكامل للعمل Offline');
+      console.log('جاري أرشفة الملفات للإصدار الجديد...');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
 });
 
-// استراتيجية التشغيل: البحث في الكاش أولاً (لسرعة فائقة)
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
+// مرحلة التنشيط: تنظيف الكاش القديم
+self.addEventListener('activate', (event) => {
+  // جعل الـ Service Worker يسيطر على الصفحة فوراً
+  event.waitUntil(clients.claim());
+  
+  event.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(
+        keyList.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('جاري حذف الكاش القديم:', key);
+            return caches.delete(key);
+          }
+        })
+      );
     })
   );
 });
 
-// مسح النسخ القديمة وتفعيل التحديث الجديد
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(keyList.map((key) => {
-        if (key !== CACHE_NAME) {
-          return caches.delete(key);
-        }
-      }));
+// استراتيجية جلب البيانات: الكاش أولاً ثم الشبكة
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      // إذا وجد الملف في الكاش نعرضه، وإلا نطلبه من الإنترنت
+      return response || fetch(event.request);
+    }).catch(() => {
+      // يمكن إضافة صفحة خطأ هنا في حالة عدم وجود إنترنت
     })
   );
 });
