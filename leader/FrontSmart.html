@@ -248,10 +248,10 @@
             });
         }
 
-        // --- تصحيح رابط التوجيه في دالة الواتساب ---
+        // دالة المشاركة عبر الواتساب مع توثيق الرابط الصحيح
         window.shareOnWhatsApp = (title, content, postId) => {
-            // استخدام الرابط المباشر لصفحة FrontSmart داخل مجلد leader
-            const siteUrl = "https://smart-web-3f6c3.web.app/leader/FrontSmart.html"; 
+            // الرابط الرسمي للموقع موجه مباشرة لصفحة SMART
+            const siteUrl = "https://e-nafahat.github.io/e/leader/FrontSmart.html"; 
             const cleanTitle = title.replace(/\[.*?\]/g, '').trim();
             const fullMessage = `*${cleanTitle}*\n\n${content}\n\n📍 للمزيد تابعونا عبر موقعنا:\n${siteUrl}`;
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`;
@@ -274,6 +274,7 @@
                 const richContent = processContent(data.content);
                 const styledTitle = formatTitle(data.title);
 
+                // تنظيف المحتوى من الروابط قبل الإرسال للواتساب
                 const plainContent = data.content.replace(/(https?:\/\/[^\s]+)/g, '').trim();
                 const safeTitle = data.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const safeContent = plainContent.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\r?\n/g, '\\n');
@@ -332,6 +333,7 @@
             }
         };
 
+        // استقبال رسائل الفتح المباشر من الـ iFrame الأب
         window.addEventListener('message', (event) => {
             if (event.data.type === 'OPEN_SPECIFIC_POST') {
                 const postId = event.data.id;
