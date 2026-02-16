@@ -449,7 +449,18 @@
     <script>
         const audio = document.getElementById('globalAudio');
         let lastBtn = null;
-        function toggleAudio(url, btn) { if (audio.src === url && !audio.paused) { audio.pause(); btn.innerText = "▶"; } else { if (lastBtn) lastBtn.innerText = "▶"; audio.src = url; audio.play(); btn.innerText = "⏸"; lastBtn = btn; } }
+        function toggleAudio(url, btn) { 
+            if (audio.src === url && !audio.paused) { 
+                audio.pause(); 
+                btn.innerText = "▶"; 
+            } else { 
+                if (lastBtn) lastBtn.innerText = "▶"; 
+                audio.src = url; 
+                audio.play(); 
+                btn.innerText = "⏸"; 
+                lastBtn = btn; 
+            } 
+        }
     </script>
 </body>
 </html>
