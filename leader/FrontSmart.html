@@ -137,10 +137,11 @@
         .btn-edit:active, .btn-del:active { transform: translateY(2px); box-shadow: none; }
 
         .btn-share { 
-            background: #e8f5e9; color: #2e7d32; 
+            background: #25d366; color: white; 
             margin: 10px; width: calc(100% - 20px);
-            box-shadow: 0 3px 0 #c8e6c9;
+            box-shadow: 0 3px 0 #128c7e;
         }
+        .btn-share:active { transform: translateY(2px); box-shadow: none; }
 
         /* نافذة التعديل */
         #editModal { 
@@ -247,10 +248,12 @@
             });
         }
 
-        // دالة تحضير النص للواتساب (إزالة وسوم HTML والروابط المدمجة إذا وجدت)
-        window.shareOnWhatsApp = (title, content) => {
-            const siteUrl = "https://nafahat-smart.web.app"; // يمكنك تغيير الرابط لرابط موقعك الفعلي
-            const fullMessage = `*${title}*\n\n${content}\n\n📍 للمزيد تابعونا على:\n${siteUrl}`;
+        // --- تصحيح رابط التوجيه في دالة الواتساب ---
+        window.shareOnWhatsApp = (title, content, postId) => {
+            // استخدام الرابط المباشر لصفحة FrontSmart داخل مجلد leader
+            const siteUrl = "https://smart-web-3f6c3.web.app/leader/FrontSmart.html"; 
+            const cleanTitle = title.replace(/\[.*?\]/g, '').trim();
+            const fullMessage = `*${cleanTitle}*\n\n${content}\n\n📍 للمزيد تابعونا عبر موقعنا:\n${siteUrl}`;
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`;
             window.open(whatsappUrl, '_blank');
         };
@@ -271,8 +274,9 @@
                 const richContent = processContent(data.content);
                 const styledTitle = formatTitle(data.title);
 
-                // تجهيز النص الخام للمشاركة (بدون أكواد الفيديو أو الصور)
                 const plainContent = data.content.replace(/(https?:\/\/[^\s]+)/g, '').trim();
+                const safeTitle = data.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeContent = plainContent.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\r?\n/g, '\\n');
 
                 item.innerHTML = `
                     <div class="strip-header" onclick="this.parentElement.classList.toggle('active-strip')">
@@ -283,16 +287,15 @@
                     <div class="strip-content">
                         <div class="content-inner">${richContent}</div>
                         <div class="admin-controls">
-                            <button class="btn-3d btn-edit" data-id="${docSnap.id}" data-title='${data.title.replace(/'/g, "\\'")}' data-content='${data.content.replace(/'/g, "\\'").replace(/\n/g, "\\n")}'>تَعْدِيلٌ</button>
+                            <button class="btn-3d btn-edit" data-id="${docSnap.id}" data-title='${safeTitle}' data-content='${data.content.replace(/'/g, "\\'").replace(/\n/g, "\\n")}'>تَعْدِيلٌ</button>
                             <button class="btn-3d btn-del" data-id="${docSnap.id}">حَذْفٌ</button>
                         </div>
-                        <button class="btn-3d btn-share" onclick="shareOnWhatsApp('${data.title.replace(/'/g, "\\'")}', '${plainContent.replace(/'/g, "\\'").replace(/\n/g, "\\n")}')">نَشْرٌ عَبْرَ واتساب</button>
+                        <button class="btn-3d btn-share" onclick="shareOnWhatsApp('${safeTitle}', '${safeContent}', '${docSnap.id}')">نَشْرٌ عَبْرَ واتساب</button>
                     </div>
                 `;
                 container.appendChild(item);
             });
 
-            // تفعيل التعديل والحذف
             document.querySelectorAll('.btn-edit').forEach(btn => {
                 btn.onclick = () => {
                     currentEditId = btn.getAttribute('data-id');
@@ -329,7 +332,6 @@
             }
         };
 
-        // الربط مع الرسائل الخارجية
         window.addEventListener('message', (event) => {
             if (event.data.type === 'OPEN_SPECIFIC_POST') {
                 const postId = event.data.id;
