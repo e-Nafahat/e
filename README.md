@@ -47,8 +47,10 @@
 ---
 
 ## <img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/24/c5a059/external-setting-strategy-flatart-icons-outline-flatarticons.png"/> 🚀 التقنيات المستخدمة (Tech Stack)
-* **Frontend:** HTML5, CSS3, JavaScript (Vanilla JS).
-* **Database:** Firebase Firestore (Real-time synchronization).
+* **Frontend:** HTML5, CSS3 (Flexbox & Grid), JavaScript (ES6+ Vanilla JS).
+* **Typography:** Integration with Google Fonts (Cairo & Amiri).
+* **Database:** Firebase Firestore (Real-time synchronization & NoSQL structure).
+* **PWA Features:** Service Workers, Manifest JSON, and Cache Storage API.
 * **Deployment:** GitHub Pages & PWA Architecture.
 * **Analytics:** GitHub Insights (بأكثر من 1000 عملية نسخ في 14 يوماً).
 
