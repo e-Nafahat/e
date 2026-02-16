@@ -168,7 +168,7 @@
         .media-container img, .media-container video { width: 100%; height: auto; display: block; }
         
         .source-tag { 
-            display: flex; flex-direction: column; align-items: center; gap: 12px;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
             margin-top: 20px; color: var(--gold-dark); 
             font-weight: 900; font-size: 1rem; text-align: center; 
             border-top: 2px solid #f9f6f0; padding-top: 15px; 
@@ -176,19 +176,19 @@
 
         .btn-share-public {
             display: inline-block;
-            padding: 8px 25px;
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-radius: 12px;
-            font-size: 0.85rem;
+            padding: 10px 30px;
+            background: #25d366;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.9rem;
             cursor: pointer;
-            border: 1px solid #c8e6c9;
+            border: none;
             font-family: 'Cairo';
             font-weight: 800;
-            transition: 0.3s;
-            box-shadow: 0 4px 0 #c8e6c9;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
         }
-        .btn-share-public:active { transform: translateY(2px); box-shadow: none; }
+        .btn-share-public:active { transform: scale(0.95); }
 
         .admin-controls { display: none; gap: 8px; padding: 12px; background: #f8f9fa; border-top: 1px solid #eee; }
         .is-admin .admin-controls { display: flex !important; }
@@ -284,12 +284,18 @@
             return mediaHtml + `<div class="content-text">${text}</div>`;
         }
 
-        // دالة المشاركة العالمية المعرفة على window لضمان الوصول إليها من onclick
-        window.shareOnWhatsapp = (title, content, source, num) => {
-            const currentUrl = window.location.origin + window.location.pathname + "#post-" + num;
-            const message = `*${title}*\n\n${content}\n\n*المصدر:* ${source}\n\n📍 للمزيد عبر موقعنا:\n${currentUrl}`;
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+        // دالة المشاركة العالمية المعرفة على window لضمان العمل من الـ onclick
+        window.shareMe = (title, content, source, num) => {
+            // تنظيف النص من أي علامات ترميز زائدة قبل الإرسال
+            const cleanTitle = title.trim();
+            const cleanContent = content.trim();
+            const cleanSource = source.trim();
+            
+            const shareUrl = window.location.origin + window.location.pathname + '#post-' + num;
+            const message = `*${cleanTitle}*\n\n${cleanContent}\n\n*المصدر:* ${cleanSource}\n\n📍 تابع النفحة عبر الرابط:\n${shareUrl}`;
+            
+            const finalLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(finalLink, '_blank');
         };
 
         onSnapshot(query(collection(db, "nafahat"), orderBy("time", "desc")), (snapshot) => {
@@ -321,10 +327,10 @@
                     </div>
                 </div>`;
 
-                // تحضير النصوص للمشاركة بإزالة أي مشاكل في علامات الاقتباس
-                const cleanTitle = (data.title || "تأملات إيمانية").replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const cleanContent = data.content.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
-                const cleanSource = (data.source || "قلمُ المحرابِ").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                // تجهيز النصوص للمشاركة (التعامل مع علامات الاقتباس والسطور الجديدة)
+                const safeTitle = (data.title || "نفحة إيمانية").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeContent = data.content.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\r?\n/g, '\\n');
+                const safeSource = (data.source || "قلم المحراب").replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
                 articlesHTML += `
                     <div class="article-strip" id="post-${postNum}">
@@ -333,10 +339,11 @@
                             <h2>${data.title || (data.content.substring(0, 50) + "...")}</h2>
                             <div class="dropdown-icon">▾</div> </div>
                         <div class="strip-content">
-                            <div class="content-inner">${richContent}
+                            <div class="content-inner">
+                                ${richContent}
                                 <div class="source-tag">
                                     <span>﴿ ${data.source || "قلمُ المحرابِ"} ﴾</span>
-                                    <button class="btn-share-public" onclick="event.stopPropagation(); window.shareOnWhatsapp('${cleanTitle}', '${cleanContent}', '${cleanSource}', '${postNum}')">نَشْرٌ عَبْرَ وَاتْسَاب</button>
+                                    <button class="btn-share-public" onclick="event.stopPropagation(); shareMe('${safeTitle}', '${safeContent}', '${safeSource}', '${postNum}')">مشاركة عبر واتساب</button>
                                 </div>
                             </div>
                             <div class="admin-controls">
