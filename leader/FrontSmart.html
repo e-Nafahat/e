@@ -199,16 +199,22 @@
         const db = getFirestore(app);
         let currentEditId = null;
 
-        // الدخول كأدمن
+        // الدخول كأدمن (ضغط مطول 2 ثانية على تبويب الكل)
         let pressTimer;
         const adminBtn = document.getElementById('adminTrigger');
-        adminBtn.addEventListener('touchstart', () => {
+        
+        const startPress = () => {
             pressTimer = window.setTimeout(() => {
                 const pass = prompt("مِفْتَاحُ الأَدْمِن:");
                 if (pass === "FM1661") document.body.classList.add('is-admin');
             }, 2000);
-        });
-        adminBtn.addEventListener('touchend', () => clearTimeout(pressTimer));
+        };
+        const endPress = () => clearTimeout(pressTimer);
+
+        adminBtn.addEventListener('touchstart', startPress);
+        adminBtn.addEventListener('touchend', endPress);
+        adminBtn.addEventListener('mousedown', startPress);
+        adminBtn.addEventListener('mouseup', endPress);
 
         window.filterArticles = (category, btn) => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -241,6 +247,14 @@
             });
         }
 
+        // دالة تحضير النص للواتساب (إزالة وسوم HTML والروابط المدمجة إذا وجدت)
+        window.shareOnWhatsApp = (title, content) => {
+            const siteUrl = "https://nafahat-smart.web.app"; // يمكنك تغيير الرابط لرابط موقعك الفعلي
+            const fullMessage = `*${title}*\n\n${content}\n\n📍 للمزيد تابعونا على:\n${siteUrl}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        };
+
         const q = query(collection(db, "articles"), orderBy("time", "desc"));
         onSnapshot(q, (snapshot) => {
             const container = document.getElementById('articlesWrapper');
@@ -257,6 +271,9 @@
                 const richContent = processContent(data.content);
                 const styledTitle = formatTitle(data.title);
 
+                // تجهيز النص الخام للمشاركة (بدون أكواد الفيديو أو الصور)
+                const plainContent = data.content.replace(/(https?:\/\/[^\s]+)/g, '').trim();
+
                 item.innerHTML = `
                     <div class="strip-header" onclick="this.parentElement.classList.toggle('active-strip')">
                         <div class="post-number">${total - index}</div>
@@ -269,7 +286,7 @@
                             <button class="btn-3d btn-edit" data-id="${docSnap.id}" data-title='${data.title.replace(/'/g, "\\'")}' data-content='${data.content.replace(/'/g, "\\'").replace(/\n/g, "\\n")}'>تَعْدِيلٌ</button>
                             <button class="btn-3d btn-del" data-id="${docSnap.id}">حَذْفٌ</button>
                         </div>
-                        <button class="btn-3d btn-share" onclick="window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent('${data.title}'))">نَشْرٌ عَبْرَ واتساب</button>
+                        <button class="btn-3d btn-share" onclick="shareOnWhatsApp('${data.title.replace(/'/g, "\\'")}', '${plainContent.replace(/'/g, "\\'").replace(/\n/g, "\\n")}')">نَشْرٌ عَبْرَ واتساب</button>
                     </div>
                 `;
                 container.appendChild(item);
@@ -296,29 +313,30 @@
 
         document.getElementById('saveUpdateBtn').onclick = async () => {
             const btn = document.getElementById('saveUpdateBtn');
+            const originalText = btn.innerText;
             btn.innerText = "جاري الحفظ...";
-            await updateDoc(doc(db, "articles", currentEditId), {
-                title: document.getElementById('editTitle').value,
-                content: document.getElementById('editContent').value,
-                time: serverTimestamp()
-            });
-            btn.innerText = "حِفْظُ التَّعْدِيلَاتِ";
-            closeModal();
+            try {
+                await updateDoc(doc(db, "articles", currentEditId), {
+                    title: document.getElementById('editTitle').value,
+                    content: document.getElementById('editContent').value,
+                    time: serverTimestamp()
+                });
+                closeModal();
+            } catch (e) {
+                alert("خطأ في التحديث");
+            } finally {
+                btn.innerText = originalText;
+            }
         };
 
-        // --- التعديل الجوهري للربط مع الصفحة الرئيسية والشريط ---
+        // الربط مع الرسائل الخارجية
         window.addEventListener('message', (event) => {
             if (event.data.type === 'OPEN_SPECIFIC_POST') {
                 const postId = event.data.id;
                 const targetElement = document.getElementById('post-' + postId);
                 if (targetElement) {
-                    // إغلاق أي مقالات أخرى مفتوحة أولاً (اختياري لنظافة العرض)
                     document.querySelectorAll('.article-strip').forEach(s => s.classList.remove('active-strip'));
-                    
-                    // فتح المقالة المطلوبة
                     targetElement.classList.add('active-strip');
-                    
-                    // التمرير إليها بسلاسة
                     targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
