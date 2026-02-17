@@ -1,6 +1,7 @@
-// تم رفع الإصدار لـ v6 لإجبار النظام على اكتشاف تغيير جذري
+// اسم الإصدار - رفعه لضمان تحديث شامل وإجبار المتصفح على الاستجابة
 const CACHE_NAME = 'nafahat-v6'; 
 
+// القائمة الكاملة والمطابقة تماماً لهيكل مستودع "e"
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -9,6 +10,7 @@ const ASSETS_TO_CACHE = [
   '/e/sitemap.xml',
   '/e/.nojekyll',
   '/e/favicon.png',
+  '/e/sw.js',
   
   // مجلد leader
   '/e/leader/home.html',
@@ -20,13 +22,13 @@ const ASSETS_TO_CACHE = [
   '/e/leader/khatma.html',
   '/e/leader/Mehrab.html',
   '/e/leader/support.html',
-  '/e/leader/Nresearch.html',
-  '/e/leader/live.html',
   '/e/leader/main.js',
   '/e/leader/masbaha_script.js',
   '/e/leader/masbaha_style.css',
   '/e/leader/style.css',
   '/e/leader/LogoNafahat.png',
+  '/e/leader/Nresearch.html',
+  '/e/leader/live.html',
   '/e/leader/lindo.mp3',
   
   // مجلد Library
@@ -49,33 +51,31 @@ const ASSETS_TO_CACHE = [
 
 // مرحلة التثبيت: إجبار الملف الجديد على السيطرة فوراً
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // تفعيل فوري للكود الجديد دون انتظار إغلاق المتصفح
+  self.skipWaiting(); 
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('تم تحديث أرشفة نفحات للفئة v6');
+      console.log('تم تحديث أرشفة مستودع e بنجاح للإصدار v6');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
 });
 
-// مرحلة التنشيط: مسح شامل وشديد لكل ما هو قديم
+// مرحلة التنشيط: مسح شامل وشديد لكل النسخ القديمة لضمان سرعة التحديث
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(keyList.map((key) => {
-        // حذف أي كاش قديم (v1, v2, v3, v4, v5) فوراً
         if (key !== CACHE_NAME) {
-          console.log('جاري حذف الذاكرة المؤقتة القديمة:', key);
+          console.log('جاري حذف الذاكرة القديمة:', key);
           return caches.delete(key);
         }
       }));
     })
   );
-  // السيطرة على جميع الصفحات المفتوحة فوراً
   event.waitUntil(clients.claim());
 });
 
-// استراتيجية جلب البيانات: (الشبكة أولاً ثم الكاش) لضمان السرعة والتحديث
+// استراتيجية جلب البيانات: (الشبكة أولاً) لضمان ظهور أي تعديل ترفعه على GitHub فوراً
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request).catch(() => {
