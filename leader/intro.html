@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>مرحباً بك في نفحات إيمانية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,6 @@
             --festive-green: rgba(29, 91, 61, 0.6);
         }
 
-        /* تم إزالة animation من body لضمان عدم اختفاء الصفحة كاملة */
         body, html { 
             margin: 0; padding: 0; overflow: hidden; background: #000; height: 100%; 
             font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent;
@@ -32,10 +31,8 @@
             width: 100%; height: 100%; 
             align-items: center; justify-content: center; 
             z-index: 100;
-            /* إزالة الـ transition من الحاوية الكبرى */
         }
 
-        /* التأثير الآن يطبق فقط على محتوى العناصر وليس الخلفية */
         .elements-container {
             display: flex;
             flex-direction: column;
@@ -45,7 +42,6 @@
             transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s ease;
         }
 
-        /* حالة الاختفاء للعناصر فقط عند الضغط */
         .elements-fade-out {
             opacity: 0 !important;
             transform: scale(0.95);
@@ -154,7 +150,7 @@
 <body>
 
     <audio id="logo-sound" preload="auto">
-        <source src="lindo.mp3" type="audio/mpeg">
+        <source src="leader/lindo.mp3" type="audio/mpeg">
     </audio>
 
     <div class="background-layer">
@@ -187,18 +183,22 @@
     <div id="cinema-intro">
         <div class="elements-container" id="elements-wrapper">
             <div class="intro-content" id="main-ui">
-                <img src="LogoNafahat.png" class="site-logo fade-in" style="animation-delay: 0.2s;" alt="الشعار">
+                <img src="leader/LogoNafahat.png" class="site-logo fade-in" style="animation-delay: 0.2s;" alt="الشعار">
                 <img src="https://i.postimg.cc/13M6HWjy/phram1.png" class="phram-img fade-in" style="animation-delay: 0.7s;" alt="الآية">
+                
                 <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
+                
                 <div class="elegant-sub fade-in" style="animation-delay: 1.8s;">
                     <span>طال الغياب.. وآن أوان اللقاء بنور الطاعات</span>
                     <span>اشتاقت الأرواح لنفحاتك.. فأهلاً بقلب الشهور</span>
                     <span>هنا تولد القلوب من جديد.. في رحاب الله</span>
                 </div>
+                
                 <div class="ramadan-counter fade-in" style="animation-delay: 2.3s;">
                     <div class="counter-title">بقي على شهر الرحمة</div>
                     <span class="days-left" id="daysText">جاري الحساب..</span>
                 </div>
+                
                 <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.8s;">دخول</button>
                 <p class="elegant-wisdom fade-in" style="animation-delay: 3.3s;">لن يصلح آخر هذه الأمة إلا بما صلح به أولها</p>
             </div>
@@ -266,25 +266,24 @@
             startBtn.addEventListener('click', function() {
                 if(logoAudio) {
                     logoAudio.play().then(() => {
-                        // إخفاء العناصر الداخلية فقط
                         elementsWrapper.classList.add('elements-fade-out');
                         
                         logoAudio.onended = function() {
-                            window.location.href = 'home.html';
+                            window.location.href = 'leader/home.html';
                         };
 
                         setTimeout(() => {
-                            window.location.href = 'home.html';
+                            window.location.href = 'leader/home.html';
                         }, 4800); 
 
                     }).catch(e => {
                         console.log("Audio blocked");
                         elementsWrapper.classList.add('elements-fade-out');
-                        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                        setTimeout(() => { window.location.href = 'leader/home.html'; }, 1500);
                     });
                 } else {
                     elementsWrapper.classList.add('elements-fade-out');
-                    setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                    setTimeout(() => { window.location.href = 'leader/home.html'; }, 1500);
                 }
             });
 
