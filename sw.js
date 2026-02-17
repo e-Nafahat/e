@@ -1,7 +1,6 @@
-// اسم الإصدار - رفعه لضمان تحديث شامل
-const CACHE_NAME = 'nafahat-v5'; 
+// تم رفع الإصدار لـ v6 لإجبار النظام على اكتشاف تغيير جذري
+const CACHE_NAME = 'nafahat-v6'; 
 
-// القائمة المطابقة لهيكل مستودع "e" بناءً على الصور
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -48,33 +47,39 @@ const ASSETS_TO_CACHE = [
   '/e/Tasmee/ejaza-tests.html'
 ];
 
+// مرحلة التثبيت: إجبار الملف الجديد على السيطرة فوراً
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  self.skipWaiting(); // تفعيل فوري للكود الجديد دون انتظار إغلاق المتصفح
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('تم أرشفة مستودع e بنجاح');
+      console.log('تم تحديث أرشفة نفحات للفئة v6');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
 });
 
+// مرحلة التنشيط: مسح شامل وشديد لكل ما هو قديم
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
   event.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(keyList.map((key) => {
+        // حذف أي كاش قديم (v1, v2, v3, v4, v5) فوراً
         if (key !== CACHE_NAME) {
+          console.log('جاري حذف الذاكرة المؤقتة القديمة:', key);
           return caches.delete(key);
         }
       }));
     })
   );
+  // السيطرة على جميع الصفحات المفتوحة فوراً
+  event.waitUntil(clients.claim());
 });
 
+// استراتيجية جلب البيانات: (الشبكة أولاً ثم الكاش) لضمان السرعة والتحديث
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    fetch(event.request).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
