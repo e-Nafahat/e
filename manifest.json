@@ -2,31 +2,26 @@
   "name": "نفحات إيمانية",
   "short_name": "نفحات",
   "description": "المنهج الصافي والذكر الحكيم - تطبيقك الروحي الشامل",
-  "lang": "ar-SA",
+  "lang": "ar",
   "dir": "rtl",
-  "start_url": "index.html",
+  "start_url": "/e/index.html",
+  "scope": "/e/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#d4af37",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "leader/LogoNafahat.png",
+      "src": "/e/leader/LogoNafahat.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "leader/LogoNafahat.png",
+      "src": "/e/leader/LogoNafahat.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "leader/LogoNafahat.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
   "categories": ["education", "lifestyle"]
