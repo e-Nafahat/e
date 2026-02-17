@@ -15,9 +15,10 @@
             --festive-green: rgba(29, 91, 61, 0.6);
         }
 
+        /* تم إزالة animation من body لضمان عدم اختفاء الصفحة كاملة */
         body, html { 
             margin: 0; padding: 0; overflow: hidden; background: #000; height: 100%; 
-            font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; 
+            font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent;
         }
 
         .background-layer {
@@ -27,11 +28,28 @@
         }
 
         #cinema-intro { 
-            display: flex; opacity: 1; position: fixed; top: 0; left: 0; 
+            display: flex; position: fixed; top: 0; left: 0; 
             width: 100%; height: 100%; 
             align-items: center; justify-content: center; 
-            transition: opacity 1.2s ease-in-out; 
             z-index: 100;
+            /* إزالة الـ transition من الحاوية الكبرى */
+        }
+
+        /* التأثير الآن يطبق فقط على محتوى العناصر وليس الخلفية */
+        .elements-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s ease;
+        }
+
+        /* حالة الاختفاء للعناصر فقط عند الضغط */
+        .elements-fade-out {
+            opacity: 0 !important;
+            transform: scale(0.95);
+            pointer-events: none;
         }
 
         .moon-bg {
@@ -46,34 +64,11 @@
         @keyframes moonPulse { from { opacity: 0.4; transform: rotate(-15deg) scale(1); } to { opacity: 0.7; transform: rotate(-15deg) scale(1.02); } }
 
         .festive-cords-top {
-            position: absolute;
-            top: -10px;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            z-index: 3;
-            pointer-events: none;
-            display: flex;
-            justify-content: space-around;
+            position: absolute; top: -10px; left: 0; width: 100%; height: 80px;
+            z-index: 3; pointer-events: none; display: flex; justify-content: space-around;
         }
 
         .cord-svg { width: 100%; height: 100%; }
-
-        .ramadan-banners {
-            position: absolute; top: 0; width: 100%; display: flex;
-            justify-content: center; z-index: 4; pointer-events: none; opacity: 0.5;
-        }
-
-        .banner-flag {
-            width: 0; height: 0; border-left: 12px solid transparent;
-            border-right: 12px solid transparent; border-top: 20px solid var(--gold);
-            margin: 0 3px; animation: flagMove 4s infinite ease-in-out; transform-origin: top;
-        }
-
-        .banner-flag:nth-child(even) { border-top-color: var(--festive-red); animation-delay: 0.7s; }
-        .banner-flag:nth-child(3n) { border-top-color: var(--festive-green); animation-delay: 1.2s; }
-
-        @keyframes flagMove { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
 
         .ramadan-hangings {
             position: absolute; top: 20px; width: 100%; height: 200px;
@@ -89,38 +84,34 @@
         .intro-content { 
             display: flex; flex-direction: column; align-items: center; 
             justify-content: center; width: 100%; gap: 8px; z-index: 110;
-            text-align: center;
-            margin-top: 60px;
+            text-align: center; margin-top: 20px;
         }
 
-        .elegant-logo-img { width: 120px; height: auto; opacity: 0; filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.3)); }
-        
-        .quran-verse-img {
-            width: 260px;
-            max-width: 80%;
+        .site-logo {
+            width: 100px;
             height: auto;
             opacity: 0;
-            margin: 5px 0;
-            filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+            z-index: 100;
+            margin-bottom: -5px;
         }
 
-        .elegant-line { height: 1px; width: 200px; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 2px 0; }
+        .phram-img {
+            width: 260px;
+            max-width: 85%;
+            height: auto;
+            opacity: 0;
+            display: block;
+            margin-bottom: -12px;
+        }
+
+        .elegant-line { height: 1px; width: 200px; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 10px 0; }
         
         .elegant-sub { 
-            font-weight: 400; 
-            font-size: 0.9rem; 
-            color: #cecece; 
-            opacity: 0; 
-            margin: 8px 0; 
-            padding: 0 20px; 
-            line-height: 1.7; 
-            display: block;
+            font-weight: 400; font-size: 0.9rem; color: #cecece; 
+            opacity: 0; margin: 8px 0; padding: 0 20px; line-height: 1.7; display: block;
         }
 
-        .elegant-sub span {
-            display: block;
-            margin-bottom: 1px;
-        }
+        .elegant-sub span { display: block; margin-bottom: 1px; }
         
         .elegant-wisdom { font-weight: 200; font-size: 0.75rem; color: #888; opacity: 0; margin-top: 15px; padding: 0 30px; line-height: 1.4; max-width: 280px; }
 
@@ -153,11 +144,9 @@
 
         #starCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-        .fade-in-up { animation: fadeInUp 1.5s ease forwards; }
         .fade-in { animation: fadeIn 1.5s ease forwards; }
         .scale-x { animation: scaleX 1.2s ease forwards; }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleX { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
     </style>
@@ -165,7 +154,7 @@
 <body>
 
     <audio id="logo-sound" preload="auto">
-        <source src="leader/lindo.mp3" type="audio/mpeg">
+        <source src="lindo.mp3" type="audio/mpeg">
     </audio>
 
     <div class="background-layer">
@@ -196,24 +185,23 @@
     </div>
 
     <div id="cinema-intro">
-        <div class="intro-content" id="main-ui">
-            <img src="leader/LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
-            <img src="https://i.postimg.cc/J7Q6mScv/ramadan-Ph1.png" class="quran-verse-img fade-in" style="animation-delay: 1.2s;">
-            <div class="elegant-line scale-x" style="animation-delay: 1.5s;"></div>
-            
-            <div class="elegant-sub fade-in" style="animation-delay: 2.1s;">
-                <span>طال الغياب.. وآن أوان اللقاء بنور الطاعات</span>
-                <span>اشتاقت الأرواح لنفحاتك.. فأهلاً بقلب الشهور</span>
-                <span>هنا تولد القلوب من جديد.. في رحاب الله</span>
+        <div class="elements-container" id="elements-wrapper">
+            <div class="intro-content" id="main-ui">
+                <img src="LogoNafahat.png" class="site-logo fade-in" style="animation-delay: 0.2s;" alt="الشعار">
+                <img src="https://i.postimg.cc/13M6HWjy/phram1.png" class="phram-img fade-in" style="animation-delay: 0.7s;" alt="الآية">
+                <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
+                <div class="elegant-sub fade-in" style="animation-delay: 1.8s;">
+                    <span>طال الغياب.. وآن أوان اللقاء بنور الطاعات</span>
+                    <span>اشتاقت الأرواح لنفحاتك.. فأهلاً بقلب الشهور</span>
+                    <span>هنا تولد القلوب من جديد.. في رحاب الله</span>
+                </div>
+                <div class="ramadan-counter fade-in" style="animation-delay: 2.3s;">
+                    <div class="counter-title">بقي على شهر الرحمة</div>
+                    <span class="days-left" id="daysText">جاري الحساب..</span>
+                </div>
+                <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.8s;">دخول</button>
+                <p class="elegant-wisdom fade-in" style="animation-delay: 3.3s;">لن يصلح آخر هذه الأمة إلا بما صلح به أولها</p>
             </div>
-            
-            <div class="ramadan-counter fade-in" style="animation-delay: 2.5s;">
-                <div class="counter-title">بقي على شهر الرحمة</div>
-                <span class="days-left" id="daysText">جاري الحساب..</span>
-            </div>
-            
-            <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 3s;">دخول</button>
-            <p class="elegant-wisdom fade-in" style="animation-delay: 3.6s;">لن يصلح آخر هذه الأمة إلا بما صلح به أولها</p>
         </div>
     </div>
 
@@ -222,10 +210,10 @@
             const startBtn = document.getElementById('start-btn');
             const logoAudio = document.getElementById('logo-sound');
             const canvas = document.getElementById('starCanvas');
+            const elementsWrapper = document.getElementById('elements-wrapper');
             const ctx = canvas.getContext('2d');
             let stars = [], meteors = [];
 
-            // مراجعة منطق العداد: فبراير 18، 2026
             function updateRamadanCounter() {
                 const now = new Date();
                 const ramadanDate = new Date("February 18, 2026 00:00:00");
@@ -276,17 +264,32 @@
             }
 
             startBtn.addEventListener('click', function() {
-                window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
-                if(logoAudio) logoAudio.play().catch(e => console.log("Audio blocked"));
-                document.getElementById('cinema-intro').style.opacity = '0';
-                setTimeout(() => {
-                    window.parent.postMessage('START_SITE_NOW', '*');
-                }, 1000);
+                if(logoAudio) {
+                    logoAudio.play().then(() => {
+                        // إخفاء العناصر الداخلية فقط
+                        elementsWrapper.classList.add('elements-fade-out');
+                        
+                        logoAudio.onended = function() {
+                            window.location.href = 'home.html';
+                        };
+
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 4800); 
+
+                    }).catch(e => {
+                        console.log("Audio blocked");
+                        elementsWrapper.classList.add('elements-fade-out');
+                        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                    });
+                } else {
+                    elementsWrapper.classList.add('elements-fade-out');
+                    setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                }
             });
 
-            // تشغيل العداد فوراً وعند كل ثانية للتأكد من بقائه حياً
             updateRamadanCounter();
-            setInterval(updateRamadanCounter, 60000); // تحديث كل دقيقة يكفي للعداد
+            setInterval(updateRamadanCounter, 60000); 
 
             initStars();
             drawStars();
