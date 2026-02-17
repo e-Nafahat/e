@@ -14,10 +14,130 @@
             width: 100%; height: 100%; background: #000; align-items: center; 
             justify-content: center; transition: opacity 1.2s ease-in-out; 
         }
-        .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 6px; }
+
+        /* حبل أعلام الزينة الملونة */
+        .decoration-string {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 25;
+            pointer-events: none;
+        }
+        .string-arc {
+            display: flex;
+            gap: 8px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .flag-item {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 22px solid;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+            animation: flagSwing 3s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+        /* ألوان الأعلام بناءً على لقطة الشاشة */
+        .flag-item:nth-child(4n+1) { border-top-color: #d4af37; } /* ذهبي */
+        .flag-item:nth-child(4n+2) { border-top-color: #7a1a1a; } /* أحمر داكن */
+        .flag-item:nth-child(4n+3) { border-top-color: #1a4d1a; } /* أخضر داكن */
+        .flag-item:nth-child(4n+4) { border-top-color: #b8860b; } /* نحاسي */
+
+        @keyframes flagSwing {
+            from { transform: rotateX(-5deg); }
+            to { transform: rotateX(15deg); }
+        }
+
+        /* الفوانيس المطابقة للقطة الشاشة */
+        .lanterns-lux-container {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10%;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .lantern-wire {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: lanternSwing 4s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+        .wire {
+            width: 1px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.4);
+        }
+        .lantern-head {
+            width: 20px;
+            height: 8px;
+            background: #d4af37;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+        .lantern-body-lux {
+            width: 32px;
+            height: 40px;
+            background: #ebd07d; /* لون الجسم الفاتح */
+            position: relative;
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(235, 208, 125, 0.5);
+        }
+        .lantern-light {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px #fff;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .lantern-base {
+            width: 18px;
+            height: 12px;
+            background: #b8860b;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+        }
+
+        @keyframes lanternSwing {
+            from { transform: rotate(-3deg); }
+            to { transform: rotate(3deg); }
+        }
+        @keyframes glow {
+            from { opacity: 0.6; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* المحتوى الرئيسي */
+        .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 6px; z-index: 5; }
         .elegant-logo-img { width: 110px; height: auto; opacity: 0; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)); }
+        
+        /* صورة الآية القرآنية */
+        .ramadan-decoration {
+            position: relative;
+            width: 65%;
+            max-width: 300px;
+            z-index: 10;
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+        .ramadan-decoration img {
+            width: 100%;
+            display: block;
+        }
+
         .elegant-line { height: 1px; width: 65%; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 2px 0; }
-        .elegant-sub { font-weight: 400; font-size: 0.9rem; color: #cecece; opacity: 0; margin: 0; padding: 0 15px; text-align: center; line-height: 1.2; }
+        .elegant-sub { font-weight: 400; font-size: 0.9rem; color: #cecece; opacity: 0; margin: 0; padding: 0 15px; text-align: center; line-height: 1.4; }
         .mini-btn-solid {
             margin-top: 15px; padding: 8px 35px; font-size: 0.8rem; font-family: 'Cairo', sans-serif;
             color: #000; background: #d4af37; border: none; border-radius: 4px;
@@ -39,10 +159,48 @@
     </audio>
 
     <div id="cinema-intro">
+        <div class="decoration-string">
+            <div class="string-arc">
+                <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
+                <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
+                <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
+            </div>
+        </div>
+
+        <div class="lanterns-lux-container">
+            <div class="lantern-wire" style="animation-delay: 0s;">
+                <div class="wire"></div>
+                <div class="lantern-head"></div>
+                <div class="lantern-body-lux"><div class="lantern-light"></div></div>
+                <div class="lantern-base"></div>
+            </div>
+            <div class="lantern-wire" style="animation-delay: -1.5s;">
+                <div class="wire" style="height: 60px;"></div>
+                <div class="lantern-head"></div>
+                <div class="lantern-body-lux"><div class="lantern-light"></div></div>
+                <div class="lantern-base"></div>
+            </div>
+            <div class="lantern-wire" style="animation-delay: -0.8s;">
+                <div class="wire"></div>
+                <div class="lantern-head"></div>
+                <div class="lantern-body-lux"><div class="lantern-light"></div></div>
+                <div class="lantern-base"></div>
+            </div>
+        </div>
+
         <div class="intro-content">
-            <img src="LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
+            <img src="/leader/LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
+            
+            <div class="ramadan-decoration">
+                <img src="/leader/phram1.png">
+            </div>
+
             <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
-            <p class="elegant-sub fade-in" style="animation-delay: 1.8s;">لن يصلح آخر هذه الأمة إلا بما صلح به أولها</p>
+            <p class="elegant-sub fade-in" style="animation-delay: 1.8s;">
+                طال الغياب.. وآن أوان اللقاء بنور الطاعات<br>
+                اشتاقت الأرواح لنفحاتك.. فأهلاً بقلب الشهور<br>
+                هنا تولد القلوب من جديد.. في رحاب الله
+            </p>
             <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.5s;">دخول</button>
         </div>
     </div>
@@ -53,21 +211,22 @@
             const logoAudio = document.getElementById('logo-sound');
 
             startBtn.addEventListener('click', function() {
-                // 1. أمر الملف الرئيسي (Index) بتشغيل الصوت من عنده لكي لا ينقطع عند حذف الإنترو
                 window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
 
-                // 2. تشغيل الصوت احتياطياً هنا أيضاً
                 if(logoAudio) {
                     logoAudio.play().catch(e => console.log("Audio blocked"));
                 }
 
-                // 3. إرسال إشارة الدخول بعد تأخير بسيط جداً لضمان بدء الصوت
                 setTimeout(() => {
                     window.parent.postMessage('START_SITE_NOW', '*');
                 }, 100);
 
                 this.style.opacity = '0';
                 document.getElementById('cinema-intro').style.opacity = '0';
+                
+                setTimeout(() => {
+                    document.getElementById('cinema-intro').style.display = 'none';
+                }, 1200);
             });
         })();
     </script>
