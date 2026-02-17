@@ -60,7 +60,7 @@
 <div align="right">
 تم تطوير هذا المشروع وإدارته بواسطة المطور الشغوف بخدمة المحتوى الرقمي:
 <br>
-<b>محمد السيد عباس (Mohamed Younes)</b>
+<b>Mohamed El-Sayed Abbas  (Mohamed Younes)</b>
 </div>
 
 ---
