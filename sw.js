@@ -75,6 +75,13 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
 
+// الاستماع لرسالة التحديث من الواجهة الأمامية (زر التحديث في index.html)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
+
 // استراتيجية جلب البيانات: (الشبكة أولاً) لضمان ظهور أي تعديل ترفعه على GitHub فوراً
 self.addEventListener('fetch', (event) => {
   event.respondWith(
