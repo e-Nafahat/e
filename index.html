@@ -133,7 +133,6 @@
             overflow: hidden; clip: rect(0,0,0,0); border: 0;
         }
 
-        /* تنسيق نافذة بشرى التحديث */
         #update-banner {
             display: none; position: fixed; bottom: 25px; left: 20px; right: 20px; 
             background: linear-gradient(135deg, #d4af37, #b39359); color: #000; 
@@ -199,16 +198,14 @@
     </div>
 
     <script>
-        // منطق الـ Service Worker وبشرى التحديث
         let newWorker;
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/e/sw.js').then(reg => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
                     reg.addEventListener('updatefound', () => {
                         newWorker = reg.installing;
                         newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // إظهار نافذة البشرى بدلاً من Confirm التقليدية
                                 document.getElementById('update-banner').style.display = 'block';
                             }
                         });
@@ -225,6 +222,7 @@
         }
 
         let isAdmin = false;
+        // Logic Check: استدعاء الصوت من مجلد leader
         const globalIntroAudio = new Audio('leader/lindo.mp3');
         globalIntroAudio.preload = 'auto';
 
@@ -275,7 +273,6 @@
 
         window.addEventListener('message', function(event) {
             const data = event.data;
-
             if (data === 'START_SITE_NOW') executeSiteEntry();
             if (data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
             if (data === 'PLAY_INTRO_AUDIO') globalIntroAudio.play().catch(e => console.log("Audio play blocked"));
@@ -317,6 +314,7 @@
                 .then(data => {
                     const holder = document.getElementById('intro-holder');
                     if(holder) {
+                        // Logic Check: استبدال مسار الشعار ليعمل من داخل مجلد leader
                         const correctedData = data.replace(/src="LogoNafahat.png"/g, 'src="leader/LogoNafahat.png"');
                         holder.innerHTML = correctedData;
                         
