@@ -1,5 +1,6 @@
-const CACHE_NAME = 'nafahat-v3';
+const CACHE_NAME = 'nafahat-v4'; // تم رفع الإصدار لـ v4 لإجبار تحديث الأيقونة
 
+// القائمة المطابقة لهيكل مستودع "e" بالكامل
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -35,47 +36,46 @@ const ASSETS_TO_CACHE = [
   '/e/Textbook/hadith100.html'
 ];
 
-// مرحلة التثبيت - تسريع التفعيل
+// مرحلة التثبيت - Logic Check: استخدام skipWaiting للتحديث الفوري
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting(); // إجبار الـ Service Worker الجديد على التنشيط فوراً
+  self.skipWaiting();
 });
 
-// مرحلة التنشيط - حذف الكاش القديم فوراً
+// مرحلة التنشيط - تنظيف الكاش القديم فوراً
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('SW: Deleting old cache:', cache);
+            console.log('SW: Clearing old cache:', cache);
             return caches.delete(cache);
           }
         })
       );
-    }).then(() => self.clients.claim()) // السيطرة على الصفحات فوراً لضمان تحديثها
+    }).then(() => self.clients.claim())
   );
 });
 
-// استراتيجية جلب البيانات: التحديث أثناء الاستخدام (Stale-While-Revalidate)
-// تضمن ظهور المحتوى بسرعة من الكاش مع تحديثه في الخلفية للمرة القادمة
+// استراتيجية جلب البيانات: Stale-While-Revalidate
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // تحديث الكاش بالنسخة الجديدة من الشبكة
         if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, networkResponse.clone());
+            cache.put(event.request, responseToCache);
           });
         }
         return networkResponse;
       }).catch(() => {
-        // في حال عدم وجود إنترنت وفشل الشبكة
+        // العودة للكاش في حال انقطاع الشبكة
       });
 
       return cachedResponse || fetchPromise;
