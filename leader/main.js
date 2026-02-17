@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = { 
-    // تَمَّ حَذْفُ الْمِفْتَاحِ الْمُسَرَّبِ لِتَأْمِينِ الْمَوْقِعِ وَإِغْلَاقِ الثُّغْرَةِ
     apiKey: "", 
     authDomain: "smart-web-3f6c3.firebaseapp.com", 
     projectId: "smart-web-3f6c3", 
@@ -14,8 +13,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// --- منطق التحديث التلقائي الصامت (حل مشكلة حذف التطبيق) ---
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        // تسجيل الـ Service Worker من المجلد المتفق عليه في الذاكرة
+        navigator.serviceWorker.register('/e/sw.js').then(reg => {
+            // التحقق من وجود تحديثات في الخلفية
+            reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                        if (navigator.serviceWorker.controller) {
+                            // تم العثور على نسخة جديدة (v5 مثلاً)، نقوم بالتحديث فوراً
+                            console.log('تحديث جديد متاح.. يتم التثبيت تلقائياً');
+                            window.location.reload();
+                        }
+                    }
+                };
+            };
+        }).catch(err => console.error('فشل تسجيل الـ SW:', err));
+    });
+}
+// -------------------------------------------------------
+
 function formatTitle(title) {
-    // تَنْسِيقُ التَّصْنِيفَاتِ الدِّينِيَّةِ (عَقِيدَة، رَقَائِق، سِيرَة) لِتَظْهَرَ بِشَكْلٍ مُمَيَّزٍ
     return title.replace(/\[(عقيدة|رقائق|سيرة)\]/g, '<span class="slider-category">[$1]</span>');
 }
 
@@ -27,7 +48,6 @@ onSnapshot(q, (snapshot) => {
     snapshot.docs.forEach(docSnap => { 
         const data = docSnap.data(); 
         const styledTitle = formatTitle(data.title);
-        // إِرْسَالُ رِسَالَةٍ إِلَى المَلَفِّ الأَبِ (FrontSmart.html) لِفَتْحِ المَقَالِ المُحَدَّدِ
         html += `<div class="slider-item" onclick="window.parent.postMessage({type: 'OPEN_SPECIFIC_POST', id: '${docSnap.id}'}, '*')">${styledTitle}</div>`; 
     });
     track.innerHTML = html + html; 
