@@ -1,6 +1,5 @@
-const CACHE_NAME = 'nafahat-v4'; // تم رفع الإصدار لـ v4 لإجبار تحديث الأيقونة
+const CACHE_NAME = 'nafahat-v5';
 
-// القائمة المطابقة لهيكل مستودع "e" بالكامل
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -8,8 +7,8 @@ const ASSETS_TO_CACHE = [
   '/e/robots.txt',
   '/e/sitemap.xml',
   '/e/.nojekyll',
-  
-  // مجلد leader - المحرك والوسائط
+
+  // leader
   '/e/leader/home.html',
   '/e/leader/admin.html',
   '/e/leader/FrontSmart.html',
@@ -27,16 +26,16 @@ const ASSETS_TO_CACHE = [
   '/e/leader/style.css',
   '/e/leader/LogoNafahat.png',
   '/e/leader/lindo.mp3',
-  
-  // مجلد Library
+
+  // Library
   '/e/Library/library.html',
-  
-  // مجلد Textbook - الأذكار والمتون
+
+  // Textbook
   '/e/Textbook/nawawi.html',
   '/e/Textbook/hadith100.html'
 ];
 
-// مرحلة التثبيت - Logic Check: استخدام skipWaiting للتحديث الفوري
+// Install
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -46,14 +45,13 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// مرحلة التنشيط - تنظيف الكاش القديم فوراً
+// Activate
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('SW: Clearing old cache:', cache);
             return caches.delete(cache);
           }
         })
@@ -62,21 +60,24 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// استراتيجية جلب البيانات: Stale-While-Revalidate
+// Fetch Strategy: Stale While Revalidate
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      }).catch(() => {
-        // العودة للكاش في حال انقطاع الشبكة
-      });
+
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => cachedResponse);
 
       return cachedResponse || fetchPromise;
     })
