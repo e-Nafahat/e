@@ -4,39 +4,30 @@
   "description": "المنهج الصافي والذكر الحكيم - تطبيقك الروحي الشامل",
   "lang": "ar-SA",
   "dir": "rtl",
-  "start_url": "/e/index.html",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#0d1b1e",
-  "theme_color": "#12372a",
+  "background_color": "#000000",
+  "theme_color": "#d4af37",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/e/leader/LogoNafahat.png",
+      "src": "leader/LogoNafahat.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/e/leader/LogoNafahat.png",
+      "src": "leader/LogoNafahat.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/e/leader/LogoNafahat.png",
+      "src": "leader/LogoNafahat.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
   ],
-  "categories": ["education", "lifestyle"],
-  "screenshots": [
-    {
-      "src": "https://i.postimg.cc/xChCyRZ3/e-Nafahat.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpg",
-      "form_factor": "narrow",
-      "label": "الواجهة الرئيسية لتطبيق نفحات"
-    }
-  ]
+  "categories": ["education", "lifestyle"]
 }
