@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>مرحباً بك في نفحات إيمانية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -88,32 +91,32 @@
 
         .intro-content { 
             display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; width: 100%; gap: 8px; z-index: 110;
+            justify-content: center; width: 100%; gap: 5px; z-index: 110;
             text-align: center;
-            margin-top: 60px; /* إزاحة المحتوى للأسفل لتجنب التداخل مع الفوانيس */
+            margin-top: 130px; 
         }
 
-        .elegant-logo-img { width: 120px; height: auto; opacity: 0; filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.3)); }
+        .elegant-logo-img { width: 115px; height: auto; opacity: 0; filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.3)); }
         
         .quran-verse-img {
-            width: 260px;
+            width: 250px;
             max-width: 80%;
             height: auto;
             opacity: 0;
-            margin: 5px 0;
+            margin: 2px 0;
             filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
         }
 
-        .elegant-line { height: 1px; width: 200px; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 2px 0; }
+        .elegant-line { height: 1px; width: 180px; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 2px 0; }
         
         .elegant-sub { 
             font-weight: 400; 
-            font-size: 0.9rem; 
+            font-size: 0.85rem; 
             color: #cecece; 
             opacity: 0; 
-            margin: 8px 0; 
+            margin: 5px 0; 
             padding: 0 20px; 
-            line-height: 1.7; 
+            line-height: 1.6; 
             display: block;
         }
 
@@ -122,14 +125,14 @@
             margin-bottom: 1px;
         }
         
-        .elegant-wisdom { font-weight: 200; font-size: 0.75rem; color: #888; opacity: 0; margin-top: 15px; padding: 0 30px; line-height: 1.4; max-width: 280px; }
+        .elegant-wisdom { font-weight: 200; font-size: 0.75rem; color: #888; opacity: 0; margin-top: 10px; padding: 0 30px; line-height: 1.4; max-width: 280px; }
 
         .ramadan-counter {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 10px 22px;
+            padding: 8px 20px;
             border-radius: 18px;
-            margin: 12px 0;
+            margin: 10px 0;
             backdrop-filter: blur(10px);
             opacity: 0;
             display: flex;
@@ -140,13 +143,12 @@
         }
 
         .counter-title { font-size: 0.7rem; color: var(--gold); margin-bottom: 2px; opacity: 0.9; text-align: center; width: 100%; }
-        .days-left { font-size: 1.15rem; font-weight: 700; color: #fff; text-align: center; width: 100%; display: block; }
+        .days-left { font-size: 1.1rem; font-weight: 700; color: #fff; text-align: center; width: 100%; display: block; }
 
         .mini-btn-solid {
-            padding: 8px 50px; font-size: 1rem; font-family: 'Cairo', sans-serif;
+            padding: 8px 45px; font-size: 1rem; font-family: 'Cairo', sans-serif;
             color: #d4af37; background: transparent; border: 1px solid #d4af37; 
             border-radius: 30px; cursor: pointer; transition: all 0.4s ease; opacity: 0;
-            margin-top: 5px;
         }
 
         .mini-btn-solid:hover { background: #d4af37; color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
@@ -271,6 +273,12 @@
                 for (let i = 0; i < 150; i++) {
                     stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.2, opacity: Math.random(), blink: Math.random() * 0.02, velocity: Math.random() * 0.03 });
                 }
+            }
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) { registration.unregister(); }
+                });
             }
 
             function drawStars() {
