@@ -1,6 +1,5 @@
-const CACHE_NAME = 'nafahat-v3'; // رفعنا الإصدار لضمان تحديث شامل عند الزوار
+const CACHE_NAME = 'nafahat-v3';
 
-// القائمة المطابقة لهيكل مستودع "e" بالكامل
 const ASSETS_TO_CACHE = [
   '/e/',
   '/e/index.html',
@@ -33,47 +32,53 @@ const ASSETS_TO_CACHE = [
   
   // مجلد Textbook - الأذكار والمتون
   '/e/Textbook/nawawi.html',
-  '/e/Textbook/hadith100.html',
-  '/e/Textbook/azkarNight.html',
-  '/e/Textbook/azkar.html',
-  '/e/Textbook/bayqonia.html',
-  '/e/Textbook/athkar-sleep.html',
-  '/e/Textbook/AZKRONY.html',
-  
-  // مجلد Tasmee - التسميع والإجازة
-  '/e/Tasmee/quran1.html',
-  '/e/Tasmee/ejaza.html',
-  '/e/Tasmee/ejaza-tests.html'
+  '/e/Textbook/hadith100.html'
 ];
 
-// تثبيت ملفات الموقع في ذاكرة الهاتف/المتصفح
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+// مرحلة التثبيت - تسريع التفعيل
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('تم أرشفة هيكل مستودع e بالكامل للعمل Offline');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
+  self.skipWaiting(); // إجبار الـ Service Worker الجديد على التنشيط فوراً
 });
 
-// استراتيجية التشغيل: البحث في الكاش أولاً (لسرعة فائقة)
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
-    })
+// مرحلة التنشيط - حذف الكاش القديم فوراً
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log('SW: Deleting old cache:', cache);
+            return caches.delete(cache);
+          }
+        })
+      );
+    }).then(() => self.clients.claim()) // السيطرة على الصفحات فوراً لضمان تحديثها
   );
 });
 
-// مسح النسخ القديمة وتفعيل التحديث الجديد
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(keyList.map((key) => {
-        if (key !== CACHE_NAME) {
-          return caches.delete(key);
+// استراتيجية جلب البيانات: التحديث أثناء الاستخدام (Stale-While-Revalidate)
+// تضمن ظهور المحتوى بسرعة من الكاش مع تحديثه في الخلفية للمرة القادمة
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        // تحديث الكاش بالنسخة الجديدة من الشبكة
+        if (networkResponse && networkResponse.status === 200) {
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+          });
         }
-      }));
+        return networkResponse;
+      }).catch(() => {
+        // في حال عدم وجود إنترنت وفشل الشبكة
+      });
+
+      return cachedResponse || fetchPromise;
     })
   );
 });
