@@ -43,18 +43,17 @@
             animation: flagSwing 3s ease-in-out infinite alternate;
             transform-origin: top center;
         }
-        /* ألوان الأعلام بناءً على لقطة الشاشة */
-        .flag-item:nth-child(4n+1) { border-top-color: #d4af37; } /* ذهبي */
-        .flag-item:nth-child(4n+2) { border-top-color: #7a1a1a; } /* أحمر داكن */
-        .flag-item:nth-child(4n+3) { border-top-color: #1a4d1a; } /* أخضر داكن */
-        .flag-item:nth-child(4n+4) { border-top-color: #b8860b; } /* نحاسي */
+        .flag-item:nth-child(4n+1) { border-top-color: #d4af37; } 
+        .flag-item:nth-child(4n+2) { border-top-color: #7a1a1a; } 
+        .flag-item:nth-child(4n+3) { border-top-color: #1a4d1a; } 
+        .flag-item:nth-child(4n+4) { border-top-color: #b8860b; } 
 
         @keyframes flagSwing {
             from { transform: rotateX(-5deg); }
             to { transform: rotateX(15deg); }
         }
 
-        /* الفوانيس المطابقة للقطة الشاشة */
+        /* الفوانيس */
         .lanterns-lux-container {
             position: absolute;
             top: 0;
@@ -86,7 +85,7 @@
         .lantern-body-lux {
             width: 32px;
             height: 40px;
-            background: #ebd07d; /* لون الجسم الفاتح */
+            background: #ebd07d; 
             position: relative;
             clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
             display: flex;
@@ -118,11 +117,17 @@
             to { opacity: 1; transform: scale(1.1); }
         }
 
-        /* المحتوى الرئيسي */
         .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 6px; z-index: 5; }
-        .elegant-logo-img { width: 110px; height: auto; opacity: 0; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)); }
         
-        /* صورة الآية القرآنية */
+        /* الشعار - استخدام المسار الكامل */
+        .elegant-logo-img { 
+            width: 110px; 
+            height: auto; 
+            opacity: 0; 
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)); 
+        }
+        
+        /* صورة الآية - استخدام المسار الكامل */
         .ramadan-decoration {
             position: relative;
             width: 65%;
@@ -155,7 +160,7 @@
 <body>
 
     <audio id="logo-sound" preload="auto">
-        <source src="lindo.mp3" type="audio/mpeg">
+        <source src="https://e-nafahat.github.io/e/leader/lindo.mp3" type="audio/mpeg">
     </audio>
 
     <div id="cinema-intro">
@@ -189,10 +194,10 @@
         </div>
 
         <div class="intro-content">
-            <img src="/leader/LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
+            <img src="https://e-nafahat.github.io/e/leader/LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
             
             <div class="ramadan-decoration">
-                <img src="/leader/phram1.png">
+                <img src="https://e-nafahat.github.io/e/leader/phram1.png">
             </div>
 
             <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
