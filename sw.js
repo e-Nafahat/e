@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nafahat-dynamic-v2';
+const CACHE_NAME = 'nafahat-dynamic-v3';
 
 // Install
 self.addEventListener('install', (event) => {
@@ -10,20 +10,30 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cache) => caches.delete(cache))
+        cacheNames
+          .filter((cache) => cache !== CACHE_NAME)
+          .map((cache) => caches.delete(cache))
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Fetch – Network First (تحديث سريع جداً)
+// Fetch – Network First (مناسب للفهرسة)
 self.addEventListener('fetch', (event) => {
 
   if (event.request.method !== 'GET') return;
 
+  // لا نخزن طلبات خارج الموقع
+  const requestURL = new URL(event.request.url);
+  if (requestURL.origin !== location.origin) return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
+
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
 
         const responseClone = response.clone();
 
