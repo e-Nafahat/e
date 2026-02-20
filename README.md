@@ -9,7 +9,7 @@
 ### **تطبيق ويب تقدمي (PWA) متكامل للأذكار والخدمات الإسلامية الرقمية**
 
 [![Developer](https://img.shields.io/badge/Developer-Mohamed%20Younes-gold?style=for-the-badge&logo=codeforces&logoColor=white)](https://github.com/e-nafahat)
-[![Clones](https://img.shields.io/badge/Total%20Clones-1000%2B-brightgreen?style=for-the-badge&logo=github)](https://github.com/e-nafahat/e/graphs/traffic)
+[![Clones](https://img.shields.io/badge/Total%20Clones-1600%2B-brightgreen?style=for-the-badge&logo=github)](https://github.com/e-nafahat/e/graphs/traffic)
 [![Status](https://img.shields.io/badge/Status-Active-green?style=for-the-badge)](https://e-nafahat.github.io/e)
 
 </div>
