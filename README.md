@@ -52,7 +52,7 @@
 * **Database:** Firebase Firestore (Real-time synchronization & NoSQL structure).
 * **PWA Features:** Service Workers, Manifest JSON, and Cache Storage API.
 * **Deployment:** GitHub Pages & PWA Architecture.
-* **Analytics:** GitHub Insights (بأكثر من 1000 عملية نسخ في 14 يوماً).
+* **Analytics:** GitHub Insights (بأكثر من 1600 عملية نسخ في 14 يوماً).
 
 ---
 
