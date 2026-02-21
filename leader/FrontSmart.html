@@ -30,7 +30,6 @@
             outline: none !important;
         }
 
-        /* زر العودة الذكي - يمنع إعادة تحميل الانترو */
         .exit-btn {
             position: fixed;
             top: 15px;
@@ -376,12 +375,13 @@
                 const { cleanText, mediaHtml } = splitMedia(data.content);
                 const isTarget = d.id === targetId;
                 
-                // المسار المطلق للشعار لضمان ظهوره في المعاينة
-                const logoPath = window.location.origin + "/leader/LogoNafahat.png";
                 const shareLink = `${window.location.origin}${window.location.pathname}?id=${d.id}`;
                 
+                // تنظيف المحتوى من روابط الصور فقط للمشاركة ليبقى النص نقياً
                 let contentForShare = data.content.replace(/(https?:\/\/[^\s]+\.(?:jpeg|jpg|gif|png|webp))/gi, '').trim();
-                const fullShareMessage = `${logoPath}\n\n*${data.title}*\n\n${contentForShare}\n\n🔗 رابط القراءة:\n${shareLink}`;
+                
+                // بناء الرسالة: العنوان عريض + النص + الرابط
+                const fullShareMessage = `✨ *${data.title}* ✨\n\n${contentForShare}\n\n🔗 رابط المقال كاملاً:\n${shareLink}`;
 
                 const card = document.createElement('div');
                 card.className = `smart-card ${isTarget ? 'expanded highlight-active' : ''}`;
