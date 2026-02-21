@@ -376,16 +376,14 @@
                 const isTarget = d.id === targetId;
                 
                 const shareLink = `${window.location.origin}${window.location.pathname}?id=${d.id}`;
-                
-                // تنظيف المحتوى من روابط الصور فقط للمشاركة ليبقى النص نقياً
                 let contentForShare = data.content.replace(/(https?:\/\/[^\s]+\.(?:jpeg|jpg|gif|png|webp))/gi, '').trim();
-                
-                // بناء الرسالة: العنوان عريض + النص + الرابط
                 const fullShareMessage = `✨ *${data.title}* ✨\n\n${contentForShare}\n\n🔗 رابط المقال كاملاً:\n${shareLink}`;
 
                 const card = document.createElement('div');
                 card.className = `smart-card ${isTarget ? 'expanded highlight-active' : ''}`;
                 card.id = d.id;
+                
+                // إنشاء العناصر يدوياً لتجنب مشاكل الـ onclick مع النصوص المعقدة
                 card.innerHTML = `
                     <div class="card-header-vibrant">
                         <h2>${data.title}</h2>
@@ -397,12 +395,24 @@
                     </div>
                     <div class="card-footer">
                         <div class="admin-buttons">
-                            <button class="adm-btn edit" onclick="openEditor('${d.id}','${data.title.replace(/'/g,"\\'")}','${data.content.replace(/'/g,"\\'").replace(/\n/g,"\\n")}')">تعديل</button>
-                            <button class="adm-btn del" onclick="deleteItem('${d.id}')">حذف</button>
+                            <button class="adm-btn edit-trigger" data-id="${d.id}">تعديل</button>
+                            <button class="adm-btn del-trigger" data-id="${d.id}">حذف</button>
                         </div>
                         <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(fullShareMessage)}" class="whatsapp-link" target="_blank">نشر الفائدة 📲</a>
                     </div>
                 `;
+
+                // إضافة مستمعات الأحداث للأزرار بدلاً من استخدام onclick المباشر
+                const editBtn = card.querySelector('.edit-trigger');
+                editBtn.addEventListener('click', () => {
+                    window.openEditor(d.id, data.title, data.content);
+                });
+
+                const delBtn = card.querySelector('.del-trigger');
+                delBtn.addEventListener('click', () => {
+                    window.deleteItem(d.id);
+                });
+
                 wrap.appendChild(card);
             });
             if (targetId) {
@@ -413,19 +423,37 @@
         window.openEditor = (id, t, c) => {
             currentId = id;
             document.getElementById('upTitle').value = t;
-            document.getElementById('upContent').value = c.replace(/\\n/g, '\n');
+            document.getElementById('upContent').value = c;
             document.getElementById('updateModal').style.display = 'flex';
         };
 
-        window.deleteItem = async (id) => { if(confirm("حذف نهائي؟")) await deleteDoc(doc(db, "articles", id)); };
+        window.deleteItem = async (id) => { 
+            if(confirm("حذف نهائي لهذا المقال؟")) {
+                await deleteDoc(doc(db, "articles", id));
+            }
+        };
 
         document.getElementById('saveBtn').onclick = async () => {
-            await updateDoc(doc(db, "articles", currentId), {
-                title: document.getElementById('upTitle').value,
-                content: document.getElementById('upContent').value,
-                time: serverTimestamp()
-            });
-            document.getElementById('updateModal').style.display = 'none';
+            if(!currentId) return;
+            const upBtn = document.getElementById('saveBtn');
+            const originalText = upBtn.innerText;
+            upBtn.innerText = "جاري الحفظ...";
+            upBtn.disabled = true;
+
+            try {
+                await updateDoc(doc(db, "articles", currentId), {
+                    title: document.getElementById('upTitle').value,
+                    content: document.getElementById('upContent').value,
+                    time: serverTimestamp()
+                });
+                document.getElementById('updateModal').style.display = 'none';
+            } catch (error) {
+                alert("حدث خطأ أثناء الحفظ!");
+                console.error(error);
+            } finally {
+                upBtn.innerText = originalText;
+                upBtn.disabled = false;
+            }
         };
     </script>
 </body>
