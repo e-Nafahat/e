@@ -300,13 +300,8 @@
             return mediaHtml + `<div class="content-text">${text}</div>`;
         }
 
-        // دالة التنقل المحسنة والنهائية
         window.goToPost = (num) => {
-            // إرسال رسالة للموقع الرئيسي (index.html) عبر طبقتين من الأطر
-            // نستخدم window.top للوصول لأعلى نافذة مباشرة
             window.top.postMessage({ type: 'OPEN_PAGE', page: 'mehrab' }, '*');
-            
-            // ننتظر قليلاً ثم نرسل أمر التمرير للمنشور
             setTimeout(() => {
                 window.top.postMessage({ type: 'SCROLL_TO_POST', postId: 'post-' + num }, '*');
             }, 500);
@@ -348,7 +343,7 @@
                             <h2>${data.title || (data.content.substring(0, 50) + "...")}</h2>
                             <div class="dropdown-icon">▾</div> </div>
                         <div class="strip-content">
-                            <div class="content-inner">${richContent}<span class="source-tag">﴿ ${data.source || "قلمُ المحرابِ"} ﴾ <button class="btn-share-public" onclick="event.stopPropagation(); shareMe('${(data.title || "تأملات إيمانية").replace(/'/g, "\\'")}', '${postNum}')">مشاركة</button></span></div>
+                            <div class="content-inner">${richContent}<span class="source-tag">﴿ ${data.source || "قلمُ المحرابِ"} ﴾ <button class="btn-share-public" onclick="event.stopPropagation(); shareMe('${(data.title || "تأملات إيمانية").replace(/'/g, "\\'")}', '${postNum}', '${data.content.replace(/\r?\n/g, " ").replace(/'/g, "\\'").substring(0, 500)}')">مشاركة</button></span></div>
                             <div class="admin-controls">
                                 <button class="btn-adm btn-edit" 
                                     data-id="${docSnap.id}" 
@@ -366,18 +361,19 @@
             handleHash();
         });
 
-        window.shareMe = (title, num) => {
+        window.shareMe = (title, num, content) => {
             const shareUrl = window.location.origin + window.location.pathname + '#post-' + num;
-            const shareText = `تأمل معي في هذه النفحة الإيمانية: ${title}`;
+            // تجهيز الرسالة الكاملة: العنوان + جزء من المحتوى + الرابط
+            const fullMessage = `✨ *${title}* ✨\n\n${content}...\n\n🔗 اقرأ المزيد من هنا:\n${shareUrl}`;
             
             if (navigator.share) {
                 navigator.share({
                     title: title,
-                    text: shareText,
+                    text: fullMessage,
                     url: shareUrl
                 }).catch(console.error);
             } else {
-                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + " " + shareUrl)}`;
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`;
                 window.open(whatsappUrl, '_blank');
             }
         };
@@ -401,7 +397,6 @@
             }
         };
 
-        // مستقبل الرسائل للأوامر المباشرة داخل الصفحة
         window.addEventListener('message', (event) => {
             if (event.data.type === 'SCROLL_TO_POST') {
                 const target = document.getElementById(event.data.postId);
