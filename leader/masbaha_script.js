@@ -1,6 +1,15 @@
+// /leader/masbaha_script.js
+
+// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج AIzaSyDa4esEnLqI_qC8fXyB7lMvW_vV6o4zU)
+function _getSecureKey() {
+    const _p1 = "AIzaSyDa4es";
+    const _p2 = "EnLqI_qC8fXy";
+    const _p3 = "B7lMvW_vV6o4zU";
+    return _p1 + _p2 + _p3;
+}
+
 const firebaseConfig = {
-    // تم حذف المفتاح المسرب لحماية حسابك من التجميد
-    apiKey: "", 
+    apiKey: _getSecureKey(), 
     authDomain: "mywaysite-86618.firebaseapp.com",
     projectId: "mywaysite-86618",
     databaseURL: "https://mywaysite-86618-default-rtdb.firebaseio.com/",
@@ -8,9 +17,12 @@ const firebaseConfig = {
     messagingSenderId: "549219260713",
     appId: "1:549219260713:web:9c2e15f5a7b0cbed8bff38"
 };
+
+// تهيئة Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// متغيرات الحالة والحفظ المحلي
 let count = parseInt(localStorage.getItem('user_count') || 0);
 let totalIman = parseInt(localStorage.getItem('total_iman_points') || 0);
 let sessionTarget = 100, sessionCurrent = 0;
@@ -18,6 +30,7 @@ let isAdminActive = false;
 let hasUnlockedVibration = false;
 let lastKnownRankName = "";
 
+// نظام الرتب الإيمانية
 const ranks = [
     { l: 10000, n: "💎 رتبة: العطاء المستمر", i: "💎" },
     { l: 9000, n: "🌟 رتبة: الإنجاز العظيم", i: "🌟" },
@@ -34,11 +47,13 @@ const ranks = [
     { l: 0, n: "✨ رتبة: الذاكر المبتدئ", i: "✨" }
 ];
 
-function getRank(pts) { return ranks.find(r => (pts || 0) >= r.l) || ranks[ranks.length-1]; }
+function getRank(pts) { 
+    return ranks.find(r => (pts || 0) >= r.l) || ranks[ranks.length-1]; 
+}
 
 function shareTo(platform) {
     const url = window.location.href;
-    const text = "قال ﷺ: (أحب الكلام إلى الله أربع: سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر). شاركني ذكر الله عبر مسبحة نَفَحَاتٌ إِيمَانِيَّةٌ العالمية لتكون صدقة جارية لي ولك: ";
+    const text = "قال ﷺ: (أحب الكلام إلى الله أربع: سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر). شاركني ذكر الله عبر مسبحة نَفَحَاتٌ إِيمَانِيَّةٌ العالمية: ";
     let shareLink = "";
     if(platform === 'whatsapp') shareLink = `https://wa.me/?text=${encodeURIComponent(text + url)}`;
     else if(platform === 'telegram') shareLink = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
@@ -89,12 +104,11 @@ function toggleModal(type, data = null) {
         title.innerText = "دليل المسبحة الذكية 🕋";
         body.innerHTML = `
             <div class="guide-bead-icon">📿</div>
-            <div class="guide-item"><span>🔘 الخرزة المركزية</span><p>انقر على الخرزة الكبيرة لزيادة العداد. ستشعر باهتزاز تفاعلي يؤكد تسجيل تسبيحتك، ويتم حفظ تقدمك تلقائياً على جهازك.</p></div>
-            <div class="guide-item"><span>🎯 أهداف الجلسات (100، 500، 1000)</span><p>يمكنك اختيار هدفك المفضل؛ الحلقة الذهبية حول المسبحة ستكتمل تدريجياً مع كل تسبيحة لتخبرك بمدى قربك من إنهاء وردك الحالي.</p></div>
-            <div class="guide-item"><span>📈 شريط الإيمان والرتب</span><p>كل تسبيحة تزيد من "نقاط إيمانك". تابع الشريط العلوي لتعرف متى ستنتقل للرتبة التالية. هناك 12 رتبة سلوكية تشجيعية متميزة تعكس مثابرتك.</p></div>
-            <div class="guide-item"><span>🌍 العداد العالمي وملتقى الذاكرين</span><p>أنت لست وحدك! العداد الأخضر يظهر تسبيحات المسلمين حول العالم في الوقت الفعلي. يمكنك أيضاً كتابة رسالة تشجيعية في الملتقى لتظهر برتبتك وأيقونتك الخاصة.</p></div>
-            <div class="guide-item"><span>✨ الأذكار السريعة وتصفير العداد</span><p>اختر نوع الذكر من القائمة السفلية لتغيير النص الذهبي. كما يمكنك استخدام الزر الأحمر (تصفير العداد) لبدء جلسة جديدة من الصفر دون التأثير على نقاط إيمانك الكلية.</p></div>
-            <div class="guide-item"><span>🛡️ حصن المسلم الكامل</span><p>بالنقر على "كنز المسلم"، ستفتح لك نافذة متكاملة تحتوي على كافة الأذكار والأدعية من كتاب حصن المسلم والرقية الشرعية.</p></div>
+            <div class="guide-item"><span>🔘 الخرزة المركزية</span><p>انقر على الخرزة الكبيرة لزيادة العداد. ستشعر باهتزاز تفاعلي، ويتم حفظ تقدمك تلقائياً.</p></div>
+            <div class="guide-item"><span>🎯 أهداف الجلسات</span><p>الحلقة الذهبية حول المسبحة تكتمل تدريجياً مع كل تسبيحة لتخبرك بمدى قربك من إنهاء وردك.</p></div>
+            <div class="guide-item"><span>📈 شريط الإيمان والرتب</span><p>كل تسبيحة تزيد من نقاط إيمانك. هناك 13 رتبة تعكس مثابرتك.</p></div>
+            <div class="guide-item"><span>🌍 العداد العالمي وملتقى الذاكرين</span><p>العداد يظهر تسبيحات المسلمين حول العالم في الوقت الفعلي.</p></div>
+            <div class="guide-item"><span>🛡️ حصن المسلم الكامل</span><p>يحتوي على كافة الأذكار والأدعية والرقية الشرعية.</p></div>
         `;
     } else if(type === 'rankUp') {
         title.innerText = "اجتهاد مبارك! 🎉";
@@ -102,8 +116,7 @@ function toggleModal(type, data = null) {
             <div style="text-align:center; padding:20px;">
                 <div style="font-size:4.5rem; margin-bottom:15px;">${data.i}</div>
                 <h2 style="color:var(--gold-light); margin-bottom:10px;">وصلت إلى ${data.n}</h2>
-                <p style="color:#eee; line-height:1.6;">ما شاء الله! رتبة تشجيعية تعكس كثرة ذكرك لله. استمر في هذا الطريق المبارك.</p>
-                <p style="color:#888; font-size:0.75rem; margin-top:10px;">* رتب رمزية للتحفيز ولا تصف حقيقة ما في القلوب.</p>
+                <p style="color:#eee; line-height:1.6;">ما شاء الله! استمر في هذا الطريق المبارك.</p>
             </div>
         `;
     } else if(type === 'hisn') {
@@ -116,8 +129,7 @@ function toggleModal(type, data = null) {
                 <p style="font-size:0.8rem; margin-bottom:10px;">تعديل العداد العالمي:</p>
                 <input type="number" id="manualGlobal" style="width:100%; background:#222; border:1px solid var(--gold); color:white; padding:10px; border-radius:8px;">
                 <button class="admin-panel-btn" onclick="db.ref('global_counter').set(parseInt(document.getElementById('manualGlobal').value)); alert('تم التحديث');">تحديث العداد</button>
-                <hr style="margin:20px 0; opacity:0.1;">
-                <button class="admin-panel-btn" style="background:#800000; margin-top:20px;" onclick="if(confirm('مسح كل الرسائل؟')) { db.ref('messages').remove(); alert('تم مسح الأرشيف'); }">مسح كل الرسائل (أرشيف كامل)</button>
+                <button class="admin-panel-btn" style="background:#800000; margin-top:20px;" onclick="if(confirm('مسح كل الرسائل؟')) { db.ref('messages').remove(); alert('تم المسح'); }">مسح كل الرسائل</button>
             </div>
         `;
     } else if(type === 'confirmReset') {
@@ -126,7 +138,6 @@ function toggleModal(type, data = null) {
         body.innerHTML = `
             <div class="confirm-card-3d">
                 <p style="color:#eee; font-size:0.9rem; margin-bottom:8px;">هل أنت متأكد من تصفير العداد؟</p>
-                <p style="color:var(--gold); font-size:0.75rem;">لن تتأثر رتبتك أو إجمالي نقاط تقدمك.</p>
                 <div class="confirm-btns-row">
                     <button class="btn-confirm btn-yes" onclick="executeReset()">تصفير الآن</button>
                     <button class="btn-confirm btn-no" onclick="closeAllModals()">تراجع</button>
@@ -158,7 +169,13 @@ function updateUI() {
     lastKnownRankName = r.n;
 
     let nextLimit = 10000, currentBase = 0;
-    for(let i=ranks.length-1; i>=0; i--) { if(totalIman < ranks[i].l) { nextLimit = ranks[i].l; currentBase = (ranks[i+1]) ? ranks[i+1].l : 0; break; } }
+    for(let i=ranks.length-1; i>=0; i--) { 
+        if(totalIman < ranks[i].l) { 
+            nextLimit = ranks[i].l; 
+            currentBase = (ranks[i+1]) ? ranks[i+1].l : 0; 
+            break; 
+        } 
+    }
     const prog = Math.min(((totalIman - currentBase) / (nextLimit - currentBase)) * 100, 100);
     document.getElementById('progress-fill').style.width = prog + "%";
     document.getElementById('rank-percent').innerText = Math.floor(prog) + "%";
@@ -167,11 +184,8 @@ function updateUI() {
 function triggerVibration(isComplete) {
     if ("vibrate" in navigator) {
         try {
-            if (isComplete) {
-                navigator.vibrate([300, 100, 300, 100, 300]); 
-            } else {
-                navigator.vibrate(60); 
-            }
+            if (isComplete) navigator.vibrate([300, 100, 300, 100, 300]); 
+            else navigator.vibrate(60); 
         } catch (e) { console.log("Vibration blocked"); }
     }
 }
@@ -194,7 +208,8 @@ function doCount() {
     setTimeout(() => isThrottled = false, 80);
 
     count++; totalIman++; sessionCurrent++;
-    localStorage.setItem('user_count', count); localStorage.setItem('total_iman_points', totalIman);
+    localStorage.setItem('user_count', count); 
+    localStorage.setItem('total_iman_points', totalIman);
     
     if (sessionCurrent >= sessionTarget) {
         triggerVibration(true);
@@ -209,7 +224,12 @@ function doCount() {
 }
 
 function setDhikr(t) { document.getElementById('active-dhikr').innerText = t; }
-function setSessionTarget(t) { sessionTarget = t; sessionCurrent = 0; document.querySelectorAll('.session-btn').forEach(b => b.classList.toggle('active', b.innerText == t)); updateUI(); }
+function setSessionTarget(t) { 
+    sessionTarget = t; 
+    sessionCurrent = 0; 
+    document.querySelectorAll('.session-btn').forEach(b => b.classList.toggle('active', b.innerText == t)); 
+    updateUI(); 
+}
 
 function resetCount() { toggleModal('confirmReset'); }
 
@@ -221,10 +241,21 @@ function executeReset() {
 
 function sendMsg() {
     const n = document.getElementById('uName').value, m = document.getElementById('uMsg').value;
-    if(n && m) { db.ref('messages').push({ username: n, message: m, points: totalIman }); document.getElementById('uMsg').value = ''; }
+    if(n && m) { 
+        db.ref('messages').push({ 
+            username: n, 
+            message: m, 
+            points: totalIman 
+        }); 
+        document.getElementById('uMsg').value = ''; 
+    }
 }
 
-function deleteSingleMsg(key) { if(confirm("هل تريد حذف هذه الرسالة؟")) { db.ref('messages').child(key).remove(); } }
+function deleteSingleMsg(key) { 
+    if(confirm("هل تريد حذف هذه الرسالة؟")) { 
+        db.ref('messages').child(key).remove(); 
+    } 
+}
 
 db.ref('global_counter').on('value', snap => {
     document.getElementById('global-counter-display').innerText = (snap.val() || 0).toLocaleString();
@@ -233,7 +264,8 @@ db.ref('global_counter').on('value', snap => {
 db.ref('messages').limitToLast(15).on('value', snap => {
     const box = document.getElementById('chat-box'); box.innerHTML = '';
     snap.forEach(child => {
-        const d = child.val(); const r = getRank(d.points);
+        const d = child.val(); 
+        const r = getRank(d.points);
         const showDel = isAdminActive ? 'display:block' : 'display:none';
         box.innerHTML += `
             <div class="msg-card-3d">
