@@ -135,12 +135,14 @@
         }
 
         .main-display { flex-grow: 1; width: 100%; position: relative; padding: 10px; box-sizing: border-box; overflow: hidden; }
+        
         iframe { 
             position: absolute; top: 10px; left: 10px; right: 10px; bottom: 0; width: calc(100% - 20px); height: calc(100% - 10px); 
             border: none; visibility: hidden; opacity: 0; transition: opacity 0.3s ease; border-radius: 20px 20px 0 0; 
             -webkit-overflow-scrolling: touch; 
         }
         iframe.active { visibility: visible; opacity: 1; }
+        
         #intro-holder { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: #000; overflow: hidden; }
         
         .seo-hidden-layer {
@@ -154,7 +156,7 @@
     <div class="seo-hidden-layer">
         <h1>نفحات ايمانية</h1>
         <h2>المنهج الصافي والذكر الحكيم</h2>
-        <p>موقع نفحات ايمانية يقدم مواضيع اسلامية، مقالات شرعية، مكتبة الكتب، الختمة القرانية، وتاملات ايمانية على منهج اهل السنة والجماعة.</p>
+        <p>موقع نفحات ايمانية يقدم مواضيع اسلامية، مقالات شرعية، مكتبة الكتب، الختمة القرانية، وتاملات ايمانية على منهج اهل السنة الجماعة.</p>
     </div>
 
     <div id="intro-holder"></div>
@@ -170,15 +172,16 @@
     </div>
 
     <div id="main-site-content">
-        <nav class="header-3d">
+        <nav class="header-3d" id="mainHeader">
             <button id="home-btn" class="glass-tab c-1 active" onclick="switchPage('home-frame', this)">الرئيسية</button>
-            <button class="glass-tab c-2" onclick="switchPage('masbaha-frame', this)">المسبحة</button>
+            <button id="masbaha-btn" class="glass-tab c-2" onclick="switchPage('masbaha-frame', this)">المسبحة</button>
             <button id="posts-btn" class="glass-tab c-3" onclick="switchPage('FrontSmart-frame', this)">المقالات</button>
             <button id="mehrab-btn" class="glass-tab c-mehrab" onclick="switchPage('mehrab-frame', this)">تأملات</button>
             <button id="khatma-btn" class="glass-tab c-khatma" onclick="switchPage('khatma-frame', this)">الختمة</button>
             <button id="lib-btn" class="glass-tab c-library" onclick="switchPage('library-frame', this)">المكتبة</button>
             <button id="more-btn" class="glass-tab c-4" onclick="switchPage('more-frame', this)">أخرى</button>
         </nav>
+        
         <div class="main-display">
             <iframe id="home-frame" src="leader/home.html" class="active"></iframe>
             <iframe id="masbaha-frame" src="leader/masbaha.html"></iframe>
@@ -191,14 +194,12 @@
     </div>
 
     <script>
-        // تسجيل Service Worker لتمكين التحميل كتطبيق
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
             });
         }
 
-        let isAdmin = false;
         const globalIntroAudio = new Audio('leader/lindo.mp3');
         globalIntroAudio.preload = 'auto';
 
@@ -216,19 +217,22 @@
 
         window.openPost = function(postId) {
             const postsBtn = document.getElementById('posts-btn');
-            const iframe = document.getElementById('FrontSmart-frame');
             switchPage('FrontSmart-frame', postsBtn);
             setTimeout(() => {
-                iframe.contentWindow.postMessage({ type: 'OPEN_SPECIFIC_POST', id: postId }, '*');
+                document.getElementById('FrontSmart-frame').contentWindow.postMessage({ type: 'OPEN_SPECIFIC_POST', id: postId }, '*');
             }, 600);
         };
 
         function switchPage(frameId, btnElement) {
             document.getElementById('magicNav').classList.remove('active');
-            document.querySelectorAll('.glass-tab').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
             
-            // Logic Check: تحسين تجربة المستخدم عبر تغيير خلفية الـ Body لتناسب القسم المختار
+            const header = document.getElementById('mainHeader');
+            if (frameId === 'FrontSmart-frame') header.style.display = 'none';
+            else header.style.display = 'flex';
+
+            document.querySelectorAll('.glass-tab').forEach(b => b.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+            
             if (frameId === 'masbaha-frame') document.body.style.backgroundColor = "#000000";
             else if (frameId === 'library-frame') document.body.style.backgroundColor = "#b0b0b0";
             else if (frameId === 'khatma-frame') document.body.style.backgroundColor = "#0f172a"; 
@@ -237,20 +241,41 @@
             else document.body.style.backgroundColor = "#F5F5DC";
             
             document.querySelectorAll('iframe').forEach(f => f.classList.remove('active'));
-            document.getElementById(frameId).classList.add('active');
+            const targetFrame = document.getElementById(frameId);
+            if(targetFrame) targetFrame.classList.add('active');
         }
 
         window.addEventListener('message', function(event) {
             if (event.data === 'START_SITE_NOW') executeSiteEntry();
             if (event.data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
-            if (event.data === 'PLAY_INTRO_AUDIO') globalIntroAudio.play().catch(e => console.log("Audio play blocked"));
+            if (event.data === 'PLAY_INTRO_AUDIO') globalIntroAudio.play().catch(e => console.log("Audio blocked"));
             
-            if (event.data === 'OPEN_MORE_PAGE') switchPage('more-frame', document.getElementById('more-btn'));
-            if (event.data === 'GO_HOME') switchPage('home-frame', document.getElementById('home-btn'));
-            if (event.data === 'GO_LIBRARY') switchPage('library-frame', document.getElementById('lib-btn'));
-            if (event.data === 'GO_KHATMA') switchPage('khatma-frame', document.getElementById('khatma-btn'));
-            if (event.data === 'GO_MEHRAB') switchPage('mehrab-frame', document.getElementById('mehrab-btn'));
+            // نظام التنقل الجديد والذكي
+            if (event.data.type === 'OPEN_PAGE') {
+                const pageMap = {
+                    'home': { id: 'home-frame', btn: 'home-btn' },
+                    'masbaha': { id: 'masbaha-frame', btn: 'masbaha-btn' },
+                    'posts': { id: 'FrontSmart-frame', btn: 'posts-btn' },
+                    'mehrab': { id: 'mehrab-frame', btn: 'mehrab-btn' },
+                    'khatma': { id: 'khatma-frame', btn: 'khatma-btn' },
+                    'library': { id: 'library-frame', btn: 'lib-btn' },
+                    'more': { id: 'more-frame', btn: 'more-btn' }
+                };
+                const target = pageMap[event.data.page];
+                if (target) switchPage(target.id, document.getElementById(target.btn));
+            }
 
+            // نظام التمرير للمنشورات عبر الأطر
+            if (event.data.type === 'SCROLL_TO_POST') {
+                const mehrabFrame = document.getElementById('mehrab-frame');
+                if (mehrabFrame) {
+                    mehrabFrame.contentWindow.postMessage({ type: 'SCROLL_TO_POST', postId: event.data.postId }, '*');
+                }
+            }
+
+            if (event.data === 'GO_HOME') switchPage('home-frame', document.getElementById('home-btn'));
+            if (event.data === 'GO_MEHRAB') switchPage('mehrab-frame', document.getElementById('mehrab-btn'));
+            
             if (event.data && (event.data.type === 'OPEN_POST' || event.data.type === 'OPEN_SPECIFIC_POST')) { 
                 window.openPost(event.data.id); 
             }
@@ -274,7 +299,6 @@
                     if(holder) {
                         const correctedData = data.replace(/src="LogoNafahat.png"/g, 'src="leader/LogoNafahat.png"');
                         holder.innerHTML = correctedData;
-                        
                         const scripts = holder.querySelectorAll('script');
                         scripts.forEach(oldScript => {
                             const newScript = document.createElement('script');
@@ -283,9 +307,7 @@
                         });
                     }
                 })
-                .catch(err => {
-                    executeSiteEntry();
-                });
+                .catch(err => executeSiteEntry());
         }
 
         function closeMagicAndSwitch(frameId, btnIdx) {
