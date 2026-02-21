@@ -24,6 +24,7 @@
             font-family: 'Cairo', sans-serif; 
             color: var(--text-dark);
             -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden; /* لمنع الاهتزاز العرضي أثناء السحب */
         }
 
         button, a, input, textarea, div {
@@ -184,7 +185,6 @@
             gap: 4px;
         }
 
-        /* زر الصعود البسيط والمستدير */
         .back-to-top {
             position: fixed;
             bottom: 25px;
@@ -301,6 +301,27 @@
         const urlParams = new URLSearchParams(window.location.search);
         let targetId = urlParams.get('id');
 
+        // منطق العودة بالسحب (Swipe to Return)
+        let touchstartX = 0;
+        let touchendX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+
+        function handleGesture() {
+            const swipeDistance = 120; // المسافة المطلوبة لتفعيل العودة
+            if (touchendX - touchstartX > swipeDistance || touchstartX - touchendX > swipeDistance) {
+                // العودة للمجلد الرئيسي index.html عند السحب القوي يميناً أو يساراً
+                window.location.href = "../index.html";
+            }
+        }
+
         window.addEventListener('message', (event) => {
             if (event.data.type === 'OPEN_SPECIFIC_POST') {
                 focusOnArticle(event.data.id);
@@ -329,11 +350,13 @@
         function splitMedia(text) {
             const urls = text.match(/(https?:\/\/[^\s]+)/g);
             let mediaHtml = ''; 
+            let firstImageUrl = ''; // لاستخدامها في المعاينة عند النشر
             let cleanText = text;
             if (urls) {
                 urls.forEach(u => {
                     cleanText = cleanText.replace(u, '');
                     if (u.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+                        if(!firstImageUrl) firstImageUrl = u;
                         mediaHtml += `<div class="card-media"><img src="${u}" loading="lazy"></div>`;
                     } else if (u.includes('youtube.com') || u.includes('youtu.be')) {
                         let vidId = u.includes('v=') ? u.split('v=')[1].split('&')[0] : u.split('/').pop();
@@ -341,7 +364,7 @@
                     }
                 });
             }
-            return { cleanText, mediaHtml };
+            return { cleanText, mediaHtml, firstImageUrl };
         }
 
         const q = query(collection(db, "articles"), orderBy("time", "desc"));
@@ -350,11 +373,14 @@
             wrap.innerHTML = "";
             snap.docs.forEach(d => {
                 const data = d.data();
-                const { cleanText, mediaHtml } = splitMedia(data.content);
+                const { cleanText, mediaHtml, firstImageUrl } = splitMedia(data.content);
                 const isTarget = d.id === targetId;
                 
                 const shareLink = `${window.location.origin}${window.location.pathname}?id=${d.id}`;
-                const fullShareMessage = `*${data.title}*\n\n${data.content}\n\n🔗 رابط المقال:\n${shareLink}`;
+                
+                // تعديل رسالة المشاركة لتشمل رابط الصورة في المقدمة لضمان المعاينة
+                const imageHeader = firstImageUrl ? firstImageUrl + "\n" : "";
+                const fullShareMessage = `${imageHeader}*${data.title}*\n\n${data.content}\n\n🔗 رابط الموضوع المباشر:\n${shareLink}`;
 
                 const card = document.createElement('div');
                 card.className = `smart-card ${isTarget ? 'expanded highlight-active' : ''}`;
