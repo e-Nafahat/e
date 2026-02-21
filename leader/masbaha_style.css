@@ -19,6 +19,10 @@
     padding: 0; 
     box-sizing: border-box; 
     -webkit-tap-highlight-color: transparent; 
+    /* الإضافة هنا لحل مشكلة حدود الرقم والمربعات الزرقاء */
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 body { 
