@@ -3,184 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SMART | نَفَحَاتٌ إِيمَانِيَّةٌ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>SMART | مَقَالَاتُ نَفَحَاتِ الإِيمَانِ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold-matte: #c5a059; 
-            --gold-dark: #a88548;
-            --soft-white: #ffffff;
-            --text-main: #34495e;
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f1d377 50%, #a88548 100%);
+            --dark-header: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+            --gold-main: #d4af37;
+            --text-dark: #1a2a3a;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --shadow-strong: rgba(0, 0, 0, 0.1);
         }
+
+        html { scroll-behavior: smooth; }
 
         body { 
             margin: 0; 
-            padding: 10px; 
-            background-color: transparent; 
+            padding: 10px 15px 80px; 
+            background: #f0f2f5; 
             font-family: 'Cairo', sans-serif; 
-            scroll-behavior: smooth;
+            color: var(--text-dark);
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* شريط التبويبات */
-        .tabs-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
+        button, a, input, textarea, div {
+            outline: none !important;
+        }
+
+        .header-section {
+            text-align: center;
             margin-bottom: 20px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding: 5px;
-            -webkit-overflow-scrolling: touch;
         }
 
-        .tab-btn {
-            padding: 8px 16px;
-            background: #fff;
-            border: 1px solid var(--gold-matte);
-            color: var(--text-main);
-            border-radius: 12px;
+        .logo-container {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-main);
+            padding: 4px;
+            background: white;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 0.8rem;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 3px 0 var(--gold-matte);
-            white-space: nowrap;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .tab-btn.active {
-            background: var(--gold-matte);
-            color: white;
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 var(--gold-dark);
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
-        /* تنسيق المقالات */
-        .article-strip { 
-            background: var(--soft-white); 
-            border-radius: 15px; 
-            margin-bottom: 12px; 
-            border: 1px solid rgba(197, 160, 89, 0.15); 
-            overflow: hidden; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transform: translateZ(0);
-            will-change: transform;
+        .header-section h1 {
+            font-weight: 900;
+            font-size: 1.5rem;
+            background: var(--dark-header);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
         }
 
-        .strip-header { 
-            padding: 15px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
+        .poetry-box {
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #5d6d7e;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
         }
 
-        .post-number { 
-            background: var(--gold-matte); 
-            color: white; 
-            min-width: 28px; 
-            height: 28px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 8px; 
-            font-weight: 800; 
-            font-size: 0.75rem;
+        #articlesWrapper {
+            display: grid;
+            gap: 16px; 
+            max-width: 530px; 
+            margin: 0 auto;
         }
 
-        .strip-header h2 { 
-            margin: 0; font-size: 0.9rem; color: var(--text-main); flex-grow: 1; font-weight: 700; 
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        .smart-card {
+            background: var(--glass-bg);
+            border-radius: 22px; 
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 8px 20px var(--shadow-strong); 
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            scroll-margin-top: 20px;
         }
 
-        .category-tag { color: var(--gold-matte); font-weight: 800; margin-left: 5px; }
-        .arrow-icon { color: var(--gold-matte); font-size: 0.9rem; transition: 0.4s ease; }
-        .active-strip .arrow-icon { transform: rotate(180deg); }
-
-        .strip-content { 
-            max-height: 0; 
-            overflow: hidden; 
-            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .active-strip .strip-content { 
-            max-height: 5000px; 
+        .highlight-active {
+            border: 2px solid var(--gold-main);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
         }
 
-        .content-inner { 
-            padding: 20px; font-size: 1.05rem; line-height: 1.8; color: #333; 
+        .card-header-vibrant {
+            background: var(--dark-header);
+            padding: 10px 20px; 
+            border-bottom: 3px solid var(--gold-main);
+        }
+
+        .card-header-vibrant h2 {
+            margin: 0;
+            font-size: 1rem; 
+            font-weight: 400;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        .card-media img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+
+        .card-info { padding: 12px 20px; } 
+
+        .card-text {
+            font-size: 0.98rem; 
+            line-height: 1.7;
+            color: #2c3e50;
+            text-align: justify;
             white-space: pre-wrap; 
-            border-top: 1px solid #f0f0f0; text-align: justify;
+            max-height: 88px; 
+            overflow: hidden;
+            transition: max-height 0.6s ease;
         }
 
-        /* الوسائط */
-        .media-container { 
-            margin: 15px 0; border-radius: 12px; overflow: hidden; background: #000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .expanded .card-text { max-height: 20000px; }
+
+        .read-more-btn {
+            background: var(--gold-gradient);
+            border: none;
+            color: #fff;
+            font-family: 'Cairo';
+            font-weight: 700;
+            font-size: 0.7rem; 
+            padding: 6px 14px; 
+            border-radius: 9px;
+            margin-top: 8px;
+            cursor: pointer;
         }
-        .media-container img { max-width: 100%; height: auto; display: block; }
-        
-        .video-wrapper, .shorts-wrapper { position: relative; width: 100%; height: 0; }
-        .video-wrapper { padding-bottom: 56.25%; }
-        .shorts-wrapper { padding-bottom: 177.77%; max-width: 320px; margin: 0 auto; }
-        .video-wrapper iframe, .shorts-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        /* أزرار الإدارة والـ 3D */
-        .admin-controls { display: none; gap: 8px; padding: 12px; background: #fdfdfd; border-top: 1px solid #eee; }
-        .is-admin .admin-controls { display: flex !important; }
+        .card-footer {
+            padding: 7px 20px; 
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+        }
 
-        .btn-3d {
-            border: none; padding: 10px; border-radius: 10px; font-family: 'Cairo'; 
-            font-weight: 800; cursor: pointer; font-size: 0.8rem; flex: 1;
+        .whatsapp-link {
+            background: #25d366;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-header);
+            padding: 10px 25px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--gold-main);
+            z-index: 9999;
+        }
+
+        .nav-item {
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-decoration: none;
             transition: 0.2s;
         }
-        .btn-edit { background: #e3f2fd; color: #1976d2; box-shadow: 0 3px 0 #bbdefb; }
-        .btn-del { background: #ffebee; color: #d32f2f; box-shadow: 0 3px 0 #ffcdd2; }
-        .btn-edit:active, .btn-del:active { transform: translateY(2px); box-shadow: none; }
 
-        .btn-share { 
-            background: #25d366; color: white; 
-            margin: 10px; width: calc(100% - 20px);
-            box-shadow: 0 3px 0 #128c7e;
+        .nav-item:active { transform: scale(0.9); color: var(--gold-main); }
+
+        .admin-buttons { display: none; gap: 8px; }
+        .is-admin .admin-buttons { display: flex; }
+
+        .adm-btn {
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: none;
+            font-family: 'Cairo';
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
         }
-        .btn-share:active { transform: translateY(2px); box-shadow: none; }
+        .edit { background: #e3f2fd; color: #1976d2; }
+        .del { background: #ffebee; color: #d32f2f; }
 
-        /* نافذة التعديل */
-        #editModal { 
-            display: none; position: fixed; inset: 0; 
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 9999; 
+        #updateModal {
+            display: none; 
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(10px);
+            z-index: 100000;
             align-items: center; justify-content: center;
         }
-        .modal-body { 
-            background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 400px;
+
+        .modal-inner {
+            background: white; 
+            width: 90%; max-width: 400px;
+            padding: 25px; border-radius: 25px;
         }
-        .modal-body input, .modal-body textarea { 
-            width: 100%; margin-bottom: 12px; padding: 12px; border: 2px solid #eee; 
-            border-radius: 10px; font-family: 'Cairo'; outline: none; transition: 0.3s;
+
+        .modal-inner input, .modal-inner textarea {
+            width: 100%; padding: 12px;
+            margin-bottom: 15px; border-radius: 12px;
+            border: 1px solid #eee; font-family: 'Cairo';
+            box-sizing: border-box;
         }
-        .modal-body input:focus { border-color: var(--gold-matte); }
-        .save-btn { 
-            background: var(--gold-matte); color: white; width: 100%; padding: 14px; 
-            border: none; border-radius: 10px; font-weight: 800; cursor: pointer;
+
+        #saveBtn {
+            width: 100%; padding: 15px;
+            background: var(--dark-header); color: white;
+            border: none; border-radius: 12px;
+            font-weight: 700; cursor: pointer;
         }
+
+        ::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
 
-    <div class="tabs-container">
-        <button class="tab-btn active" id="adminTrigger" onclick="filterArticles('الكل', this)">الْكُلُّ</button>
-        <button class="tab-btn" onclick="filterArticles('عقيدة', this)">عَقِيدَةٌ</button>
-        <button class="tab-btn" onclick="filterArticles('رقائق', this)">رَقَائِقُ</button>
-        <button class="tab-btn" onclick="filterArticles('سيرة', this)">سِيَرٌ</button>
-    </div>
+    <header class="header-section">
+        <div class="logo-container" id="adminTrigger">
+            <img src="LogoNafahat.png" alt="نفحات إيمانية">
+        </div>
+        <h1>مَقَالَاتُ نَفَحَاتِ الإِيمَانِ</h1>
+        <div class="poetry-box">
+            <span class="poetry-line-1">العِلمُ يَنهَضُ بِالخَسيسِ إِلى العُلى</span>
+            <span class="poetry-line-2">وَالجَهلُ يَخفِضُ بِالشَريفِ إِلى الثَرى</span>
+        </div>
+    </header>
 
     <div id="articlesWrapper"></div>
 
-    <div id="editModal">
-        <div class="modal-body">
-            <h3 style="text-align:center; color:var(--gold-matte); margin-bottom:15px;">تَعْدِيلُ النَّفْحَةِ</h3>
-            <input type="text" id="editTitle" placeholder="العنوان [التصنيف]">
-            <textarea id="editContent" rows="10" placeholder="المحتوى..."></textarea>
-            <button class="save-btn" id="saveUpdateBtn">حِفْظُ التَّعْدِيلَاتِ</button>
-            <button onclick="closeModal()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer; color:#888;">إِلْغَاءٌ</button>
+    <nav class="nav-bar">
+        <div class="nav-item" onclick="window.scrollTo(0,0)" title="لأعلى">▲</div>
+        <a href="../index.html" class="nav-item" title="الرئيسية">🏠</a>
+        <div class="nav-item" onclick="window.scrollTo(0, document.body.scrollHeight)" title="لأسفل">▼</div>
+    </nav>
+
+    <div id="updateModal">
+        <div class="modal-inner">
+            <h3 style="text-align:center; margin-bottom:20px; font-weight:700;">تعديل المقال</h3>
+            <input type="text" id="upTitle">
+            <textarea id="upContent" rows="10"></textarea>
+            <button id="saveBtn">حفظ الآن</button>
+            <button onclick="document.getElementById('updateModal').style.display='none'" style="width:100%; margin-top:10px; background:none; border:none; color:#999; font-weight:700; cursor:pointer;">إلغاء</button>
         </div>
     </div>
 
@@ -198,153 +302,106 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let currentEditId = null;
+        let currentId = null;
 
-        // الدخول كأدمن (ضغط مطول 2 ثانية على تبويب الكل)
-        let pressTimer;
-        const adminBtn = document.getElementById('adminTrigger');
-        
-        const startPress = () => {
-            pressTimer = window.setTimeout(() => {
-                const pass = prompt("مِفْتَاحُ الأَدْمِن:");
-                if (pass === "FM1661") document.body.classList.add('is-admin');
-            }, 2000);
-        };
-        const endPress = () => clearTimeout(pressTimer);
+        const urlParams = new URLSearchParams(window.location.search);
+        let targetId = urlParams.get('id');
 
-        adminBtn.addEventListener('touchstart', startPress);
-        adminBtn.addEventListener('touchend', endPress);
-        adminBtn.addEventListener('mousedown', startPress);
-        adminBtn.addEventListener('mouseup', endPress);
-
-        window.filterArticles = (category, btn) => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            document.querySelectorAll('.article-strip').forEach(strip => {
-                const rawTitle = strip.getAttribute('data-full-title') || "";
-                strip.style.display = (category === 'الكل' || rawTitle.includes(category)) ? 'block' : 'none';
-            });
-        };
-
-        function formatTitle(title) {
-            return title.replace(/\[(عقيدة|رقائق|سيرة)\]/g, '<span class="category-tag">[$1]</span>');
-        }
-
-        function processContent(text) {
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
-            return text.replace(urlRegex, (url) => {
-                if (url.includes('youtube.com/shorts/')) {
-                    let vidId = url.split('shorts/')[1].split('?')[0];
-                    return `<div class="media-container"><div class="shorts-wrapper"><iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe></div></div>`;
-                }
-                if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
-                    let vidId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-                    return `<div class="media-container"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe></div></div>`;
-                }
-                if (url.match(/\.(jpeg|jpg|gif|png|webp|bmp)$/i)) {
-                    return `<div class="media-container"><img src="${url}" loading="lazy"></div>`;
-                }
-                return `<a href="${url}" target="_blank" style="color:var(--gold-matte); font-weight:700;">${url}</a>`;
-            });
-        }
-
-        // دالة المشاركة عبر الواتساب مع توثيق الرابط الصحيح
-        window.shareOnWhatsApp = (title, content, postId) => {
-            // الرابط الرسمي للموقع موجه مباشرة لصفحة SMART
-            const siteUrl = "https://e-nafahat.github.io/e/leader/FrontSmart.html"; 
-            const cleanTitle = title.replace(/\[.*?\]/g, '').trim();
-            const fullMessage = `*${cleanTitle}*\n\n${content}\n\n📍 للمزيد تابعونا عبر موقعنا:\n${siteUrl}`;
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`;
-            window.open(whatsappUrl, '_blank');
-        };
-
-        const q = query(collection(db, "articles"), orderBy("time", "desc"));
-        onSnapshot(q, (snapshot) => {
-            const container = document.getElementById('articlesWrapper');
-            container.innerHTML = "";
-            let total = snapshot.size;
-
-            snapshot.docs.forEach((docSnap, index) => {
-                const data = docSnap.data();
-                const item = document.createElement('div');
-                item.className = 'article-strip';
-                item.id = 'post-' + docSnap.id;
-                item.setAttribute('data-full-title', data.title);
-                
-                const richContent = processContent(data.content);
-                const styledTitle = formatTitle(data.title);
-
-                // تنظيف المحتوى من الروابط قبل الإرسال للواتساب
-                const plainContent = data.content.replace(/(https?:\/\/[^\s]+)/g, '').trim();
-                const safeTitle = data.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const safeContent = plainContent.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\r?\n/g, '\\n');
-
-                item.innerHTML = `
-                    <div class="strip-header" onclick="this.parentElement.classList.toggle('active-strip')">
-                        <div class="post-number">${total - index}</div>
-                        <h2>${styledTitle}</h2>
-                        <span class="arrow-icon">▼</span>
-                    </div>
-                    <div class="strip-content">
-                        <div class="content-inner">${richContent}</div>
-                        <div class="admin-controls">
-                            <button class="btn-3d btn-edit" data-id="${docSnap.id}" data-title='${safeTitle}' data-content='${data.content.replace(/'/g, "\\'").replace(/\n/g, "\\n")}'>تَعْدِيلٌ</button>
-                            <button class="btn-3d btn-del" data-id="${docSnap.id}">حَذْفٌ</button>
-                        </div>
-                        <button class="btn-3d btn-share" onclick="shareOnWhatsApp('${safeTitle}', '${safeContent}', '${docSnap.id}')">نَشْرٌ عَبْرَ واتساب</button>
-                    </div>
-                `;
-                container.appendChild(item);
-            });
-
-            document.querySelectorAll('.btn-edit').forEach(btn => {
-                btn.onclick = () => {
-                    currentEditId = btn.getAttribute('data-id');
-                    document.getElementById('editTitle').value = btn.getAttribute('data-title');
-                    document.getElementById('editContent').value = btn.getAttribute('data-content').replace(/\\n/g, '\n');
-                    document.getElementById('editModal').style.display = 'flex';
-                };
-            });
-
-            document.querySelectorAll('.btn-del').forEach(btn => {
-                btn.onclick = async () => {
-                    if(confirm("حَذْفُ المَقَالِ؟")) await deleteDoc(doc(db, "articles", btn.getAttribute('data-id')));
-                };
-            });
-        });
-
-        window.closeModal = () => document.getElementById('editModal').style.display = 'none';
-
-        document.getElementById('saveUpdateBtn').onclick = async () => {
-            const btn = document.getElementById('saveUpdateBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "جاري الحفظ...";
-            try {
-                await updateDoc(doc(db, "articles", currentEditId), {
-                    title: document.getElementById('editTitle').value,
-                    content: document.getElementById('editContent').value,
-                    time: serverTimestamp()
-                });
-                closeModal();
-            } catch (e) {
-                alert("خطأ في التحديث");
-            } finally {
-                btn.innerText = originalText;
-            }
-        };
-
-        // استقبال رسائل الفتح المباشر من الـ iFrame الأب
         window.addEventListener('message', (event) => {
             if (event.data.type === 'OPEN_SPECIFIC_POST') {
-                const postId = event.data.id;
-                const targetElement = document.getElementById('post-' + postId);
-                if (targetElement) {
-                    document.querySelectorAll('.article-strip').forEach(s => s.classList.remove('active-strip'));
-                    targetElement.classList.add('active-strip');
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+                focusOnArticle(event.data.id);
             }
         });
+
+        function focusOnArticle(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                document.querySelectorAll('.smart-card').forEach(c => c.classList.remove('expanded', 'highlight-active'));
+                el.classList.add('expanded', 'highlight-active');
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        const trigger = document.getElementById('adminTrigger');
+        let timer;
+        const handleStart = () => { timer = setTimeout(() => { if(prompt("المفتاح:")==="FM1661") document.body.classList.add('is-admin'); }, 2000); };
+        const handleEnd = () => clearTimeout(timer);
+
+        trigger.addEventListener('touchstart', handleStart);
+        trigger.addEventListener('touchend', handleEnd);
+        trigger.addEventListener('mousedown', handleStart);
+        trigger.addEventListener('mouseup', handleEnd);
+
+        function splitMedia(text) {
+            const urls = text.match(/(https?:\/\/[^\s]+)/g);
+            let mediaHtml = ''; 
+            let cleanText = text;
+            if (urls) {
+                urls.forEach(u => {
+                    cleanText = cleanText.replace(u, '');
+                    if (u.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+                        mediaHtml += `<div class="card-media"><img src="${u}" loading="lazy"></div>`;
+                    } else if (u.includes('youtube.com') || u.includes('youtu.be')) {
+                        let vidId = u.includes('v=') ? u.split('v=')[1].split('&')[0] : u.split('/').pop();
+                        mediaHtml += `<div class="card-media"><div class="video-container"><iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe></div></div>`;
+                    }
+                });
+            }
+            return { cleanText, mediaHtml };
+        }
+
+        const q = query(collection(db, "articles"), orderBy("time", "desc"));
+        onSnapshot(q, (snap) => {
+            const wrap = document.getElementById('articlesWrapper');
+            wrap.innerHTML = "";
+            snap.docs.forEach(d => {
+                const data = d.data();
+                const { cleanText, mediaHtml } = splitMedia(data.content);
+                const isTarget = d.id === targetId;
+                const card = document.createElement('div');
+                card.className = `smart-card ${isTarget ? 'expanded highlight-active' : ''}`;
+                card.id = d.id;
+                card.innerHTML = `
+                    <div class="card-header-vibrant">
+                        <h2>${data.title}</h2>
+                    </div>
+                    ${mediaHtml}
+                    <div class="card-info">
+                        <div class="card-text">${cleanText}</div>
+                        <button class="read-more-btn" onclick="this.parentElement.parentElement.classList.toggle('expanded'); this.innerText=this.parentElement.parentElement.classList.contains('expanded')?'طوي المقال ⇡':'أكمل القراءة ⇣'">${isTarget ? 'طوي المقال ⇡' : 'أكمل القراءة ⇣'}</button>
+                    </div>
+                    <div class="card-footer">
+                        <div class="admin-buttons">
+                            <button class="adm-btn edit" onclick="openEditor('${d.id}','${data.title.replace(/'/g,"\\'")}','${data.content.replace(/'/g,"\\'").replace(/\n/g,"\\n")}')">تعديل</button>
+                            <button class="adm-btn del" onclick="deleteItem('${d.id}')">حذف</button>
+                        </div>
+                        <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('*' + data.title + '*\n\n' + data.content)}" class="whatsapp-link" target="_blank">نشر الفائدة 📲</a>
+                    </div>
+                `;
+                wrap.appendChild(card);
+            });
+            if (targetId) {
+                setTimeout(() => focusOnArticle(targetId), 500);
+            }
+        });
+
+        window.openEditor = (id, t, c) => {
+            currentId = id;
+            document.getElementById('upTitle').value = t;
+            document.getElementById('upContent').value = c.replace(/\\n/g, '\n');
+            document.getElementById('updateModal').style.display = 'flex';
+        };
+
+        window.deleteItem = async (id) => { if(confirm("حذف نهائي؟")) await deleteDoc(doc(db, "articles", id)); };
+
+        document.getElementById('saveBtn').onclick = async () => {
+            await updateDoc(doc(db, "articles", currentId), {
+                title: document.getElementById('upTitle').value,
+                content: document.getElementById('upContent').value,
+                time: serverTimestamp()
+            });
+            document.getElementById('updateModal').style.display = 'none';
+        };
     </script>
 </body>
 </html>
