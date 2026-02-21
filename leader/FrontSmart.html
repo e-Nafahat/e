@@ -24,16 +24,39 @@
             font-family: 'Cairo', sans-serif; 
             color: var(--text-dark);
             -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden; /* لمنع الاهتزاز العرضي أثناء السحب */
         }
 
         button, a, input, textarea, div {
             outline: none !important;
         }
 
+        /* زر العودة الذكي - يمنع إعادة تحميل الانترو */
+        .exit-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 10001;
+            background: var(--dark-header);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid var(--gold-main);
+            font-size: 1.3rem;
+            transition: 0.3s;
+        }
+
+        .exit-btn:active { transform: scale(0.9); }
+
         .header-section {
             text-align: center;
             margin-bottom: 20px;
+            padding-top: 25px;
         }
 
         .logo-container {
@@ -103,14 +126,14 @@
 
         .card-header-vibrant {
             background: var(--dark-header);
-            padding: 10px 20px; 
+            padding: 12px 20px; 
             border-bottom: 3px solid var(--gold-main);
         }
 
         .card-header-vibrant h2 {
             margin: 0;
-            font-size: 1rem; 
-            font-weight: 400;
+            font-size: 1.05rem; 
+            font-weight: 700;
             color: #fff;
             line-height: 1.4;
         }
@@ -135,20 +158,20 @@
             border: none;
         }
 
-        .card-info { padding: 12px 20px; } 
+        .card-info { padding: 15px 20px; } 
 
         .card-text {
             font-size: 0.98rem; 
-            line-height: 1.7;
+            line-height: 1.8;
             color: #2c3e50;
             text-align: justify;
             white-space: pre-wrap; 
-            max-height: 88px; 
+            max-height: 90px; 
             overflow: hidden;
             transition: max-height 0.6s ease;
         }
 
-        .expanded .card-text { max-height: 20000px; }
+        .expanded .card-text { max-height: 100000px; }
 
         .read-more-btn {
             background: var(--gold-gradient);
@@ -156,15 +179,15 @@
             color: #fff;
             font-family: 'Cairo';
             font-weight: 700;
-            font-size: 0.7rem; 
-            padding: 6px 14px; 
-            border-radius: 9px;
-            margin-top: 8px;
+            font-size: 0.75rem; 
+            padding: 8px 16px; 
+            border-radius: 10px;
+            margin-top: 10px;
             cursor: pointer;
         }
 
         .card-footer {
-            padding: 7px 20px; 
+            padding: 10px 20px; 
             background: #f8f9fa;
             display: flex;
             justify-content: space-between;
@@ -175,14 +198,14 @@
         .whatsapp-link {
             background: #25d366;
             color: white;
-            padding: 6px 12px;
-            border-radius: 10px;
+            padding: 8px 14px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .back-to-top {
@@ -206,17 +229,15 @@
             opacity: 0.8;
         }
 
-        .back-to-top:active { transform: scale(0.9); opacity: 1; }
-
         .admin-buttons { display: none; gap: 8px; }
         .is-admin .admin-buttons { display: flex; }
 
         .adm-btn {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
             border: none;
             font-family: 'Cairo';
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.7rem;
             cursor: pointer;
         }
@@ -256,6 +277,8 @@
     </style>
 </head>
 <body>
+
+    <div class="exit-btn" onclick="window.parent.postMessage('GO_HOME', '*')" title="عودة">✕</div>
 
     <header class="header-section">
         <div class="logo-container" id="adminTrigger">
@@ -301,27 +324,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         let targetId = urlParams.get('id');
 
-        // منطق العودة بالسحب (Swipe to Return)
-        let touchstartX = 0;
-        let touchendX = 0;
-        
-        document.addEventListener('touchstart', e => {
-            touchstartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            handleGesture();
-        });
-
-        function handleGesture() {
-            const swipeDistance = 120; // المسافة المطلوبة لتفعيل العودة
-            if (touchendX - touchstartX > swipeDistance || touchstartX - touchendX > swipeDistance) {
-                // العودة للمجلد الرئيسي index.html عند السحب القوي يميناً أو يساراً
-                window.location.href = "../index.html";
-            }
-        }
-
         window.addEventListener('message', (event) => {
             if (event.data.type === 'OPEN_SPECIFIC_POST') {
                 focusOnArticle(event.data.id);
@@ -350,13 +352,11 @@
         function splitMedia(text) {
             const urls = text.match(/(https?:\/\/[^\s]+)/g);
             let mediaHtml = ''; 
-            let firstImageUrl = ''; // لاستخدامها في المعاينة عند النشر
             let cleanText = text;
             if (urls) {
                 urls.forEach(u => {
                     cleanText = cleanText.replace(u, '');
                     if (u.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
-                        if(!firstImageUrl) firstImageUrl = u;
                         mediaHtml += `<div class="card-media"><img src="${u}" loading="lazy"></div>`;
                     } else if (u.includes('youtube.com') || u.includes('youtu.be')) {
                         let vidId = u.includes('v=') ? u.split('v=')[1].split('&')[0] : u.split('/').pop();
@@ -364,7 +364,7 @@
                     }
                 });
             }
-            return { cleanText, mediaHtml, firstImageUrl };
+            return { cleanText, mediaHtml };
         }
 
         const q = query(collection(db, "articles"), orderBy("time", "desc"));
@@ -373,14 +373,15 @@
             wrap.innerHTML = "";
             snap.docs.forEach(d => {
                 const data = d.data();
-                const { cleanText, mediaHtml, firstImageUrl } = splitMedia(data.content);
+                const { cleanText, mediaHtml } = splitMedia(data.content);
                 const isTarget = d.id === targetId;
                 
+                // المسار المطلق للشعار لضمان ظهوره في المعاينة
+                const logoPath = window.location.origin + "/leader/LogoNafahat.png";
                 const shareLink = `${window.location.origin}${window.location.pathname}?id=${d.id}`;
                 
-                // تعديل رسالة المشاركة لتشمل رابط الصورة في المقدمة لضمان المعاينة
-                const imageHeader = firstImageUrl ? firstImageUrl + "\n" : "";
-                const fullShareMessage = `${imageHeader}*${data.title}*\n\n${data.content}\n\n🔗 رابط الموضوع المباشر:\n${shareLink}`;
+                let contentForShare = data.content.replace(/(https?:\/\/[^\s]+\.(?:jpeg|jpg|gif|png|webp))/gi, '').trim();
+                const fullShareMessage = `${logoPath}\n\n*${data.title}*\n\n${contentForShare}\n\n🔗 رابط القراءة:\n${shareLink}`;
 
                 const card = document.createElement('div');
                 card.className = `smart-card ${isTarget ? 'expanded highlight-active' : ''}`;
