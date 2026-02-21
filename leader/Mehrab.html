@@ -51,6 +51,29 @@
         body.no-header .full-page-ui { display: none !important; }
         body.no-header .header-logo-container { display: none; }
 
+        .exit-btn-smart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            background: var(--deep-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--gold-matte);
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: none;
+        }
+        body:not(.no-header) .exit-btn-smart { display: flex; }
+        .exit-btn-smart:active { transform: scale(0.9); }
+
         .slider-wrapper { 
             display: none; width: 100%; overflow-x: auto; 
             scroll-snap-type: x mandatory; scrollbar-width: none; 
@@ -118,13 +141,6 @@
         }
         .full-page-ui { text-align: center; margin-bottom: 20px; padding-top: 5px; position: relative; z-index: 10; }
         .page-title { color: var(--gold-matte); font-size: 1.4rem; font-weight: 900; margin-bottom: 12px; cursor: pointer; user-select: none; }
-        .back-btn { 
-            color: #fff; font-size: 0.8rem; text-decoration: none; 
-            background: rgba(255,255,255,0.1); border: 1.5px solid var(--gold-matte); 
-            padding: 5px 18px; border-radius: 20px; font-weight: 700;
-            display: inline-block;
-            transform: translateZ(0);
-        }
 
         .article-strip { 
             background: var(--glass-bg); border-radius: 22px; 
@@ -168,27 +184,26 @@
         .media-container img, .media-container video { width: 100%; height: auto; display: block; }
         
         .source-tag { 
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-            margin-top: 20px; color: var(--gold-dark); 
+            display: block; margin-top: 20px; color: var(--gold-dark); 
             font-weight: 900; font-size: 1rem; text-align: center; 
-            border-top: 2px solid #f9f6f0; padding-top: 15px; 
+            border-top: 2px solid #f9f6f0; padding-top: 12px; 
         }
 
         .btn-share-public {
             display: inline-block;
-            padding: 10px 30px;
-            background: #25d366;
-            color: white;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            margin-right: 12px;
+            padding: 4px 15px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 10px;
+            font-size: 0.8rem;
             cursor: pointer;
-            border: none;
+            border: 1px solid #c8e6c9;
             font-family: 'Cairo';
-            font-weight: 800;
+            font-weight: 700;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
         }
-        .btn-share-public:active { transform: scale(0.95); }
+        .btn-share-public:active { transform: scale(0.95); background: #c8e6c9; }
 
         .admin-controls { display: none; gap: 8px; padding: 12px; background: #f8f9fa; border-top: 1px solid #eee; }
         .is-admin .admin-controls { display: flex !important; }
@@ -204,13 +219,14 @@
 </head>
 <body class="no-header">
 
+    <div class="exit-btn-smart" onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'home'}, '*')" title="عودة">✕</div>
+
     <div class="header-logo-container">
         <img src="LogoNafahat.png" alt="شعار نفحات إيمانية" class="mini-top-logo">
     </div>
 
     <div class="full-page-ui">
         <div class="page-title" id="adminLock">تَأَمُّلَاتٌ إِيمَانِيَّةٌ 💎</div>
-        <a href="javascript:void(0)" onclick="closeFullView()" class="back-btn">الْعَوْدَةُ لِلرَّئِيسِيَّةِ</a>
     </div>
 
     <div id="sliderControlBtn" onclick="toggleAutoPlay()">⏸</div>
@@ -284,18 +300,16 @@
             return mediaHtml + `<div class="content-text">${text}</div>`;
         }
 
-        // دالة المشاركة العالمية المعرفة على window لضمان العمل من الـ onclick
-        window.shareMe = (title, content, source, num) => {
-            // تنظيف النص من أي علامات ترميز زائدة قبل الإرسال
-            const cleanTitle = title.trim();
-            const cleanContent = content.trim();
-            const cleanSource = source.trim();
+        // دالة التنقل المحسنة والنهائية
+        window.goToPost = (num) => {
+            // إرسال رسالة للموقع الرئيسي (index.html) عبر طبقتين من الأطر
+            // نستخدم window.top للوصول لأعلى نافذة مباشرة
+            window.top.postMessage({ type: 'OPEN_PAGE', page: 'mehrab' }, '*');
             
-            const shareUrl = window.location.origin + window.location.pathname + '#post-' + num;
-            const message = `*${cleanTitle}*\n\n${cleanContent}\n\n*المصدر:* ${cleanSource}\n\n📍 تابع النفحة عبر الرابط:\n${shareUrl}`;
-            
-            const finalLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(finalLink, '_blank');
+            // ننتظر قليلاً ثم نرسل أمر التمرير للمنشور
+            setTimeout(() => {
+                window.top.postMessage({ type: 'SCROLL_TO_POST', postId: 'post-' + num }, '*');
+            }, 500);
         };
 
         onSnapshot(query(collection(db, "nafahat"), orderBy("time", "desc")), (snapshot) => {
@@ -322,15 +336,10 @@
                         <div class="home-media-frame">${homeMedia ? homeMedia : `<div style="width:100%; height:100%; background:linear-gradient(45deg, #0a2d53, #001e3c); display:flex; align-items:center; justify-content:center; color:var(--gold-matte); font-size:3rem;">💎</div>`}</div>
                         <div class="home-content-box">
                             <span class="home-card-title">${data.title || "تَأَمُّلَاتٌ إِيمَانِيَّةٌ"}</span>
-                            <button class="btn-meditate" onclick="window.parent.location.href='Mehrab.html#post-${postNum}'">تَأَمَّلْ مَعَنَا</button>
+                            <button class="btn-meditate" onclick="goToPost('${postNum}')">تَأَمَّلْ مَعَنَا</button>
                         </div>
                     </div>
                 </div>`;
-
-                // تجهيز النصوص للمشاركة (التعامل مع علامات الاقتباس والسطور الجديدة)
-                const safeTitle = (data.title || "نفحة إيمانية").replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const safeContent = data.content.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\r?\n/g, '\\n');
-                const safeSource = (data.source || "قلم المحراب").replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
                 articlesHTML += `
                     <div class="article-strip" id="post-${postNum}">
@@ -339,13 +348,7 @@
                             <h2>${data.title || (data.content.substring(0, 50) + "...")}</h2>
                             <div class="dropdown-icon">▾</div> </div>
                         <div class="strip-content">
-                            <div class="content-inner">
-                                ${richContent}
-                                <div class="source-tag">
-                                    <span>﴿ ${data.source || "قلمُ المحرابِ"} ﴾</span>
-                                    <button class="btn-share-public" onclick="event.stopPropagation(); shareMe('${safeTitle}', '${safeContent}', '${safeSource}', '${postNum}')">مشاركة عبر واتساب</button>
-                                </div>
-                            </div>
+                            <div class="content-inner">${richContent}<span class="source-tag">﴿ ${data.source || "قلمُ المحرابِ"} ﴾ <button class="btn-share-public" onclick="event.stopPropagation(); shareMe('${(data.title || "تأملات إيمانية").replace(/'/g, "\\'")}', '${postNum}')">مشاركة</button></span></div>
                             <div class="admin-controls">
                                 <button class="btn-adm btn-edit" 
                                     data-id="${docSnap.id}" 
@@ -362,6 +365,22 @@
             if(container) container.innerHTML = articlesHTML;
             handleHash();
         });
+
+        window.shareMe = (title, num) => {
+            const shareUrl = window.location.origin + window.location.pathname + '#post-' + num;
+            const shareText = `تأمل معي في هذه النفحة الإيمانية: ${title}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: shareText,
+                    url: shareUrl
+                }).catch(console.error);
+            } else {
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + " " + shareUrl)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        };
 
         window.toggleStrip = (el) => {
             const isActive = el.classList.contains('active-strip');
@@ -382,8 +401,18 @@
             }
         };
 
+        // مستقبل الرسائل للأوامر المباشرة داخل الصفحة
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'SCROLL_TO_POST') {
+                const target = document.getElementById(event.data.postId);
+                if (target) {
+                    toggleStrip(target);
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
         window.closeModal = () => document.getElementById('editModal').style.display = 'none';
-        window.closeFullView = () => { window.parent.location.href = 'home.html'; };
 
         function startSlider() {
             if (sliderInterval) clearInterval(sliderInterval);
@@ -410,7 +439,8 @@
             const saveBtn = document.getElementById('saveUpdateBtn');
             saveBtn.innerText = "جاري الحفظ...";
             try {
-                await updateDoc(doc(db, "nafahat", currentEditId), {
+                const docRef = doc(db, "nafahat", currentEditId);
+                await updateDoc(docRef, {
                     title: document.getElementById('editTitle').value,
                     content: document.getElementById('editContent').value,
                     source: document.getElementById('editSource').value,
@@ -418,7 +448,7 @@
                 });
                 closeModal();
             } catch (error) {
-                console.error(error);
+                console.error("Error updating document: ", error);
             } finally {
                 saveBtn.innerText = "حفظ التعديلات";
             }
