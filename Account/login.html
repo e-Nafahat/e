@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - نفحات</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 90%; max-width: 400px; }
+        .logo { text-align: center; margin-bottom: 20px; }
+        .logo img { max-width: 120px; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; color: #444; }
+        input { width: 100%; padding: 12px; border: 1px solid #dcdfe6; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 13px; background-color: #2c3e50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .footer { text-align: center; margin-top: 20px; font-size: 14px; }
+        .footer a { color: #2c3e50; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">
+        <img src="../leader/LogoNafahat.png" alt="نفحات">
+    </div>
+    <h2>دخول الأعضاء</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="password" required>
+        </div>
+        <button type="submit" id="loginBtn">دخول</button>
+    </form>
+    <div class="footer">
+        ليس لديك حساب؟ <a href="register.html">سجل الآن</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        const btn = document.getElementById('loginBtn');
+
+        btn.disabled = true;
+        btn.innerText = "جاري التحقق...";
+
+        fetch('https://sheetdb.io/api/v1/s3jllp8tzxr3t')
+        .then(res => res.json())
+        .then(users => {
+            const user = users.find(u => u.email === email && u.password === pass);
+            if (user) {
+                localStorage.setItem('userName', user.full_name);
+                alert("أهلاً بك يا " + user.full_name);
+                window.location.href = "profile.html"; 
+            } else {
+                alert("خطأ: البيانات غير صحيحة!");
+                btn.disabled = false;
+                btn.innerText = "دخول";
+            }
+        });
+    });
+</script>
+</body>
+</html>
 
