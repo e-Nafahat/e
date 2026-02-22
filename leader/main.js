@@ -13,29 +13,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- منطق التحديث التلقائي الصامت (حل مشكلة حذف التطبيق) ---
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        // تسجيل الـ Service Worker من المجلد المتفق عليه في الذاكرة
-        navigator.serviceWorker.register('/e/sw.js').then(reg => {
-            // التحقق من وجود تحديثات في الخلفية
-            reg.onupdatefound = () => {
-                const installingWorker = reg.installing;
-                installingWorker.onstatechange = () => {
-                    if (installingWorker.state === 'installed') {
-                        if (navigator.serviceWorker.controller) {
-                            // تم العثور على نسخة جديدة (v5 مثلاً)، نقوم بالتحديث فوراً
-                            console.log('تحديث جديد متاح.. يتم التثبيت تلقائياً');
-                            window.location.reload();
-                        }
-                    }
-                };
-            };
-        }).catch(err => console.error('فشل تسجيل الـ SW:', err));
-    });
-}
-// -------------------------------------------------------
-
 function formatTitle(title) {
     return title.replace(/\[(عقيدة|رقائق|سيرة)\]/g, '<span class="slider-category">[$1]</span>');
 }
@@ -48,12 +25,32 @@ onSnapshot(q, (snapshot) => {
     snapshot.docs.forEach(docSnap => { 
         const data = docSnap.data(); 
         const styledTitle = formatTitle(data.title);
-        html += `<div class="slider-item" onclick="window.parent.postMessage({type: 'OPEN_SPECIFIC_POST', id: '${docSnap.id}'}, '*')">${styledTitle}</div>`; 
+        
+        // تعديل المنطق البرمجي: إرسال الطلب لفتح صفحة المقالات أولاً ثم تحديد المنشور
+        html += `<div class="slider-item" onclick="handlePostClick('${docSnap.id}')">${styledTitle}</div>`; 
     });
     track.innerHTML = html + html; 
     const duration = Math.max(15, snapshot.size * 5); 
     track.style.animationDuration = duration + "s";
 });
+
+// وظيفة المعالجة لضمان وصول الرسالة للموقع الرئيسي (index.html)
+window.handlePostClick = function(postId) {
+    // 1. طلب الانتقال لصفحة المقالات في الموقع الرئيسي
+    window.parent.postMessage({
+        type: 'OPEN_PAGE', 
+        page: 'posts'
+    }, '*');
+
+    // 2. إرسال أمر فتح المنشور المحدد
+    // نستخدم تأخير بسيط لضمان تحميل إطار المقالات أولاً
+    setTimeout(() => {
+        window.parent.postMessage({
+            type: 'OPEN_SPECIFIC_POST', 
+            id: postId
+        }, '*');
+    }, 300);
+};
 
 const toggleBtn = document.getElementById('toggleSlider');
 const trackElement = document.getElementById('sliderTrack');
