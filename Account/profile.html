@@ -178,13 +178,22 @@
                 // تحديث البيانات في الصفحة
                 document.getElementById('display-name').innerText = user.name;
                 document.getElementById('user-email').innerText = user.email;
-                document.getElementById('login-method').innerText = user.method === 'google' ? 'حساب جوجل' : 'بريد الكتروني';
+                
+                // تحديد طريقة الدخول بناء على البيانات المخزنة
+                let methodText = "بريد الكتروني";
+                if (user.method === 'google' || user.google_id) {
+                    methodText = "حساب جوجل";
+                }
+                document.getElementById('login-method').innerText = methodText;
+                
                 document.getElementById('join-date').innerText = user.joinDate || new Date().toLocaleDateString('ar-EG');
                 
-                // تحديث حالة الاشتراك بناء على الاسم المتفق عليه في الذاكرة
-                if (user.name === "محمد السيد عباس" || user.name === "Mohamed Elsayed Abbas" || user.name === "Mohamed Younes") {
+                // منطق التعرف على المالك (محمد السيد عباس) لرفع الرتبة تلقائياً
+                const ownerNames = ["محمد السيد عباس", "Mohamed Elsayed Abbas", "Mohamed Younes"];
+                if (ownerNames.includes(user.name)) {
                     document.getElementById('sub-type').innerText = "اشتراك كامل (مدى الحياة)";
-                    document.getElementById('membership-status').innerText = "عضوية ذهبية";
+                    document.getElementById('membership-status').innerText = "عضوية ذهبية (المالك)";
+                    document.querySelector('.action-btn').style.display = 'none'; // إخفاء زر الاشتراك للمالك
                 } else {
                     document.getElementById('sub-type').innerText = "اشتراك نشط";
                     document.getElementById('membership-status').innerText = "عضوية مميزة";
@@ -192,7 +201,7 @@
 
                 // تحديث الصورة إذا كانت قادمة من جوجل
                 if (user.picture) {
-                    document.getElementById('avatar-container').innerHTML = `<img src="${user.picture}" alt="User">`;
+                    document.getElementById('avatar-container').innerHTML = `<img src="${user.picture}" alt="User Profile">`;
                 }
             } else {
                 // إذا لم يوجد مستخدم مسجل يتم التوجيه لصفحة تسجيل الدخول
@@ -201,6 +210,7 @@
         }
 
         function logout() {
+            // مسح بيانات الجلسة فقط عند تسجيل الخروج
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('currentUser');
             window.location.href = 'login.html';
