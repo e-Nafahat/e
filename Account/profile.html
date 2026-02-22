@@ -2,52 +2,106 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>الملف الشخصي - نفحات</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; text-align: center; padding: 50px 20px; margin: 0; }
-        .profile-card { background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; border-top: 5px solid #2c3e50; }
-        .welcome-msg { color: #2c3e50; font-size: 24px; margin-bottom: 10px; font-weight: bold; }
-        .user-email { color: #7f8c8d; margin-bottom: 30px; font-size: 16px; }
-        .btn-home { display: inline-block; padding: 12px 25px; background-color: #2c3e50; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.3s; }
-        .btn-home:hover { background-color: #34495e; }
-        .logout { display: block; margin-top: 20px; color: #e74c3c; text-decoration: none; font-size: 14px; cursor: pointer; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f4f7f6; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .profile-card { 
+            background: white; 
+            padding: 40px 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            width: 100%;
+            max-width: 380px; 
+            margin: 0 auto; 
+            border-top: 6px solid #2c3e50; 
+            text-align: center;
+        }
+        .profile-card img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border: 3px solid #f0f2f5;
+        }
+        .welcome-msg { 
+            color: #2c3e50; 
+            font-size: 22px; 
+            margin-bottom: 15px; 
+            font-weight: bold; 
+            line-height: 1.4;
+        }
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .btn-home { 
+            display: block; 
+            width: 100%;
+            padding: 15px 0; 
+            background-color: #2c3e50; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 16px;
+            margin-bottom: 20px; 
+            transition: transform 0.2s;
+            box-sizing: border-box;
+        }
+        .btn-home:active {
+            transform: scale(0.98);
+        }
+        .logout { 
+            color: #e74c3c; 
+            text-decoration: none; 
+            font-size: 15px; 
+            font-weight: 600;
+            cursor: pointer; 
+            display: inline-block;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-
 <div class="profile-card">
-    <img src="../leader/LogoNafahat.png" width="100" alt="نفحات" style="margin-bottom: 20px;">
-    <div class="welcome-msg">مرحباً، <span id="userNameDisplay">يا شريكنا</span></div>
-    <div class="user-email" id="userEmailDisplay">جاري تحميل بياناتك...</div>
-    
+    <img src="../leader/LogoNafahat.png" alt="شعار نفحات">
+    <div class="welcome-msg">أهلاً بك يا <br><span id="userNameDisplay">...</span></div>
     <p>لقد أصبحت الآن جزءاً من عائلة نفحات.</p>
-    
     <a href="../index.html" class="btn-home">العودة للرئيسية</a>
-    <a onclick="logout()" class="logout">تسجيل الخروج</a>
+    <span onclick="logout()" class="logout">تسجيل الخروج</span>
 </div>
 
 <script>
-    // التحقق من وجود بيانات في ذاكرة المتصفح (Logic Check)
-    const storedName = localStorage.getItem('userName');
+    // مراجعة المنطق البرمجي (Logic Check)
+    // استعادة اسم المستخدم الذي تم تخزينه أثناء عملية الدخول (سواء يدوي أو جوجل)
+    const name = localStorage.getItem('userName');
     
-    if (storedName) {
-        document.getElementById('userNameDisplay').innerText = storedName;
-        // إخفاء رسالة التحميل
-        document.getElementById('userEmailDisplay').innerText = "تم تسجيل الدخول بنجاح";
-    } else {
-        // إذا حاول أحد الدخول للصفحة مباشرة دون تسجيل دخول، يتم تحويله لصفحة الدخول
-        alert("يرجى تسجيل الدخول أولاً");
-        window.location.href = "login.html";
+    if (!name) { 
+        // حماية الصفحة: إذا حاول شخص دخولها بدون تسجيل، يتم تحويله لصفحة الدخول
+        window.location.href = "login.html"; 
+    } else { 
+        // عرض الاسم في المكان المخصص داخل البطاقة
+        document.getElementById('userNameDisplay').innerText = name; 
     }
 
     function logout() {
-        // مسح الذاكرة عند الخروج
+        // إنهاء الجلسة ومسح البيانات المحلية تماماً
         localStorage.clear();
         window.location.href = "login.html";
     }
 </script>
-
 </body>
 </html>
-
