@@ -101,6 +101,7 @@
             transition: 0.3s;
             margin-top: 10px;
         }
+        .register-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .divider {
             margin: 20px 0;
@@ -160,7 +161,7 @@
                 <input type="password" id="regPass" placeholder="••••••••" required>
             </div>
 
-            <button type="submit" class="register-btn">انشاء الحساب</button>
+            <button type="submit" id="submitBtn" class="register-btn">انشاء الحساب</button>
         </form>
 
         <div class="login-link">
@@ -169,22 +170,25 @@
     </div>
 
     <script>
+        // الرابط الذي استخرجته أنت من الموبايل
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxWhxN86oCMzxXSUVnTTuF1apRAfTLVeFffbBlNMYAeiR1yTfc3nziBdtUjBubVGX5V/exec';
+
         function startGoogleAuth() {
             google.accounts.id.prompt();
         }
 
+        // معالجة بيانات جوجل وإرسالها للجدول
         function handleCredentialResponse(response) {
             const responsePayload = parseJwt(response.credential);
             const userData = {
-                name: responsePayload.name,
+                full_name: responsePayload.name,
                 email: responsePayload.email,
-                picture: responsePayload.picture,
-                method: 'google',
-                joinDate: new Date().toLocaleDateString('ar-EG')
+                password: "GOOGLE_AUTH_USER",
+                google_id: responsePayload.sub
             };
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('currentUser', JSON.stringify(userData));
-            window.location.href = 'profile.html';
+
+            // إرسال البيانات للجدول
+            sendToSheet(userData, responsePayload.picture);
         }
 
         function parseJwt(token) {
@@ -196,20 +200,55 @@
             return JSON.parse(jsonPayload);
         }
 
+        // معالجة التسجيل اليدوي وإرساله للجدول
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = document.getElementById('regEmail').value;
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "جاري الاتصال بالسجلات...";
+
             const userData = {
-                name: document.getElementById('regName').value,
-                email: email,
+                full_name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
                 password: document.getElementById('regPass').value,
-                method: 'manual',
-                joinDate: new Date().toLocaleDateString('ar-EG')
+                google_id: "MANUAL_ENTRY"
             };
-            localStorage.setItem('user_' + email, JSON.stringify(userData));
-            alert('تم انشاء الحساب بنجاح!');
-            window.location.href = 'login.html';
+
+            sendToSheet(userData);
         });
+
+        // دالة موحدة لإرسال البيانات لـ Google Sheets و LocalStorage
+        function sendToSheet(data, picture = null) {
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                // حفظ الجلسة محلياً للدخول الفوري
+                const localData = {
+                    name: data.full_name,
+                    email: data.email,
+                    picture: picture,
+                    joinDate: new Date().toLocaleDateString('ar-EG')
+                };
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', JSON.stringify(localData));
+                
+                alert('مبارك! تم إنشاء حسابك في نفحات إيمانية بنجاح.');
+                window.location.href = 'profile.html';
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert('عذراً، حدث خطأ في ربط البيانات. حاول مجدداً.');
+                if(document.getElementById('submitBtn')) {
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('submitBtn').innerText = "انشاء الحساب";
+                }
+            });
+        }
     </script>
 </body>
 </html>
