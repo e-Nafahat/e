@@ -2,36 +2,93 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>إنشاء حساب جديد - نفحات</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 90%; max-width: 400px; }
-        .logo { text-align: center; margin-bottom: 20px; }
-        .logo img { max-width: 120px; height: auto; }
-        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 22px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; color: #444; font-weight: 600; }
-        input { width: 100%; padding: 12px; border: 1px solid #dcdfe6; border-radius: 6px; box-sizing: border-box; font-size: 14px; transition: border 0.3s; }
-        input:focus { border-color: #2c3e50; outline: none; }
-        button { width: 100%; padding: 13px; background-color: #2c3e50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
-        button:hover { background-color: #1a252f; }
-        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
-        .footer { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f0f2f5; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding-top: 20px;
+        }
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+            width: 95%; 
+            max-width: 400px; 
+            box-sizing: border-box;
+        }
+        .logo { text-align: center; margin-bottom: 15px; }
+        .logo img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; }
+        h2 { text-align: right; color: #2c3e50; font-size: 22px; margin-bottom: 25px; padding-right: 5px; }
+        .form-group { margin-bottom: 18px; text-align: right; }
+        label { display: block; margin-bottom: 8px; color: #444; font-weight: 600; font-size: 14px; }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid #dcdfe6; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            background-color: #f9fafb;
+        }
+        input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            background-color: #fff;
+        }
+        .btn-main { 
+            width: 100%; 
+            padding: 15px; 
+            background-color: #2c3e50; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin-top: 10px; 
+            transition: background 0.3s;
+        }
+        .btn-main:active { background-color: #1a252f; }
+        .social-login { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .social-btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-start; 
+            width: 100%; 
+            padding: 12px 20px; 
+            margin-bottom: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            background: white; 
+            cursor: pointer; 
+            font-size: 15px; 
+            font-weight: 600; 
+            color: #444; 
+            text-decoration: none; 
+            box-sizing: border-box;
+        }
+        .social-btn img { width: 22px; height: 22px; margin-left: 15px; }
+        .footer { text-align: center; margin-top: 20px; font-size: 15px; color: #666; }
         .footer a { color: #2c3e50; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-
 <div class="card">
-    <div class="logo">
-        <img src="../leader/LogoNafahat.png" alt="نفحات">
-    </div>
+    <div class="logo"><img src="../leader/LogoNafahat.png" alt="نفحات"></div>
     <h2>فتح حساب جديد</h2>
     <form id="registerForm">
         <div class="form-group">
             <label>الاسم الكامل</label>
-            <input type="text" name="data[full_name]" placeholder="أدخل اسمك الثلاثي" required>
+            <input type="text" name="data[full_name]" placeholder="أدخل اسمك الكامل" required>
         </div>
         <div class="form-group">
             <label>البريد الإلكتروني</label>
@@ -39,57 +96,97 @@
         </div>
         <div class="form-group">
             <label>كلمة المرور</label>
-            <input type="password" name="data[password]" id="password" placeholder="8 رموز على الأقل" required minlength="8">
+            <input type="password" name="data[password]" id="password" placeholder="********" required minlength="8">
         </div>
-        <div class="form-group">
-            <label>تأكيد كلمة المرور</label>
-            <input type="password" id="confirm_password" placeholder="أعد كتابة كلمة المرور" required>
-        </div>
-        <button type="submit" id="submitBtn">إنشاء الحساب</button>
+        <button type="submit" id="submitBtn" class="btn-main">إنشاء الحساب</button>
     </form>
-    <div class="footer">
-        لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+    <div class="social-login">
+        <div class="social-btn" id="googleCustomBtn">
+            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google Logo">
+            <span>تسجيل سريع بواسطة جوجل</span>
+        </div>
     </div>
+    <div class="footer">لديك حساب بالفعل؟ <a href="login.html">دخول</a></div>
 </div>
 
 <script>
-    const form = document.getElementById('registerForm');
-    const submitBtn = document.getElementById('submitBtn');
+    window.onload = function () {
+        // تهيئة خدمة جوجل باستخدام الـ Client ID الخاص بك
+        google.accounts.id.initialize({
+            client_id: "549219260713-2svevb2f0obauqcu1be3qvd5kp77sv5i.apps.googleusercontent.com",
+            callback: handleGoogleResponse,
+            auto_select: false,
+            itp_support: true
+        });
+        
+        // ربط الزر المخصص بفتح نافذة جوجل
+        document.getElementById('googleCustomBtn').onclick = () => {
+            google.accounts.id.prompt((notification) => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // محاولة فرض إظهار النافذة إذا تم حجبها تلقائياً
+                    google.accounts.id.renderButton(
+                        document.createElement("div"), 
+                        { theme: "outline", size: "large" }
+                    );
+                }
+            });
+        };
+    };
 
+    function handleGoogleResponse(response) {
+        // فك تشفير البيانات المرسلة من جوجل
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        
+        // إرسال البيانات لـ SheetDB للتسجيل
+        fetch('https://sheetdb.io/api/v1/s3jllp8tzxr3t', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                data: [{
+                    full_name: payload.name,
+                    email: payload.email,
+                    google_id: payload.sub,
+                    password: 'GOOGLE_USER_AUTH'
+                }]
+            })
+        }).then(res => res.json()).then(data => {
+            if (data.created === 1 || data.error === undefined) {
+                localStorage.setItem('userName', payload.name);
+                window.location.href = "profile.html";
+            } else {
+                alert("فشل التسجيل عبر جوجل.");
+            }
+        }).catch(() => {
+            alert("خطأ في الاتصال بقاعدة البيانات.");
+        });
+    }
+
+    // منطق التسجيل اليدوي عبر النموذج
+    const form = document.getElementById('registerForm');
+    const btn = document.getElementById('submitBtn');
     form.addEventListener("submit", e => {
         e.preventDefault();
+        btn.disabled = true;
+        btn.innerText = "جاري الحفظ...";
         
-        const pass = document.getElementById('password').value;
-        const confirmPass = document.getElementById('confirm_password').value;
-        
-        if (pass !== confirmPass) {
-            alert("عذراً، كلمات المرور غير متطابقة!");
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "جاري الحفظ...";
-
-        // تم وضع رابطك هنا بنجاح
         fetch('https://sheetdb.io/api/v1/s3jllp8tzxr3t', {
             method: "POST",
             body: new FormData(form),
-        }).then(res => res.json())
-          .then(data => {
+        }).then(res => res.json()).then(data => {
             if (data.created === 1) {
                 alert("أهلاً بك يا شريكنا! تم تسجيل حسابك بنجاح.");
-                window.location.href = "login.html"; 
+                window.location.href = "login.html";
             } else {
-                alert("حدث خطأ ما، يرجى المحاولة لاحقاً.");
-                submitBtn.disabled = false;
-                submitBtn.innerText = "إنشاء الحساب";
+                alert("حدث خطأ، حاول مرة أخرى.");
+                btn.disabled = false;
+                btn.innerText = "إنشاء الحساب";
             }
-        }).catch(err => {
-            alert("تأكد من اتصالك بالإنترنت");
-            submitBtn.disabled = false;
+        }).catch(() => {
+            alert("فشل الاتصال بالخادم.");
+            btn.disabled = false;
+            btn.innerText = "إنشاء الحساب";
         });
     });
 </script>
 </body>
 </html>
-
