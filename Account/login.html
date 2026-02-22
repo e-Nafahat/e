@@ -3,187 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تسجيل الدخول - نفحات</title>
+    <title>تسجيل الدخول | نفحات إيمانية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
-            background-color: #f0f2f5; 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding-top: 40px;
+        :root {
+            --gold: #c5a059;
+            --dark-blue: #0a1929;
+            --bg-color: #f8f9fa;
         }
-        .card { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
-            width: 95%; 
-            max-width: 400px; 
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #001f3f 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 30px 25px;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-area img {
+            width: 70px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.3));
+        }
+
+        h2 {
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 5px;
+            font-size: 1.4rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-right: 10px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-family: 'Cairo';
             box-sizing: border-box;
-        }
-        .logo { text-align: center; margin-bottom: 20px; }
-        .logo img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
-        h2 { text-align: right; color: #2c3e50; font-size: 22px; margin-bottom: 25px; padding-right: 5px; }
-        .form-group { margin-bottom: 15px; text-align: right; }
-        input { 
-            width: 100%; 
-            padding: 14px; 
-            border: 1px solid #dcdfe6; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-            font-size: 16px; 
-            background-color: #f9fafb;
-        }
-        input:focus {
             outline: none;
-            border-color: #2c3e50;
-            background-color: #fff;
+            text-align: right;
         }
-        .btn-main { 
-            width: 100%; 
-            padding: 15px; 
-            background-color: #2c3e50; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold; 
-            margin-top: 10px; 
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: var(--gold);
+            color: #000;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 5px;
         }
-        .social-login { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
-        .social-btn { 
-            display: flex; 
-            align-items: center; 
-            justify-content: flex-start; 
-            width: 100%; 
-            padding: 12px 20px; 
-            margin-bottom: 12px; 
-            border-radius: 8px; 
-            border: 1px solid #ddd; 
-            background: white; 
-            cursor: pointer; 
-            font-size: 15px; 
-            font-weight: 600; 
-            color: #444; 
-            box-sizing: border-box;
+
+        .divider {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            color: #888;
+            font-size: 0.75rem;
         }
-        .social-btn img { width: 22px; height: 22px; margin-left: 15px; }
-        .footer { text-align: center; margin-top: 20px; font-size: 15px; color: #666; }
-        .footer a { color: #2c3e50; text-decoration: none; font-weight: bold; }
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 0 10px;
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: white;
+            color: #333;
+            font-family: 'Cairo';
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .google-btn:hover { background: #f1f1f1; }
+        .google-btn img { width: 20px; height: 20px; }
+
+        .footer-links {
+            margin-top: 20px;
+            font-size: 0.75rem;
+        }
+        .footer-links a { color: var(--gold); text-decoration: none; margin: 0 5px; }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="logo"><img src="../leader/LogoNafahat.png" alt="نفحات"></div>
-    <h2>دخول الأعضاء</h2>
-    <form id="loginForm">
-        <div class="form-group"><input type="email" id="email" placeholder="البريد الإلكتروني" required></div>
-        <div class="form-group"><input type="password" id="password" placeholder="كلمة المرور" required></div>
-        <button type="submit" id="loginBtn" class="btn-main">دخول</button>
-    </form>
-    <div class="social-login">
-        <div class="social-btn" id="googleLoginBtn">
-            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
-            <span>دخول بواسطة جوجل</span>
+
+    <div class="login-container">
+        <div class="logo-area">
+            <img src="../leader/LogoNafahat.png" alt="Logo">
+        </div>
+        <h2>تسجيل الدخول</h2>
+
+        <div id="g_id_onload"
+             data-client_id="549219260713-2svevb2f0obauqcu1be3qvd5kp77sv5i.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        
+        <button class="google-btn" onclick="google.accounts.id.prompt()">
+            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google Logo">
+            تسجيل الدخول بواسطة جوجل
+        </button>
+
+        <div class="divider">أو عبر البريد الالكتروني</div>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <label>البريد الالكتروني</label>
+                <input type="email" id="email" placeholder="أدخل البريد الالكتروني" required>
+            </div>
+            <div class="input-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">دخول</button>
+        </form>
+
+        <div class="footer-links">
+            <a href="#">نسيت كلمة المرور؟</a>
+            <span>|</span>
+            <a href="register.html">حساب جديد</a>
         </div>
     </div>
-    <div class="footer">ليس لديك حساب؟ <a href="register.html">سجل الآن</a></div>
-</div>
 
-<script>
-    // مراجعة المنطق البرمجي (Logic Check) لضمان ربط الزر المخصص بهوية جوجل
-    window.onload = function () {
-        google.accounts.id.initialize({
-            client_id: "549219260713-2svevb2f0obauqcu1be3qvd5kp77sv5i.apps.googleusercontent.com",
-            callback: handleGoogleLogin,
-            auto_select: false,
-            itp_support: true
-        });
+    <script>
+        // معالجة استجابة جوجل
+        function handleCredentialResponse(response) {
+            const responsePayload = parseJwt(response.credential);
+            const userData = {
+                name: responsePayload.name,
+                email: responsePayload.email,
+                picture: responsePayload.picture,
+                method: 'google',
+                joinDate: new Date().toLocaleDateString('ar-EG')
+            };
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            window.location.href = 'profile.html';
+        }
 
-        // ربط الحدث بالزر الذي قمنا بإنشائه في الـ HTML
-        document.getElementById('googleLoginBtn').onclick = () => {
-            google.accounts.id.prompt((notification) => {
-                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                    // في حال فشل ظهور النافذة المنبثقة التلقائية، يتم محاولة فرضها
-                    google.accounts.id.renderButton(
-                        document.createElement("div"), // عنصر وهمي فقط لتحفيز المحرك
-                        { theme: "outline", size: "large" }
-                    );
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // تسجيل الدخول اليدوي ومطابقة البيانات المخزنة
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // استرجاع بيانات المستخدم من localStorage التي تم تخزينها في register.html
+            const storedUser = localStorage.getItem('user_' + email);
+
+            if (storedUser) {
+                const userObj = JSON.parse(storedUser);
+                if (userObj.password === password) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('currentUser', JSON.stringify(userObj));
+                    window.location.href = 'profile.html';
+                } else {
+                    alert('كلمة المرور غير صحيحة');
                 }
-            });
-        };
-    };
-
-    function handleGoogleLogin(response) {
-        // فك تشفير التوكن (JWT) للحصول على بيانات المستخدم
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        
-        fetch('https://sheetdb.io/api/v1/s3jllp8tzxr3t')
-        .then(res => res.json())
-        .then(users => {
-            const user = users.find(u => u.email === payload.email);
-            if (user) {
-                localStorage.setItem('userName', user.full_name);
-                window.location.href = "profile.html";
             } else {
-                alert("حساب جوجل هذا غير مسجل لدينا، جارِ إنشاء حساب لك..");
-                autoRegister(payload.name, payload.email, payload.sub);
+                alert('عذرا، هذا الحساب غير مسجل لدينا');
             }
-        }).catch(() => {
-            alert("خطأ في الاتصال بقاعدة البيانات.");
         });
-    }
-
-    function autoRegister(name, email, gid) {
-        fetch('https://sheetdb.io/api/v1/s3jllp8tzxr3t', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                data: [{ 
-                    full_name: name, 
-                    email: email, 
-                    google_id: gid, 
-                    password: 'GOOGLE_USER_AUTH' 
-                }]
-            })
-        }).then(() => {
-            localStorage.setItem('userName', name);
-            window.location.href = "profile.html";
-        });
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        const btn = document.getElementById('loginBtn');
-        
-        btn.disabled = true;
-        btn.innerText = "جاري التحقق...";
-        
-        fetch('https://sheetdb.io/api/v1/s3jllp8tzxr3t')
-        .then(res => res.json())
-        .then(users => {
-            const user = users.find(u => u.email === email && u.password === pass);
-            if (user) {
-                localStorage.setItem('userName', user.full_name);
-                window.location.href = "profile.html"; 
-            } else {
-                alert("خطأ: البيانات غير صحيحة!");
-                btn.innerText = "دخول";
-                btn.disabled = false;
-            }
-        }).catch(() => {
-            alert("فشل الاتصال بالخادم.");
-            btn.innerText = "دخول";
-            btn.disabled = false;
-        });
-    });
-</script>
+    </script>
 </body>
 </html>
