@@ -39,16 +39,48 @@
             transition: all 0.2s ease;
             position: relative;
             z-index: 1001;
+            background: rgba(197, 160, 89, 0.1); 
+            border-radius: 8px;
         }
 
         .menu-icon span {
             display: block;
-            width: 24px;
+            width: 20px;
             height: 2px;
             background: var(--gold);
             border-radius: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 0 5px rgba(197, 160, 89, 0.2);
+        }
+
+        /* --- زر الحساب/تسجيل الدخول --- */
+        .user-auth-btn {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            z-index: 1001;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            overflow: hidden;
+        }
+        .user-auth-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-auth-btn:active { transform: scale(0.9); background: var(--gold); color: #000; }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
         /* --- تنسيق الهيدر المطور --- */
@@ -127,6 +159,7 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
         .library-entrance:active { transform: scale(0.98); }
@@ -175,7 +208,7 @@
 
         .library-entrance:hover .m-book { transform: translateY(-5px) rotateZ(0deg); }
 
-        /* --- تصميم زر البث المباشر المستطيل --- */
+        /* --- تصميم زر البث المباشر --- */
         .live-stream-box {
             display: flex;
             align-items: center;
@@ -190,52 +223,19 @@
             backdrop-filter: blur(10px);
             position: relative;
             transition: 0.3s ease;
+            cursor: pointer;
         }
 
         .live-stream-box:active { transform: scale(0.97); }
-
         .live-info { flex-grow: 1; }
-        
         .live-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
-
         .live-title-ar { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin: 0; }
-
         .live-title-en { color: #8b7346; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
-
         .live-desc { color: #9b86a4; font-size: 0.65rem; margin: 0; line-height: 1.3; font-weight: 500; }
-
-        .live-visual { 
-            display: flex; 
-            flex-direction: column-reverse; 
-            align-items: center; 
-            gap: 6px; 
-            min-width: 40px;
-        }
-
-        .pulse-indicator {
-            width: 8px;
-            height: 8px;
-            background: #ff3b3b;
-            border-radius: 50%;
-            position: relative;
-            box-shadow: 0 0 10px #ff3b3b;
-        }
-
-        .pulse-indicator::after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            border-radius: inherit;
-            animation: pulse-ring 1.5s infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.7; }
-            100% { transform: scale(3); opacity: 0; }
-        }
-
+        .live-visual { display: flex; flex-direction: column-reverse; align-items: center; gap: 6px; min-width: 40px; }
+        .pulse-indicator { width: 8px; height: 8px; background: #ff3b3b; border-radius: 50%; position: relative; box-shadow: 0 0 10px #ff3b3b; }
+        .pulse-indicator::after { content: ""; position: absolute; width: 100%; height: 100%; background: inherit; border-radius: inherit; animation: pulse-ring 1.5s infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(3); opacity: 0; } }
         .live-icon-3d { font-size: 1.5rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); line-height: 1; }
 
         /* --- تصميم زر مُصَحِّحُ النَّفَحَاتِ --- */
@@ -253,6 +253,7 @@
             position: relative;
             transition: 0.3s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
         }
         .tasmee-entrance:active { transform: scale(0.97); }
         .tasmee-info { flex-grow: 1; }
@@ -262,7 +263,7 @@
         .tasmee-desc { color: #a9dfbf; font-size: 0.65rem; margin: 0; line-height: 1.3; }
         .tasmee-visual { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4)); }
 
-        /* --- تصميم زر اِخْتِبَارَاتُ اَلْإِجَازَةِ الجديد --- */
+        /* --- تصميم زر اِخْتِبَارَاتُ اَلْإِجَازَةِ --- */
         .ejaza-entrance {
             display: flex;
             align-items: center;
@@ -277,6 +278,7 @@
             position: relative;
             transition: 0.3s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
         }
         .ejaza-entrance:active { transform: scale(0.97); }
         .ejaza-info { flex-grow: 1; }
@@ -307,16 +309,20 @@
             transition: 0.3s;
             text-decoration: none;
         }
-        .floating-smart-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
     <header class="site-header">
-        <div class="menu-icon" onclick="window.parent.postMessage('TOGGLE_MENU', '*')">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-controls">
+            <div class="menu-icon" onclick="window.parent.postMessage('TOGGLE_MENU', '*')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="../Account/login.html" class="user-auth-btn" id="userAuthBtn" title="تسجيل الدخول / حسابي">
+                👤
+            </a>
         </div>
 
         <div class="header-center-titles">
@@ -337,7 +343,7 @@
         <div class="slider-controls"><button id="toggleSlider">⏸</button></div>
     </div>
 
-    <div onclick="window.parent.postMessage('OPEN_MORE_PAGE', '*')" class="more-trigger">
+    <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'more'}, '*')" class="more-trigger">
         <span class="more-icon">✨</span><span class="more-text">مَوَاقِيتُ الصَّلَاةِ وَإِضَافَاتٌ ذَكِيَّةٌ</span><span class="more-icon">🕋</span>
     </div>
 
@@ -350,7 +356,7 @@
         <button class="play-btn" onclick="toggleAudio('https://s34.radiolize.com/radio/8050/radio.mp3', this)">▶</button>
     </div>
 
-    <a href="live.html" class="live-stream-box">
+    <div onclick="location.href='live.html'" class="live-stream-box">
         <div class="live-info">
             <div class="live-title-row">
                 <h3 class="live-title-ar">اَلْبَثُّ الْمُبَاشِرُ</h3>
@@ -362,9 +368,9 @@
             <span class="live-icon-3d">📺</span>
             <div class="pulse-indicator"></div>
         </div>
-    </a>
+    </div>
 
-    <a href="../Tasmee/quran1.html" class="tasmee-entrance">
+    <div onclick="location.href='../Tasmee/quran1.html'" class="tasmee-entrance">
         <div class="tasmee-info">
             <div class="tasmee-title-row">
                 <h3 class="tasmee-title-ar">مُصَحِّحُ النَّفَحَاتِ</h3>
@@ -373,9 +379,9 @@
             <p class="tasmee-desc">اختبر حفظك واسترجع الآيات بدقة مع خاصية التلميح الصوتي لأشهر القراء.</p>
         </div>
         <div class="tasmee-visual">🎙️</div>
-    </a>
+    </div>
 
-    <a href="../Tasmee/ejaza-tests.html" class="ejaza-entrance">
+    <div onclick="location.href='../Tasmee/ejaza-tests.html'" class="ejaza-entrance">
         <div class="ejaza-info">
             <div class="ejaza-title-row">
                 <h3 class="ejaza-title-ar">اِخْتِبَارَاتُ اَلْإِجَازَةِ</h3>
@@ -384,11 +390,11 @@
             <p class="ejaza-desc">قيّم مهاراتك في ضبط فواصل الآيات ومواضع الوقف والابتداء في القرآن الكريم.</p>
         </div>
         <div class="ejaza-visual">📜</div>
-    </a>
+    </div>
 
     <section class="quran-dynamic-section">
         <div class="dynamic-header">
-            <div class="dynamic-label" onclick="window.parent.postMessage('GO_MEHRAB', '*')">
+            <div class="dynamic-label" onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'mehrab'}, '*')">
                 <span>💎</span> تَأَمُّلَاتٌ إِيمَانِيَّةٌ
             </div>
         </div>
@@ -396,10 +402,10 @@
     </section>
 
     <div class="glass-dashboard">
-        <a href="masbaha.html" class="glass-btn btn-masbaha"><span class="btn-icon">📿</span><span class="btn-label">المسبحة</span></a>
-        <a href="../Textbook/azkar.html" class="glass-btn btn-morning"><span class="btn-icon">☀️</span><span class="btn-label">الصباح</span></a>
-        <a href="../Textbook/azkarNight.html" class="glass-btn btn-evening"><span class="btn-icon">🌙</span><span class="btn-label">المساء</span></a>
-        <a href="khatma.html" class="glass-btn btn-khatma"><span class="btn-icon">📖</span><span class="btn-label">الختمة</span></a>
+        <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'masbaha'}, '*')" class="glass-btn btn-masbaha"><span class="btn-icon">📿</span><span class="btn-label">المسبحة</span></div>
+        <div onclick="location.href='../Textbook/azkar.html'" class="glass-btn btn-morning"><span class="btn-icon">☀️</span><span class="btn-label">الصباح</span></div>
+        <div onclick="location.href='../Textbook/azkarNight.html'" class="glass-btn btn-evening"><span class="btn-icon">🌙</span><span class="btn-label">المساء</span></div>
+        <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'khatma'}, '*')" class="glass-btn btn-khatma"><span class="btn-icon">📖</span><span class="btn-label">الختمة</span></div>
     </div>
 
     <div class="podium-container">
@@ -426,7 +432,7 @@
         <div class="audio-strip s6"><div class="strip-header"><div class="strip-title">تِلَاوَاتٌ خَاشِعَةٌ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/salma', this)">▶</button></div><div class="strip-desc">تلاوات مؤثرة ومختارة.</div></div>
     </div>
 
-    <a href="../Library/library.html" class="library-entrance">
+    <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'library'}, '*')" class="library-entrance">
         <div class="lib-text">
             <h3>📖 المَكْتَبَةُ الإِسْلَامِيَّةُ</h3>
             <p>خَيْرُ جَلِيسٍ في الزَّمَانِ كِتَابُ .. وَمِنْهُ لِأَنْوَارِ الهُدَى أَبْوَابُ</p>
@@ -439,7 +445,7 @@
                 <div class="m-book b3"></div>
             </div>
         </div>
-    </a>
+    </div>
 
     <footer class="final-footer"><div class="footer-content"><span>جميع الحقوق محفوظة لموقع</span> <span style="font-weight:900; color:var(--gold);">نَفَحَاتٌ إِيمَانِيَّةٌ</span> <span>| 2026</span></div></footer>
 
@@ -460,6 +466,27 @@
                 btn.innerText = "⏸"; 
                 lastBtn = btn; 
             } 
+        }
+        
+        // مراجعة المنطق: تحديث حالة أيقونة الحساب بشكل ديناميكي
+        window.onload = function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = localStorage.getItem('currentUser');
+            const authBtn = document.getElementById('userAuthBtn');
+
+            if(isLoggedIn === 'true' && currentUser) {
+                const user = JSON.parse(currentUser);
+                authBtn.href = '../Account/profile.html';
+                // إذا كان المستخدم يملك صورة (من جوجل مثلاً) تظهر في الأيقونة
+                if (user.picture) {
+                    authBtn.innerHTML = `<img src="${user.picture}" alt="User">`;
+                } else {
+                    authBtn.innerHTML = '👤';
+                }
+            } else {
+                authBtn.href = '../Account/login.html';
+                authBtn.innerHTML = '👤';
+            }
         }
     </script>
 </body>
