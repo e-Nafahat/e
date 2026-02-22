@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+# منع أرشفة صفحة الإدارة لحماية الخصوصية
 Disallow: /leader/admin.html
+# منع أرشفة المجلدات البرمجية الصرفة لتركيز الأرشفة على المحتوى
+Disallow: /css/
+Disallow: /js/
+Disallow: /vendor/
 
+# تعيين خريطة الموقع لمحركات البحث
 Sitemap: https://e-nafahat.github.io/e/sitemap.xml
