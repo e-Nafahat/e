@@ -9,13 +9,52 @@
             margin: 0; padding: 0; overflow: hidden; background: #000; height: 100%; 
             font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; 
         }
-        #cinema-intro { 
-            display: flex; opacity: 1; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; background: #000; align-items: center; 
-            justify-content: center; transition: opacity 1.2s ease-in-out; 
+        
+        /* خلفية الكون */
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle at center, #001220 0%, #000 100%);
         }
 
-        /* حبل أعلام الزينة الملونة */
+        #cinema-intro { 
+            display: flex; opacity: 1; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: transparent; 
+            align-items: center; justify-content: center; transition: opacity 1.5s ease-in-out; 
+            z-index: 2;
+        }
+
+        /* الهلال المضيء الأنيق (تعديل الاتجاه واللون) */
+        .moon-container {
+            position: absolute;
+            top: 85px;
+            right: 195px; /* تم نقله لليمين ليتناسب مع الاتجاه الجديد */
+            width: 10px;
+            height: 10px;
+            z-index: 15;
+            filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+            animation: moonPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .crescent-moon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            /* اتجاه الهلال الصحيح ولونه المضيء */
+            box-shadow: -10px 8px 0 0 rgba(245, 245, 245, 0.95); 
+            transform: rotate(-10deg);
+        }
+
+        @keyframes moonPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        /* زينة الأعلام السينمائية */
         .decoration-string {
             position: absolute;
             top: -5px;
@@ -28,7 +67,7 @@
         }
         .string-arc {
             display: flex;
-            gap: 8px;
+            gap:0px;
             padding: 0;
             margin: 0;
             list-style: none;
@@ -36,11 +75,11 @@
         .flag-item {
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 22px solid;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
-            animation: flagSwing 3s ease-in-out infinite alternate;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 40px solid;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+            animation: flagSwing 4s ease-in-out infinite alternate;
             transform-origin: top center;
         }
         .flag-item:nth-child(4n+1) { border-top-color: #d4af37; } 
@@ -49,18 +88,18 @@
         .flag-item:nth-child(4n+4) { border-top-color: #b8860b; } 
 
         @keyframes flagSwing {
-            from { transform: rotateX(-5deg); }
+            from { transform: rotateX(-10deg); }
             to { transform: rotateX(15deg); }
         }
 
-        /* الفوانيس */
+        /* حاوية الفوانيس الراقية */
         .lanterns-lux-container {
             position: absolute;
             top: 0;
-            width: 100%;
+            width: 110%;
             display: flex;
             justify-content: space-around;
-            padding: 0 10%;
+            padding: 0 5%;
             z-index: 20;
             pointer-events: none;
         }
@@ -68,102 +107,176 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: lanternSwing 4s ease-in-out infinite alternate;
+            animation: lanternSwing 3s ease-in-out infinite alternate;
             transform-origin: top center;
         }
         .wire {
-            width: 1px;
-            height: 40px;
-            background: rgba(212, 175, 55, 0.4);
+            width: 1.5px;
+            height: 65px;
+            background: linear-gradient(to bottom, #444, #d4af37);
         }
-        .lantern-head {
-            width: 20px;
-            height: 8px;
-            background: #d4af37;
-            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-        }
-        .lantern-body-lux {
-            width: 32px;
-            height: 40px;
-            background: #ebd07d; 
+
+        /* الفانوس الملكي المطور */
+        .royal-lantern {
             position: relative;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            width: 42px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* قمة الفانوس مع حلقة التعليق */
+        .lantern-cap {
+            width: 10px;
+            height: 10px;
+            background: #d4af37;
+            border-radius: 50% 50% 0 0;
+            border: 1px solid #b8860b;
+        }
+        .lantern-roof {
+            width: 30px;
+            height: 15px;
+            background: linear-gradient(to bottom, #d4af37, #b8860b);
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+            margin-top: -1px;
+        }
+
+        /* جسم الفانوس مع تأثير الزجاج والنقوش */
+        .lantern-glass {
+            width: 30px;
+            height: 35px;
+            background: radial-gradient(circle, #fff9e6 10%, #ebd07d 70%, #d4af37 100%);
+            clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(235, 208, 125, 0.5);
+            border-left: 2px solid #b8860b;
+            border-right: 2px solid #b8860b;
+            overflow: hidden;
         }
-        .lantern-light {
-            width: 10px;
-            height: 10px;
+
+        /* تأثير النقوش الإسلامية الداخلية */
+        .lantern-glass::before {
+            content: "✦";
+            color: rgba(184, 134, 11, 0.3);
+            font-size: 10px;
+            position: absolute;
+            animation: rotatePattern 10s linear infinite;
+        }
+
+        /* الوهج المتحرك (الشعلة) */
+        .lantern-flame {
+            width: 15px;
+            height: 22px;
             background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px 2px #fff;
-            animation: glow 2s ease-in-out infinite alternate;
+            border-radius: 50% 50% 40% 40%;
+            filter: blur(4px);
+            box-shadow: 0 0 20px 8px #fff, 0 0 35px 15px rgba(212, 175, 55, 0.6);
+            animation: flickerIntensity 2s infinite alternate;
         }
+
+        /* قاعدة الفانوس المزخرفة */
         .lantern-base {
-            width: 18px;
-            height: 12px;
+            width: 28px;
+            height: 8px;
             background: #b8860b;
-            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            border-radius: 2px;
+            margin-top: -1px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
+        @keyframes rotatePattern {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes flickerIntensity {
+            0% { opacity: 0.7; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
         @keyframes lanternSwing {
-            from { transform: rotate(-3deg); }
-            to { transform: rotate(3deg); }
-        }
-        @keyframes glow {
-            from { opacity: 0.6; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1.1); }
+            from { transform: rotate(-5deg); }
+            to { transform: rotate(5deg); }
         }
 
-        .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 6px; z-index: 5; }
+        /* محتوى المقدمة */
+        .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 8px; z-index: 5; }
         
-        /* الشعار - استخدام المسار الكامل */
         .elegant-logo-img { 
             width: 110px; 
             height: auto; 
             opacity: 0; 
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)); 
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); 
+            z-index: 10;
         }
         
-        /* صورة الآية - استخدام المسار الكامل */
         .ramadan-decoration {
             position: relative;
             width: 65%;
             max-width: 300px;
             z-index: 10;
             margin: 5px 0;
-            opacity: 0.9;
+            opacity: 0.95;
         }
-        .ramadan-decoration img {
-            width: 100%;
-            display: block;
+        .ramadan-decoration img { width: 100%; display: block; }
+
+        .elegant-line { height: 1px; width: 60%; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 4px 0; }
+        
+        .elegant-sub { 
+            font-weight: 400; 
+            font-size: 0.95rem; 
+            color: #f0f0f0; 
+            opacity: 0; 
+            text-align: center; 
+            line-height: 1.6; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+        }
+        
+        .imam-malik-quote {
+            position: absolute;
+            bottom: 30px;
+            width: 90%;
+            text-align: center;
+            color: #d4af37;
+            font-size: 0.79rem;
+            font-weight: 200;
+            opacity: 0;
+            animation: fadeIn 3s ease forwards 3.5s;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            padding-top: 15px;
         }
 
-        .elegant-line { height: 1px; width: 65%; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 2px 0; }
-        .elegant-sub { font-weight: 400; font-size: 0.9rem; color: #cecece; opacity: 0; margin: 0; padding: 0 15px; text-align: center; line-height: 1.4; }
         .mini-btn-solid {
-            margin-top: 15px; padding: 8px 35px; font-size: 0.8rem; font-family: 'Cairo', sans-serif;
+            margin-top: 15px; padding: 10px 40px; font-size: 0.85rem; font-family: 'Cairo', sans-serif;
             color: #000; background: #d4af37; border: none; border-radius: 4px;
-            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            transition: transform 0.2s ease, opacity 0.5s ease; opacity: 0;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.3s ease, background 0.3s ease; opacity: 0;
+            z-index: 100; font-weight: 600;
         }
+
         .fade-in-up { animation: fadeInUp 1.5s ease forwards; }
-        .fade-in { animation: fadeIn 1.5s ease forwards; }
+        .fade-in { animation: fadeIn 2s ease forwards; }
         .scale-x { animation: scaleX 1.2s ease forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleX { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
     </style>
 </head>
 <body>
 
+    <canvas id="star-canvas"></canvas>
+
     <audio id="logo-sound" preload="auto">
         <source src="https://e-nafahat.github.io/e/leader/lindo.mp3" type="audio/mpeg">
     </audio>
 
     <div id="cinema-intro">
+        <div class="moon-container">
+            <div class="crescent-moon"></div>
+        </div>
+
         <div class="decoration-string">
             <div class="string-arc">
                 <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
@@ -175,21 +288,30 @@
         <div class="lanterns-lux-container">
             <div class="lantern-wire" style="animation-delay: 0s;">
                 <div class="wire"></div>
-                <div class="lantern-head"></div>
-                <div class="lantern-body-lux"><div class="lantern-light"></div></div>
-                <div class="lantern-base"></div>
+                <div class="royal-lantern">
+                    <div class="lantern-cap"></div>
+                    <div class="lantern-roof"></div>
+                    <div class="lantern-glass"><div class="lantern-flame"></div></div>
+                    <div class="lantern-base"></div>
+                </div>
             </div>
-            <div class="lantern-wire" style="animation-delay: -1.5s;">
-                <div class="wire" style="height: 60px;"></div>
-                <div class="lantern-head"></div>
-                <div class="lantern-body-lux"><div class="lantern-light"></div></div>
-                <div class="lantern-base"></div>
+            <div class="lantern-wire" style="animation-delay: -2.5s;">
+                <div class="wire" style="height: 75px;"></div>
+                <div class="royal-lantern">
+                    <div class="lantern-cap"></div>
+                    <div class="lantern-roof"></div>
+                    <div class="lantern-glass"><div class="lantern-flame"></div></div>
+                    <div class="lantern-base"></div>
+                </div>
             </div>
-            <div class="lantern-wire" style="animation-delay: -0.8s;">
-                <div class="wire"></div>
-                <div class="lantern-head"></div>
-                <div class="lantern-body-lux"><div class="lantern-light"></div></div>
-                <div class="lantern-base"></div>
+            <div class="lantern-wire" style="animation-delay: -1.2s;">
+                <div class="wire" style="height: 55px;"></div>
+                <div class="royal-lantern">
+                    <div class="lantern-cap"></div>
+                    <div class="lantern-roof"></div>
+                    <div class="lantern-glass"><div class="lantern-flame"></div></div>
+                    <div class="lantern-base"></div>
+                </div>
             </div>
         </div>
 
@@ -208,30 +330,131 @@
             </p>
             <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.5s;">دخول</button>
         </div>
+
+        <div class="imam-malik-quote">
+     قال الإمام مالك رحمه الله - لا يصلح آخر هذه الأمة إلا ما أصلح أولها
+        </div>
     </div>
 
     <script>
+        const canvas = document.getElementById('star-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let meteors = [];
+
+        function initCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            ctx.scale(dpr, dpr);
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            
+            stars = [];
+            for(let i=0; i<180; i++) {
+                stars.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    size: Math.random() * 1.2 + 0.3,
+                    opacity: Math.random(),
+                    blink: 0.005 + Math.random() * 0.01,
+                    speed: 0.04 + Math.random() * 0.08
+                });
+            }
+            
+            for(let i=0; i<5; i++) {
+                setTimeout(createMeteor, i * 800); 
+            }
+        }
+
+        function createMeteor() {
+            meteors.push({
+                x: Math.random() * window.innerWidth * 1.2,
+                y: Math.random() * window.innerHeight * -0.4,
+                len: 120 + Math.random() * 180,
+                speed: 3 + Math.random() * 5,
+                opacity: 0.8,
+                thickness: 1.2 + Math.random() * 1
+            });
+        }
+
+        function draw() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            
+            const grad = ctx.createRadialGradient(window.innerWidth/2, window.innerHeight/2, 0, window.innerWidth/2, window.innerHeight/2, window.innerWidth);
+            grad.addColorStop(0, '#001220');
+            grad.addColorStop(1, '#000');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+            stars.forEach(s => {
+                s.opacity += s.blink;
+                if(s.opacity > 1 || s.opacity < 0.2) s.blink *= -1;
+                s.x += s.speed;
+                if(s.x > window.innerWidth) s.x = 0;
+
+                ctx.beginPath();
+                const starGrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size);
+                starGrad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
+                starGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = starGrad;
+                ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            meteors.forEach((m, index) => {
+                ctx.save();
+                ctx.globalAlpha = m.opacity;
+                
+                const meteorGrad = ctx.createLinearGradient(m.x, m.y, m.x - m.len, m.y + m.len);
+                meteorGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)'); 
+                meteorGrad.addColorStop(0.2, 'rgba(212, 175, 55, 0.5)'); 
+                meteorGrad.addColorStop(1, 'rgba(212, 175, 55, 0)'); 
+                
+                ctx.strokeStyle = meteorGrad;
+                ctx.lineWidth = m.thickness;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(m.x, m.y);
+                ctx.lineTo(m.x - m.len, m.y + m.len);
+                ctx.stroke();
+                
+                m.x -= m.speed;
+                m.y += m.speed;
+                m.opacity -= 0.006;
+
+                if(m.opacity <= 0 || m.y > window.innerHeight + m.len) {
+                    meteors.splice(index, 1);
+                }
+                ctx.restore();
+            });
+
+            if(Math.random() < 0.012) createMeteor();
+
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        draw();
+
         (function() {
             const startBtn = document.getElementById('start-btn');
             const logoAudio = document.getElementById('logo-sound');
 
             startBtn.addEventListener('click', function() {
                 window.parent.postMessage('PLAY_INTRO_AUDIO', '*');
-
                 if(logoAudio) {
                     logoAudio.play().catch(e => console.log("Audio blocked"));
                 }
-
                 setTimeout(() => {
                     window.parent.postMessage('START_SITE_NOW', '*');
                 }, 100);
-
-                this.style.opacity = '0';
                 document.getElementById('cinema-intro').style.opacity = '0';
-                
                 setTimeout(() => {
                     document.getElementById('cinema-intro').style.display = 'none';
-                }, 1200);
+                }, 1500);
             });
         })();
     </script>
