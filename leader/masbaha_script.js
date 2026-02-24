@@ -19,11 +19,8 @@ const firebaseConfig = {
 };
 
 // تهيئة Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const auth = firebase.auth();
 
 // متغيرات الحالة والحفظ المحلي
 let count = parseInt(localStorage.getItem('user_count') || 0);
@@ -49,23 +46,6 @@ const ranks = [
     { l: 100, n: "⭐ رتبة: المثابر الشاب", i: "⭐" },
     { l: 0, n: "✨ رتبة: الذاكر المبتدئ", i: "✨" }
 ];
-
-// منطق التحقق من حالة المستخدم لإظهار/إخفاء واجهة المحادثة
-auth.onAuthStateChanged((user) => {
-    const authUI = document.getElementById('user-authenticated-ui');
-    const guestUI = document.getElementById('user-guest-ui');
-    
-    if (user) {
-        if (authUI) authUI.style.display = 'block';
-        if (guestUI) guestUI.style.display = 'none';
-        if (user.displayName && document.getElementById('uName')) {
-            document.getElementById('uName').value = user.displayName;
-        }
-    } else {
-        if (authUI) authUI.style.display = 'none';
-        if (guestUI) guestUI.style.display = 'block';
-    }
-});
 
 function getRank(pts) { 
     return ranks.find(r => (pts || 0) >= r.l) || ranks[ranks.length-1]; 
@@ -99,12 +79,10 @@ function forceVibrationAccess() {
 
 let adminTimer;
 const rankEl = document.getElementById('current-rank');
-if (rankEl) {
-    rankEl.addEventListener('touchstart', () => adminTimer = setTimeout(checkAdmin, 3000));
-    rankEl.addEventListener('touchend', () => clearTimeout(adminTimer));
-    rankEl.addEventListener('mousedown', () => adminTimer = setTimeout(checkAdmin, 3000));
-    rankEl.addEventListener('mouseup', () => clearTimeout(adminTimer));
-}
+rankEl.addEventListener('touchstart', () => adminTimer = setTimeout(checkAdmin, 3000));
+rankEl.addEventListener('touchend', () => clearTimeout(adminTimer));
+rankEl.addEventListener('mousedown', () => adminTimer = setTimeout(checkAdmin, 3000));
+rankEl.addEventListener('mouseup', () => clearTimeout(adminTimer));
 
 function checkAdmin() {
     const pass = prompt("من فضلك أدخل رمز الوصول الإداري:");
@@ -120,8 +98,6 @@ function toggleModal(type, data = null) {
     const body = document.getElementById('modal-body');
     const title = document.getElementById('modal-title');
     
-    if (!modal || !body || !title) return;
-
     title.style.color = "var(--gold)";
 
     if(type === 'guide') {
@@ -175,25 +151,17 @@ function toggleModal(type, data = null) {
 }
 
 function closeAllModals() {
-    const modal = document.getElementById('appModal');
-    if (modal) modal.style.display = 'none';
+    document.getElementById('appModal').style.display = 'none';
     document.body.classList.remove('modal-open');
 }
 
 function updateUI() {
-    const counter = document.getElementById('counter');
-    const sessionDisp = document.getElementById('session-display');
-    const ring = document.getElementById('target-ring');
-    const rankEl = document.getElementById('current-rank');
-    const progFill = document.getElementById('progress-fill');
-    const rankPerc = document.getElementById('rank-percent');
-
-    if (counter) counter.innerText = count;
-    if (sessionDisp) sessionDisp.innerText = `هدف: ${sessionTarget} / ${sessionCurrent}`;
-    if (ring) ring.style.strokeDashoffset = 440 - (Math.min(sessionCurrent / sessionTarget, 1) * 440);
+    document.getElementById('counter').innerText = count;
+    document.getElementById('session-display').innerText = `هدف: ${sessionTarget} / ${sessionCurrent}`;
+    document.getElementById('target-ring').style.strokeDashoffset = 440 - (Math.min(sessionCurrent / sessionTarget, 1) * 440);
     
     const r = getRank(totalIman);
-    if (rankEl) rankEl.innerText = r.n;
+    document.getElementById('current-rank').innerText = r.n;
 
     if (lastKnownRankName !== "" && r.n !== lastKnownRankName) {
         toggleModal('rankUp', r);
@@ -209,8 +177,8 @@ function updateUI() {
         } 
     }
     const prog = Math.min(((totalIman - currentBase) / (nextLimit - currentBase)) * 100, 100);
-    if (progFill) progFill.style.width = prog + "%";
-    if (rankPerc) rankPerc.innerText = Math.floor(prog) + "%";
+    document.getElementById('progress-fill').style.width = prog + "%";
+    document.getElementById('rank-percent').innerText = Math.floor(prog) + "%";
 }
 
 function triggerVibration(isComplete) {
@@ -225,11 +193,11 @@ function triggerVibration(isComplete) {
 function celebrateGoal() {
     const body = document.getElementById('main-body');
     const bead = document.getElementById('main-bead');
-    if (body) body.classList.add('celebrate-flash');
-    if (bead) bead.classList.add('bead-win-glow');
+    body.classList.add('celebrate-flash');
+    bead.classList.add('bead-win-glow');
     setTimeout(() => {
-        if (body) body.classList.remove('celebrate-flash');
-        if (bead) bead.classList.remove('bead-win-glow');
+        body.classList.remove('celebrate-flash');
+        bead.classList.remove('bead-win-glow');
     }, 800);
 }
 
@@ -255,11 +223,7 @@ function doCount() {
     db.ref('global_counter').transaction(c => (c || 0) + 1);
 }
 
-function setDhikr(t) { 
-    const dhikr = document.getElementById('active-dhikr');
-    if (dhikr) dhikr.innerText = t; 
-}
-
+function setDhikr(t) { document.getElementById('active-dhikr').innerText = t; }
 function setSessionTarget(t) { 
     sessionTarget = t; 
     sessionCurrent = 0; 
@@ -276,22 +240,14 @@ function executeReset() {
 }
 
 function sendMsg() {
-    const user = auth.currentUser;
-    const nEl = document.getElementById('uName');
-    const mEl = document.getElementById('uMsg');
-    
-    if (!user) return;
-    
-    const n = nEl.value, m = mEl.value;
+    const n = document.getElementById('uName').value, m = document.getElementById('uMsg').value;
     if(n && m) { 
         db.ref('messages').push({ 
             username: n, 
             message: m, 
-            points: totalIman,
-            uid: user.uid,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+            points: totalIman 
         }); 
-        mEl.value = ''; 
+        document.getElementById('uMsg').value = ''; 
     }
 }
 
@@ -302,14 +258,11 @@ function deleteSingleMsg(key) {
 }
 
 db.ref('global_counter').on('value', snap => {
-    const globalDisp = document.getElementById('global-counter-display');
-    if (globalDisp) globalDisp.innerText = (snap.val() || 0).toLocaleString();
+    document.getElementById('global-counter-display').innerText = (snap.val() || 0).toLocaleString();
 });
 
 db.ref('messages').limitToLast(15).on('value', snap => {
-    const box = document.getElementById('chat-box'); 
-    if (!box) return;
-    box.innerHTML = '';
+    const box = document.getElementById('chat-box'); box.innerHTML = '';
     snap.forEach(child => {
         const d = child.val(); 
         const r = getRank(d.points);
