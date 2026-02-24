@@ -1,6 +1,6 @@
 // /leader/masbaha_script.js
 
-// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج)
+// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج AIzaSyDa4esEnLqI_qC8fXyB7lMvW_vV6o4zU)
 function _getSecureKey() {
     const _p1 = "AIzaSyDa4es";
     const _p2 = "EnLqI_qC8fXy";
@@ -23,6 +23,7 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
+const auth = firebase.auth();
 
 // متغيرات الحالة والحفظ المحلي
 let count = parseInt(localStorage.getItem('user_count') || 0);
@@ -49,23 +50,20 @@ const ranks = [
     { l: 0, n: "✨ رتبة: الذاكر المبتدئ", i: "✨" }
 ];
 
-// دالة مراقبة حالة تسجيل الدخول (إصلاح مشكلة صندوق الكتابة المغلق)
-firebase.auth().onAuthStateChanged((user) => {
+// منطق التحقق من حالة المستخدم لإظهار/إخفاء واجهة المحادثة
+auth.onAuthStateChanged((user) => {
     const authUI = document.getElementById('user-authenticated-ui');
     const guestUI = document.getElementById('user-guest-ui');
     
-    if (authUI && guestUI) {
-        if (user) {
-            authUI.style.display = 'block';
-            guestUI.style.display = 'none';
-            if(user.displayName) {
-                const nameInput = document.getElementById('uName');
-                if(nameInput) nameInput.value = user.displayName;
-            }
-        } else {
-            authUI.style.display = 'none';
-            guestUI.style.display = 'block';
+    if (user) {
+        if (authUI) authUI.style.display = 'block';
+        if (guestUI) guestUI.style.display = 'none';
+        if (user.displayName && document.getElementById('uName')) {
+            document.getElementById('uName').value = user.displayName;
         }
+    } else {
+        if (authUI) authUI.style.display = 'none';
+        if (guestUI) guestUI.style.display = 'block';
     }
 });
 
@@ -101,7 +99,7 @@ function forceVibrationAccess() {
 
 let adminTimer;
 const rankEl = document.getElementById('current-rank');
-if(rankEl) {
+if (rankEl) {
     rankEl.addEventListener('touchstart', () => adminTimer = setTimeout(checkAdmin, 3000));
     rankEl.addEventListener('touchend', () => clearTimeout(adminTimer));
     rankEl.addEventListener('mousedown', () => adminTimer = setTimeout(checkAdmin, 3000));
@@ -122,7 +120,7 @@ function toggleModal(type, data = null) {
     const body = document.getElementById('modal-body');
     const title = document.getElementById('modal-title');
     
-    if(!modal || !body || !title) return;
+    if (!modal || !body || !title) return;
 
     title.style.color = "var(--gold)";
 
@@ -178,24 +176,24 @@ function toggleModal(type, data = null) {
 
 function closeAllModals() {
     const modal = document.getElementById('appModal');
-    if(modal) modal.style.display = 'none';
+    if (modal) modal.style.display = 'none';
     document.body.classList.remove('modal-open');
 }
 
 function updateUI() {
-    const counterEl = document.getElementById('counter');
-    const sessionEl = document.getElementById('session-display');
-    const ringEl = document.getElementById('target-ring');
+    const counter = document.getElementById('counter');
+    const sessionDisp = document.getElementById('session-display');
+    const ring = document.getElementById('target-ring');
     const rankEl = document.getElementById('current-rank');
     const progFill = document.getElementById('progress-fill');
     const rankPerc = document.getElementById('rank-percent');
 
-    if(counterEl) counterEl.innerText = count;
-    if(sessionEl) sessionEl.innerText = `هدف: ${sessionTarget} / ${sessionCurrent}`;
-    if(ringEl) ringEl.style.strokeDashoffset = 440 - (Math.min(sessionCurrent / sessionTarget, 1) * 440);
+    if (counter) counter.innerText = count;
+    if (sessionDisp) sessionDisp.innerText = `هدف: ${sessionTarget} / ${sessionCurrent}`;
+    if (ring) ring.style.strokeDashoffset = 440 - (Math.min(sessionCurrent / sessionTarget, 1) * 440);
     
     const r = getRank(totalIman);
-    if(rankEl) rankEl.innerText = r.n;
+    if (rankEl) rankEl.innerText = r.n;
 
     if (lastKnownRankName !== "" && r.n !== lastKnownRankName) {
         toggleModal('rankUp', r);
@@ -211,8 +209,8 @@ function updateUI() {
         } 
     }
     const prog = Math.min(((totalIman - currentBase) / (nextLimit - currentBase)) * 100, 100);
-    if(progFill) progFill.style.width = prog + "%";
-    if(rankPerc) rankPerc.innerText = Math.floor(prog) + "%";
+    if (progFill) progFill.style.width = prog + "%";
+    if (rankPerc) rankPerc.innerText = Math.floor(prog) + "%";
 }
 
 function triggerVibration(isComplete) {
@@ -227,11 +225,11 @@ function triggerVibration(isComplete) {
 function celebrateGoal() {
     const body = document.getElementById('main-body');
     const bead = document.getElementById('main-bead');
-    if(body) body.classList.add('celebrate-flash');
-    if(bead) bead.classList.add('bead-win-glow');
+    if (body) body.classList.add('celebrate-flash');
+    if (bead) bead.classList.add('bead-win-glow');
     setTimeout(() => {
-        if(body) body.classList.remove('celebrate-flash');
-        if(bead) bead.classList.remove('bead-win-glow');
+        if (body) body.classList.remove('celebrate-flash');
+        if (bead) bead.classList.remove('bead-win-glow');
     }, 800);
 }
 
@@ -258,8 +256,8 @@ function doCount() {
 }
 
 function setDhikr(t) { 
-    const dhikrEl = document.getElementById('active-dhikr');
-    if(dhikrEl) dhikrEl.innerText = t; 
+    const dhikr = document.getElementById('active-dhikr');
+    if (dhikr) dhikr.innerText = t; 
 }
 
 function setSessionTarget(t) { 
@@ -278,24 +276,22 @@ function executeReset() {
 }
 
 function sendMsg() {
-    const user = firebase.auth().currentUser;
-    const nameInput = document.getElementById('uName');
-    const msgInput = document.getElementById('uMsg');
-
-    if(!user) return;
+    const user = auth.currentUser;
+    const nEl = document.getElementById('uName');
+    const mEl = document.getElementById('uMsg');
     
-    const n = nameInput.value.trim();
-    const m = msgInput.value.trim();
-
+    if (!user) return;
+    
+    const n = nEl.value, m = mEl.value;
     if(n && m) { 
         db.ref('messages').push({ 
-            name: n, 
+            username: n, 
             message: m, 
             points: totalIman,
             uid: user.uid,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         }); 
-        msgInput.value = ''; 
+        mEl.value = ''; 
     }
 }
 
@@ -306,13 +302,13 @@ function deleteSingleMsg(key) {
 }
 
 db.ref('global_counter').on('value', snap => {
-    const globalEl = document.getElementById('global-counter-display');
-    if(globalEl) globalEl.innerText = (snap.val() || 0).toLocaleString();
+    const globalDisp = document.getElementById('global-counter-display');
+    if (globalDisp) globalDisp.innerText = (snap.val() || 0).toLocaleString();
 });
 
 db.ref('messages').limitToLast(15).on('value', snap => {
     const box = document.getElementById('chat-box'); 
-    if(!box) return;
+    if (!box) return;
     box.innerHTML = '';
     snap.forEach(child => {
         const d = child.val(); 
@@ -321,7 +317,7 @@ db.ref('messages').limitToLast(15).on('value', snap => {
         box.innerHTML += `
             <div class="msg-card-3d">
                 <button class="del-msg-btn" style="${showDel}" onclick="deleteSingleMsg('${child.key}')">🗑️</button>
-                <div class="msg-user">${r.i} ${d.name || d.username}</div>
+                <div class="msg-user">${r.i} ${d.username}</div>
                 <div class="msg-text">${d.message}</div>
             </div>`;
     });
