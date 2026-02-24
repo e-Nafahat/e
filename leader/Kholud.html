@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>رحلة الخلود | د. حاتم عبد العظيم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* الألوان الملكية: كحلي #001f3f، زيتوني #3d4921، ذهبي #d4af37 */
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #001f3f;
+            overflow-x: hidden;
+        }
+
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            color: #d4af37; 
+            text-align: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* زر العودة في الأعلى - حل مشكلة الاختفاء */
+        .nav-back {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: #d4af37; 
+            color: #001f3f; 
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            z-index: 10000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-back:active { transform: scale(0.9); }
+
+        /* ضغط المسافات العلوية تماماً */
+        .logo-container {
+            padding: 10px 0 0 0; /* تقليل البادينج العلوي */
+            background: linear-gradient(to bottom, #00152b, transparent);
+        }
+        .logo-container img {
+            width: 80px; /* تصغير الشعار قليلاً لتقليل الارتفاع */
+            height: auto;
+        }
+
+        /* تقليل المسافة بين الشعار والعنوان */
+        .header {
+            margin-top: -5px; /* رفع العنوان للأعلى قليلاً ليقترب من الشعار */
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            margin: 0; /* إلغاء المارجن تماماً */
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .header p {
+            color: #ffffff;
+            opacity: 0.8;
+            font-size: 0.8rem;
+            margin: 2px 0 15px 0; /* مسافة بسيطة جداً تحت الوصف */
+        }
+
+        /* حاوية الفيديو */
+        .video-container {
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 0 15px 50px 15px;
+            box-sizing: border-box;
+        }
+
+        .video-item {
+            margin-bottom: 20px; 
+            background: #3d4921; 
+            border: 2px solid #d4af37; 
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; 
+            height: 0;
+            background: #000; 
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+        }
+
+        .video-title {
+            padding: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(212,175,55,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="goBackHome()" class="nav-back" aria-label="العودة للرئيسية">🏠</button>
+
+    <div class="logo-container">
+        <img src="../leader/LogoNafahat.png" alt="شعار نَفحات">
+    </div>
+
+    <div class="header">
+        <h1>رحلة الخلود</h1>
+        <p>الدكتور حاتم عبد العظيم | رمضان 2026</p>
+    </div>
+
+    <div class="video-container">
+
+        <div class="video-item">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/DFJKgZkN-Mg" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-title">الحلقة السادسة</div>
+        </div>
+
+        <div class="video-item">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/DFJKgZkN-Mg" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-title">الحلقة الخامسة</div>
+        </div>
+
+        <div class="video-item">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/nz-i3w8kz8Y" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-title">الحلقة الرابعة</div>
+        </div>
+
+        <div class="video-item">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/NbXzvDA2dGk" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-title">الحلقة الثالثة</div>
+        </div>
+
+        <div class="video-item">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/m2CdqNUOwBM" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-title">الحلقة الثانية</div>
+        </div>
+
+        <div class="video-item">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/Y4Vamywx7gU" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-title">الحلقة الأولى</div>
+        </div>
+
+    </div>
+
+    <script>
+        function goBackHome() {
+            try {
+                // إرسال رسالة الإغلاق للإطار الأب (index.html)
+                window.parent.postMessage('CLOSE_IFRAME', '*');
+                // العودة في السجل
+                window.history.back();
+            } catch (e) {
+                console.log("Navigation error", e);
+            }
+            // التوجه للرئيسية كحل نهائي لمنع التكرار
+            setTimeout(() => {
+                window.top.location.href = '../index.html';
+            }, 100);
+        }
+    </script>
+
+</body>
+</html>
