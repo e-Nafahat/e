@@ -41,6 +41,8 @@
             z-index: 1001;
             background: rgba(197, 160, 89, 0.1); 
             border-radius: 8px;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .menu-icon span {
@@ -69,6 +71,8 @@
             color: var(--gold);
             text-decoration: none;
             overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .user-auth-btn img {
             width: 100%;
@@ -114,6 +118,8 @@
             font-weight: 900;
             transform: translateY(45px); 
             pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .sub-title-eng {
@@ -126,6 +132,8 @@
             margin-top: 54px; 
             pointer-events: auto;
             text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .floating-logo-left {
@@ -141,6 +149,44 @@
 
         .showcase-slider {
             margin-top: 10px !important; 
+        }
+
+        /* --- تصميم بوابة رحلة الخلود (تم الإصلاح لمنع تحديد النص) --- */
+        .kholud-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #001f3f, #3d4921);
+            margin: 8px auto;
+            width: 95%;
+            padding: 3px 0px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid #d4af37;
+            position: relative;
+            transition: 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            cursor: pointer;
+            overflow: hidden;
+            /* منع ظهور جوجل وتحديد النص */
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        .kholud-entrance:active { transform: scale(0.97); }
+        .kholud-info { flex-grow: 1; text-align: right; pointer-events: none; }
+        .kholud-title-ar { color: #d4af37; font-size: 1rem; font-weight: 900; margin: 0; }
+        .kholud-title-en { color: rgba(255,255,255,0.6); font-size: 0.65rem; font-weight: 700; display: block; }
+        .kholud-desc { color: #ffffff; font-size: 0.65rem; margin: 4px 0 0 0; opacity: 0.9; }
+        
+        /* تنسيق الفانوس الجديد داخل الزر */
+        .kholud-visual { 
+            width: 70px;
+            height: auto;
+            margin-right: 5px;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+            pointer-events: none;
+            user-select: none;
         }
 
         /* --- تصميم بوابة المكتبة المطور 3D --- */
@@ -160,6 +206,8 @@
             overflow: hidden;
             transition: transform 0.3s ease;
             cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .library-entrance:active { transform: scale(0.98); }
@@ -224,6 +272,8 @@
             position: relative;
             transition: 0.3s ease;
             cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .live-stream-box:active { transform: scale(0.97); }
@@ -254,6 +304,8 @@
             transition: 0.3s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .tasmee-entrance:active { transform: scale(0.97); }
         .tasmee-info { flex-grow: 1; }
@@ -279,6 +331,8 @@
             transition: 0.3s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .ejaza-entrance:active { transform: scale(0.97); }
         .ejaza-info { flex-grow: 1; }
@@ -341,6 +395,15 @@
             <div class="slider-track" id="sliderTrack"><span class="slider-item">جاري تحميل النفحات...</span></div>
         </div>
         <div class="slider-controls"><button id="toggleSlider">⏸</button></div>
+    </div>
+
+    <div onclick="location.href='Kholud.html'" class="kholud-entrance">
+        <img src="https://i.postimg.cc/XYnKDrQM/fanos1.gif" class="kholud-visual" alt="فانوس">
+        <div class="kholud-info">
+            <h3 class="kholud-title-ar">رِحْلَةُ الْخُلُودِ</h3>
+            <span class="kholud-title-en">JOURNEY TO ETERNITY</span>
+            <p class="kholud-desc">دروس إيمانية رمضانية مع فضيلة الدكتور حاتم عبد العظيم.</p>
+        </div>
     </div>
 
     <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'more'}, '*')" class="more-trigger">
@@ -464,6 +527,8 @@
             box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
             transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.15);
+            user-select: none;
+            -webkit-user-select: none;
         " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(197, 160, 89, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(197, 160, 89, 0.3)';">
             <span style="font-size: 1.3rem;">✉️</span>
             راسل إدارة نفحات (مقترحات وشكاوى)
@@ -491,7 +556,6 @@
             } 
         }
         
-        // مراجعة المنطق: تحديث حالة أيقونة الحساب بشكل ديناميكي
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const currentUser = localStorage.getItem('currentUser');
@@ -500,7 +564,6 @@
             if(isLoggedIn === 'true' && currentUser) {
                 const user = JSON.parse(currentUser);
                 authBtn.href = '../Account/profile.html';
-                // إذا كان المستخدم يملك صورة (من جوجل مثلاً) تظهر في الأيقونة
                 if (user.picture) {
                     authBtn.innerHTML = `<img src="${user.picture}" alt="User">`;
                 } else {
