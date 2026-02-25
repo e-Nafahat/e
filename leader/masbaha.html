@@ -8,10 +8,47 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="masbaha_style.css">
+    <style>
+        /* إضافة تنسيق زر العودة الصغير (x) المتفق عليه */
+        .back-home-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(139, 0, 0, 0.8);
+            color: white;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .back-home-btn:hover {
+            background: var(--maroon);
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body id="main-body" onmousedown="forceVibrationAccess()" ontouchstart="forceVibrationAccess()">
 
-    <div id="notification-container" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 400px; pointer-events: none;"></div>
+    <script>
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            setTimeout(() => {
+                window.top.location.href = '../index.html';
+            }, 100);
+        }
+    </script>
+
+    <button class="back-home-btn" onclick="goBackHome()">✕</button>
 
     <button class="info-btn-3d" onclick="toggleModal('guide')">❓ الإرشادات</button>
     <div class="user-rank-3d" id="current-rank" oncontextmenu="return false;">الرتبة: ✨ ذاكر</div>
@@ -119,5 +156,17 @@
     </div>
 
     <script src="masbaha_script.js"></script>
+    
+    <script>
+        function shareTo(platform) {
+            const url = "https://e-nafahat.github.io/e";
+            const text = "قال ﷺ: (أحب الكلام إلى الله أربع: سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر). شاركني ذكر الله عبر مسبحة نَفَحَاتٌ إِيمَانِيَّةٌ العالمية: ";
+            let shareLink = "";
+            if(platform === 'whatsapp') shareLink = `https://wa.me/?text=${encodeURIComponent(text + url)}`;
+            else if(platform === 'telegram') shareLink = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+            else if(platform === 'twitter') shareLink = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+            window.open(shareLink, '_blank');
+        }
+    </script>
 </body>
 </html>
