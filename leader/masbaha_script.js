@@ -1,6 +1,6 @@
 // /leader/masbaha_script.js
 
-// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج)
+// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج AIzaSyDa4esEnLqI_qC8fXyB7lMvW_vV6o4zU)
 function _getSecureKey() {
     const _p1 = "AIzaSyDa4es";
     const _p2 = "EnLqI_qC8fXy";
@@ -49,71 +49,6 @@ const ranks = [
 
 function getRank(pts) { 
     return ranks.find(r => (pts || 0) >= r.l) || ranks[ranks.length-1]; 
-}
-
-/**
- * دالة الإشعار المستقلة (Smart Notification)
- * تم تطويرها لتعمل حتى لو لم تكن الحاوية موجودة في ملف HTML
- */
-function showNafahatNotify(msg) {
-    let container = document.getElementById('notification-container');
-    
-    // إذا لم توجد الحاوية، نقوم بإنشائها فوراً وإضافتها للـ Body
-    if(!container) {
-        container = document.createElement('div');
-        container.id = 'notification-container';
-        container.style.cssText = `
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            width: 90%;
-            max-width: 400px;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        `;
-        document.body.appendChild(container);
-    }
-
-    const toast = document.createElement('div');
-    toast.className = 'nafahat-toast';
-    // التأكد من تطبيق التنسيق الجمالي برمجياً لضمان الظهور
-    toast.style.cssText = `
-        background: rgba(184, 134, 11, 0.95);
-        color: white;
-        padding: 12px 25px;
-        border-radius: 15px;
-        margin-bottom: 10px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        border: 1px solid #f4d03f;
-        text-align: center;
-        font-weight: bold;
-        font-family: 'Cairo', sans-serif;
-        direction: rtl;
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        pointer-events: auto;
-    `;
-    toast.innerText = msg;
-    
-    container.appendChild(toast);
-
-    // تفعيل حركة الظهور
-    setTimeout(() => {
-        toast.style.opacity = "1";
-        toast.style.transform = "translateY(0)";
-    }, 10);
-
-    // إزالة الإشعار بعد 4 ثوانٍ
-    setTimeout(() => { 
-        toast.style.opacity = "0";
-        toast.style.transform = "translateY(-20px)";
-        setTimeout(() => { if(toast.parentNode) toast.remove(); }, 500);
-    }, 4000);
 }
 
 function shareTo(platform) {
@@ -193,8 +128,8 @@ function toggleModal(type, data = null) {
             <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px;">
                 <p style="font-size:0.8rem; margin-bottom:10px;">تعديل العداد العالمي:</p>
                 <input type="number" id="manualGlobal" style="width:100%; background:#222; border:1px solid var(--gold); color:white; padding:10px; border-radius:8px;">
-                <button class="admin-panel-btn" onclick="db.ref('global_counter').set(parseInt(document.getElementById('manualGlobal').value)); showNafahatNotify('تم تحديث العداد بنجاح');">تحديث العداد</button>
-                <button class="admin-panel-btn" style="background:#800000; margin-top:20px;" onclick="if(confirm('مسح كل الرسائل؟')) { db.ref('messages').remove(); showNafahatNotify('تم مسح جميع الرسائل'); }">مسح كل الرسائل</button>
+                <button class="admin-panel-btn" onclick="db.ref('global_counter').set(parseInt(document.getElementById('manualGlobal').value)); alert('تم التحديث');">تحديث العداد</button>
+                <button class="admin-panel-btn" style="background:#800000; margin-top:20px;" onclick="if(confirm('مسح كل الرسائل؟')) { db.ref('messages').remove(); alert('تم المسح'); }">مسح كل الرسائل</button>
             </div>
         `;
     } else if(type === 'confirmReset') {
@@ -302,11 +237,10 @@ function executeReset() {
     count = 0; sessionCurrent = 0;
     localStorage.setItem('user_count', count);
     updateUI(); closeAllModals();
-    showNafahatNotify('تم تصفير العداد بنجاح');
 }
 
 /**
- * دالة إرسال الرسالة المحدثة بنظام الإشعارات الشيك
+ * دالة إرسال الرسالة المحدثة لضمان التوافق مع قواعد Firebase
  */
 function sendMsg() {
     const n = document.getElementById('uName').value;
@@ -316,11 +250,13 @@ function sendMsg() {
     const lastPostDate = localStorage.getItem('last_post_date');
 
     if (n && m) {
+        // التحقق من تاريخ المشاركة (يومية)
         if (!isAdminActive && lastPostDate === today) {
-            showNafahatNotify("تقبل الله منك، شاركت بذكر اليوم. موعدنا غداً إن شاء الله ✨");
+            alert("تقبل الله منك يا مبارك، لقد شاركت بذكر اليوم. يمكنك إضافة ذكر جديد غداً إن شاء الله.");
             return;
         }
 
+        // استخدام مرجع فريد لضمان قبول الكتابة في Firebase Rules الجديدة
         const messagesRef = db.ref('messages');
         const newMessageRef = messagesRef.push();
         
@@ -332,32 +268,28 @@ function sendMsg() {
         }).then(() => {
             localStorage.setItem('last_post_date', today);
             document.getElementById('uMsg').value = ''; 
-            showNafahatNotify("تمت إضافة ذكرك في ملتقى الذاكرين بنجاح 🎉");
+            alert("تمت إضافة ذكرك في ملتقى الذاكرين بنجاح.");
         }).catch((error) => {
             console.error("Firebase Error Details:", error);
-            showNafahatNotify("عذراً، تعذر الإرسال. تأكد من الإنترنت ⚠️");
+            alert("عذراً، حدث خطأ أثناء الإرسال. تأكد من اتصالك بالإنترنت.");
         });
     } else {
-        showNafahatNotify("يرجى كتابة الاسم والذكر أولاً ✍️");
+        alert("يرجى كتابة الاسم والذكر أولاً.");
     }
 }
 
 function deleteSingleMsg(key) { 
     if(confirm("هل تريد حذف هذه الرسالة؟")) { 
         db.ref('messages').child(key).remove(); 
-        showNafahatNotify('تم حذف الرسالة بنجاح');
     } 
 }
 
 db.ref('global_counter').on('value', snap => {
-    const display = document.getElementById('global-counter-display');
-    if(display) display.innerText = (snap.val() || 0).toLocaleString();
+    document.getElementById('global-counter-display').innerText = (snap.val() || 0).toLocaleString();
 });
 
 db.ref('messages').limitToLast(15).on('value', snap => {
-    const box = document.getElementById('chat-box'); 
-    if(!box) return;
-    box.innerHTML = '';
+    const box = document.getElementById('chat-box'); box.innerHTML = '';
     snap.forEach(child => {
         const d = child.val(); 
         const r = getRank(d.points);
@@ -372,5 +304,4 @@ db.ref('messages').limitToLast(15).on('value', snap => {
     box.scrollTop = box.scrollHeight;
 });
 
-// التشغيل الأولي للواجهة
 updateUI();
