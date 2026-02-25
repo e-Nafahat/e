@@ -240,37 +240,37 @@ function executeReset() {
 }
 
 /**
- * دالة إرسال الرسالة المحدثة - ملتقى الذاكرين
- * تتضمن التحقق من تاريخ اليوم للسماح بالمشاركة مرة واحدة فقط يومياً للزوار
+ * دالة إرسال الرسالة المحدثة لضمان التوافق مع قواعد Firebase
  */
 function sendMsg() {
     const n = document.getElementById('uName').value;
     const m = document.getElementById('uMsg').value;
     
-    // الحصول على تاريخ اليوم الحالي بصيغة نصية (YYYY-MM-DD)
     const today = new Date().toISOString().split('T')[0];
     const lastPostDate = localStorage.getItem('last_post_date');
 
     if (n && m) {
-        // التحقق من تاريخ المشاركة (إلا إذا كان الأدمن مفعلاً فلا قيود)
+        // التحقق من تاريخ المشاركة (يومية)
         if (!isAdminActive && lastPostDate === today) {
             alert("تقبل الله منك يا مبارك، لقد شاركت بذكر اليوم. يمكنك إضافة ذكر جديد غداً إن شاء الله.");
             return;
         }
 
-        // إرسال البيانات إلى Firebase
-        db.ref('messages').push({ 
+        // استخدام مرجع فريد لضمان قبول الكتابة في Firebase Rules الجديدة
+        const messagesRef = db.ref('messages');
+        const newMessageRef = messagesRef.push();
+        
+        newMessageRef.set({ 
             username: n, 
             message: m, 
             points: totalIman,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         }).then(() => {
-            // حفظ تاريخ اليوم في المتصفح بعد نجاح الإرسال
             localStorage.setItem('last_post_date', today);
             document.getElementById('uMsg').value = ''; 
             alert("تمت إضافة ذكرك في ملتقى الذاكرين بنجاح.");
         }).catch((error) => {
-            console.error("Error sending message:", error);
+            console.error("Firebase Error Details:", error);
             alert("عذراً، حدث خطأ أثناء الإرسال. تأكد من اتصالك بالإنترنت.");
         });
     } else {
