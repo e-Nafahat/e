@@ -11,6 +11,8 @@
 </head>
 <body id="main-body" onmousedown="forceVibrationAccess()" ontouchstart="forceVibrationAccess()">
 
+    <div id="notification-container" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 400px; pointer-events: none;"></div>
+
     <button class="info-btn-3d" onclick="toggleModal('guide')">❓ الإرشادات</button>
     <div class="user-rank-3d" id="current-rank" oncontextmenu="return false;">الرتبة: ✨ ذاكر</div>
 
