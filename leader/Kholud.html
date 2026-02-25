@@ -23,7 +23,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* زر العودة في الأعلى - حل مشكلة الاختفاء */
+        /* زر العودة المتفق عليه في الذاكرة */
         .nav-back {
             position: fixed;
             top: 15px;
@@ -46,23 +46,22 @@
         }
         .nav-back:active { transform: scale(0.9); }
 
-        /* ضغط المسافات العلوية تماماً */
+        /* تنسيق الهيدر */
         .logo-container {
-            padding: 10px 0 0 0; /* تقليل البادينج العلوي */
+            padding: 10px 0 0 0;
             background: linear-gradient(to bottom, #00152b, transparent);
         }
         .logo-container img {
-            width: 80px; /* تصغير الشعار قليلاً لتقليل الارتفاع */
+            width: 80px;
             height: auto;
         }
 
-        /* تقليل المسافة بين الشعار والعنوان */
         .header {
-            margin-top: -5px; /* رفع العنوان للأعلى قليلاً ليقترب من الشعار */
+            margin-top: -5px;
         }
         .header h1 {
             font-size: 1.4rem;
-            margin: 0; /* إلغاء المارجن تماماً */
+            margin: 0;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
@@ -70,25 +69,20 @@
             color: #ffffff;
             opacity: 0.8;
             font-size: 0.8rem;
-            margin: 2px 0 15px 0; /* مسافة بسيطة جداً تحت الوصف */
+            margin: 2px 0 15px 0;
         }
 
-        /* حاوية الفيديو */
-        .video-container {
+        /* شاشة العرض الموحدة الثابتة */
+        .main-display {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #001f3f;
+            padding: 10px 15px;
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 0 15px 50px 15px;
             box-sizing: border-box;
-        }
-
-        .video-item {
-            margin-bottom: 20px; 
-            background: #3d4921; 
-            border: 2px solid #d4af37; 
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         }
 
         .video-wrapper {
@@ -96,6 +90,10 @@
             padding-bottom: 56.25%; 
             height: 0;
             background: #000; 
+            border: 2px solid #d4af37;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
         }
         .video-wrapper iframe {
             position: absolute;
@@ -103,14 +101,56 @@
             border: none;
         }
 
-        .video-title {
-            padding: 8px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: rgba(0,0,0,0.2);
-            border-top: 1px solid rgba(212,175,55,0.3);
+        /* قائمة الحلقات أسفل الشاشة */
+        .episodes-list {
+            width: 100%;
+            max-width: 550px;
+            margin: 20px auto;
+            padding: 0 15px 50px 15px;
+            box-sizing: border-box;
         }
+
+        .episode-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #3d4921;
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            transition: background 0.3s;
+        }
+
+        .episode-info {
+            text-align: right;
+            flex: 1;
+            padding-left: 10px;
+        }
+
+        .episode-name {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .play-btn {
+            background: #d4af37;
+            color: #001f3f;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: transform 0.2s;
+            white-space: nowrap;
+        }
+        .play-btn:active { transform: scale(0.95); }
+
     </style>
 </head>
 <body>
@@ -126,63 +166,80 @@
         <p>الدكتور حاتم عبد العظيم | رمضان 2026</p>
     </div>
 
-    <div class="video-container">
+    <div class="main-display" id="playerSection">
+        <div class="video-wrapper">
+            <iframe id="mainFrame" src="https://www.youtube.com/embed/FrpSFbLb5sI?start=57" allowfullscreen loading="lazy"></iframe>
+        </div>
+    </div>
 
-        <div class="video-item">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/DFJKgZkN-Mg" allowfullscreen loading="lazy"></iframe>
+    <div class="episodes-list">
+
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | البرزخ.. عالم خفي | حلقة 6</span>
             </div>
-            <div class="video-title">الحلقة السادسة</div>
+            <button class="play-btn" onclick="changeVideo('FrpSFbLb5sI', 57)">تشغيل</button>
         </div>
 
-        <div class="video-item">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/DFJKgZkN-Mg" allowfullscreen loading="lazy"></iframe>
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | القبر.. محطة نور في دار الظلمة | حلقة 5</span>
             </div>
-            <div class="video-title">الحلقة الخامسة</div>
+            <button class="play-btn" onclick="changeVideo('DFJKgZkN-Mg', 0)">تشغيل</button>
         </div>
 
-        <div class="video-item">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/nz-i3w8kz8Y" allowfullscreen loading="lazy"></iframe>
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | ماذا يحدث لروح المؤمن في رحلتها؟ | حلقة 4</span>
             </div>
-            <div class="video-title">الحلقة الرابعة</div>
+            <button class="play-btn" onclick="changeVideo('nz-i3w8kz8Y', 0)">تشغيل</button>
         </div>
 
-        <div class="video-item">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/NbXzvDA2dGk" allowfullscreen loading="lazy"></iframe>
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | الحقيقة التي لا يهرب منها أحد | حلقة 3</span>
             </div>
-            <div class="video-title">الحلقة الثالثة</div>
+            <button class="play-btn" onclick="changeVideo('NbXzvDA2dGk', 0)">تشغيل</button>
         </div>
 
-        <div class="video-item">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/m2CdqNUOwBM" allowfullscreen loading="lazy"></iframe>
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | لحظة الاحتضار.. كيف تبشر الملائكة المؤمن؟ | حلقة 2</span>
             </div>
-            <div class="video-title">الحلقة الثانية</div>
+            <button class="play-btn" onclick="changeVideo('m2CdqNUOwBM', 0)">تشغيل</button>
         </div>
 
-        <div class="video-item">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/Y4Vamywx7gU" allowfullscreen loading="lazy"></iframe>
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | إلى أين نمضي بعد النهاية؟ | حلقة 1</span>
             </div>
-            <div class="video-title">الحلقة الأولى</div>
+            <button class="play-btn" onclick="changeVideo('Y4Vamywx7gU', 0)">تشغيل</button>
         </div>
 
     </div>
 
     <script>
+        // وظيفة تغيير الفيديو في الشاشة الموحدة
+        function changeVideo(videoId, startTime) {
+            const iframe = document.getElementById('mainFrame');
+            // تحديث الرابط مع مراعاة وقت البدء والتشغيل التلقائي
+            iframe.src = `https://www.youtube.com/embed/${videoId}?start=${startTime}&autoplay=1`;
+            
+            // سحب الشاشة للأعلى لرؤية الفيديو بوضوح
+            window.scrollTo({
+                top: document.getElementById('playerSection').offsetTop - 10,
+                behavior: 'smooth'
+            });
+        }
+
+        // وظيفة العودة المتفق عليها في الذاكرة
         function goBackHome() {
             try {
-                // إرسال رسالة الإغلاق للإطار الأب (index.html)
                 window.parent.postMessage('CLOSE_IFRAME', '*');
-                // العودة في السجل
                 window.history.back();
             } catch (e) {
                 console.log("Navigation error", e);
             }
-            // التوجه للرئيسية كحل نهائي لمنع التكرار
             setTimeout(() => {
                 window.top.location.href = '../index.html';
             }, 100);
