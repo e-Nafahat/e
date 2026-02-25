@@ -19,7 +19,6 @@
     padding: 0; 
     box-sizing: border-box; 
     -webkit-tap-highlight-color: transparent; 
-    /* الإضافة هنا لحل مشكلة حدود الرقم والمربعات الزرقاء */
     user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -226,3 +225,29 @@ body.modal-open {
 
 .admin-panel-btn { background: #c0392b; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: bold; }
 .del-msg-btn { display: none; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #c0392b; border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; }
+
+/* --- نظام الإشعارات الذهبية الجديد (نفحات Toast) --- */
+.nafahat-toast {
+    background: rgba(184, 134, 11, 0.95); /* ذهبي داكن فخم */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.2);
+    border: 1px solid var(--gold-light);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    animation: toastIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards, toastOut 0.5s ease 3.5s forwards;
+    direction: rtl;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.8); }
+}
