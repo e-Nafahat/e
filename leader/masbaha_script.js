@@ -1,6 +1,6 @@
 // /leader/masbaha_script.js
 
-// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج AIzaSyDa4esEnLqI_qC8fXyB7lMvW_vV6o4zU)
+// دالة حماية المفتاح بتجزئة برمجية (تمنع اكتشاف GitHub للمفتاح المستخرج)
 function _getSecureKey() {
     const _p1 = "AIzaSyDa4es";
     const _p2 = "EnLqI_qC8fXy";
@@ -49,6 +49,20 @@ const ranks = [
 
 function getRank(pts) { 
     return ranks.find(r => (pts || 0) >= r.l) || ranks[ranks.length-1]; 
+}
+
+// دالة الإشعار الأنيقة الجديدة (تستخدم الحاوية في ملف HTML)
+function showNafahatNotify(msg) {
+    const container = document.getElementById('notification-container');
+    if(!container) return; 
+    const toast = document.createElement('div');
+    toast.className = 'nafahat-toast';
+    toast.innerText = msg;
+    container.appendChild(toast);
+    // إزالة الإشعار بعد انتهاء مدة العرض (4 ثوانٍ)
+    setTimeout(() => { 
+        if(toast.parentNode) toast.remove(); 
+    }, 4000);
 }
 
 function shareTo(platform) {
@@ -128,8 +142,8 @@ function toggleModal(type, data = null) {
             <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px;">
                 <p style="font-size:0.8rem; margin-bottom:10px;">تعديل العداد العالمي:</p>
                 <input type="number" id="manualGlobal" style="width:100%; background:#222; border:1px solid var(--gold); color:white; padding:10px; border-radius:8px;">
-                <button class="admin-panel-btn" onclick="db.ref('global_counter').set(parseInt(document.getElementById('manualGlobal').value)); alert('تم التحديث');">تحديث العداد</button>
-                <button class="admin-panel-btn" style="background:#800000; margin-top:20px;" onclick="if(confirm('مسح كل الرسائل؟')) { db.ref('messages').remove(); alert('تم المسح'); }">مسح كل الرسائل</button>
+                <button class="admin-panel-btn" onclick="db.ref('global_counter').set(parseInt(document.getElementById('manualGlobal').value)); showNafahatNotify('تم تحديث العداد بنجاح');">تحديث العداد</button>
+                <button class="admin-panel-btn" style="background:#800000; margin-top:20px;" onclick="if(confirm('مسح كل الرسائل؟')) { db.ref('messages').remove(); showNafahatNotify('تم مسح جميع الرسائل'); }">مسح كل الرسائل</button>
             </div>
         `;
     } else if(type === 'confirmReset') {
@@ -237,10 +251,11 @@ function executeReset() {
     count = 0; sessionCurrent = 0;
     localStorage.setItem('user_count', count);
     updateUI(); closeAllModals();
+    showNafahatNotify('تم تصفير العداد بنجاح');
 }
 
 /**
- * دالة إرسال الرسالة المحدثة لضمان التوافق مع قواعد Firebase
+ * دالة إرسال الرسالة المحدثة بنظام الإشعارات الشيك
  */
 function sendMsg() {
     const n = document.getElementById('uName').value;
@@ -250,13 +265,11 @@ function sendMsg() {
     const lastPostDate = localStorage.getItem('last_post_date');
 
     if (n && m) {
-        // التحقق من تاريخ المشاركة (يومية)
         if (!isAdminActive && lastPostDate === today) {
-            alert("تقبل الله منك يا مبارك، لقد شاركت بذكر اليوم. يمكنك إضافة ذكر جديد غداً إن شاء الله.");
+            showNafahatNotify("تقبل الله منك، شاركت بذكر اليوم. موعدنا غداً إن شاء الله ✨");
             return;
         }
 
-        // استخدام مرجع فريد لضمان قبول الكتابة في Firebase Rules الجديدة
         const messagesRef = db.ref('messages');
         const newMessageRef = messagesRef.push();
         
@@ -268,19 +281,20 @@ function sendMsg() {
         }).then(() => {
             localStorage.setItem('last_post_date', today);
             document.getElementById('uMsg').value = ''; 
-            alert("تمت إضافة ذكرك في ملتقى الذاكرين بنجاح.");
+            showNafahatNotify("تمت إضافة ذكرك في ملتقى الذاكرين بنجاح 🎉");
         }).catch((error) => {
             console.error("Firebase Error Details:", error);
-            alert("عذراً، حدث خطأ أثناء الإرسال. تأكد من اتصالك بالإنترنت.");
+            showNafahatNotify("عذراً، تعذر الإرسال. تأكد من الإنترنت ⚠️");
         });
     } else {
-        alert("يرجى كتابة الاسم والذكر أولاً.");
+        showNafahatNotify("يرجى كتابة الاسم والذكر أولاً ✍️");
     }
 }
 
 function deleteSingleMsg(key) { 
     if(confirm("هل تريد حذف هذه الرسالة؟")) { 
         db.ref('messages').child(key).remove(); 
+        showNafahatNotify('تم حذف الرسالة بنجاح');
     } 
 }
 
