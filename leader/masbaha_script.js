@@ -51,17 +51,68 @@ function getRank(pts) {
     return ranks.find(r => (pts || 0) >= r.l) || ranks[ranks.length-1]; 
 }
 
-// دالة الإشعار الأنيقة الجديدة (تستخدم الحاوية في ملف HTML)
+/**
+ * دالة الإشعار المستقلة (Smart Notification)
+ * تم تطويرها لتعمل حتى لو لم تكن الحاوية موجودة في ملف HTML
+ */
 function showNafahatNotify(msg) {
-    const container = document.getElementById('notification-container');
-    if(!container) return; 
+    let container = document.getElementById('notification-container');
+    
+    // إذا لم توجد الحاوية، نقوم بإنشائها فوراً وإضافتها للـ Body
+    if(!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        `;
+        document.body.appendChild(container);
+    }
+
     const toast = document.createElement('div');
     toast.className = 'nafahat-toast';
+    // التأكد من تطبيق التنسيق الجمالي برمجياً لضمان الظهور
+    toast.style.cssText = `
+        background: rgba(184, 134, 11, 0.95);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border: 1px solid #f4d03f;
+        text-align: center;
+        font-weight: bold;
+        font-family: 'Cairo', sans-serif;
+        direction: rtl;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        pointer-events: auto;
+    `;
     toast.innerText = msg;
+    
     container.appendChild(toast);
-    // إزالة الإشعار بعد انتهاء مدة العرض (4 ثوانٍ)
+
+    // تفعيل حركة الظهور
+    setTimeout(() => {
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0)";
+    }, 10);
+
+    // إزالة الإشعار بعد 4 ثوانٍ
     setTimeout(() => { 
-        if(toast.parentNode) toast.remove(); 
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-20px)";
+        setTimeout(() => { if(toast.parentNode) toast.remove(); }, 500);
     }, 4000);
 }
 
@@ -299,11 +350,14 @@ function deleteSingleMsg(key) {
 }
 
 db.ref('global_counter').on('value', snap => {
-    document.getElementById('global-counter-display').innerText = (snap.val() || 0).toLocaleString();
+    const display = document.getElementById('global-counter-display');
+    if(display) display.innerText = (snap.val() || 0).toLocaleString();
 });
 
 db.ref('messages').limitToLast(15).on('value', snap => {
-    const box = document.getElementById('chat-box'); box.innerHTML = '';
+    const box = document.getElementById('chat-box'); 
+    if(!box) return;
+    box.innerHTML = '';
     snap.forEach(child => {
         const d = child.val(); 
         const r = getRank(d.points);
@@ -318,4 +372,5 @@ db.ref('messages').limitToLast(15).on('value', snap => {
     box.scrollTop = box.scrollHeight;
 });
 
+// التشغيل الأولي للواجهة
 updateUI();
