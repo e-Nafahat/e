@@ -168,11 +168,18 @@
 
     <div class="main-display" id="playerSection">
         <div class="video-wrapper">
-            <iframe id="mainFrame" src="https://www.youtube.com/embed/FrpSFbLb5sI?start=57" allowfullscreen loading="lazy"></iframe>
+            <iframe id="mainFrame" src="https://www.youtube.com/embed/4S7yL85oq4w" allowfullscreen loading="lazy"></iframe>
         </div>
     </div>
 
     <div class="episodes-list">
+
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رحلة الخلود | الطريق إلى الدار الباقية.. شروط الفوز وأسباب النجاة | حلقة 7</span>
+            </div>
+            <button class="play-btn" onclick="changeVideo('4S7yL85oq4w', 0)">تشغيل</button>
+        </div>
 
         <div class="episode-card">
             <div class="episode-info">
@@ -222,10 +229,8 @@
         // وظيفة تغيير الفيديو في الشاشة الموحدة
         function changeVideo(videoId, startTime) {
             const iframe = document.getElementById('mainFrame');
-            // تحديث الرابط مع مراعاة وقت البدء والتشغيل التلقائي
             iframe.src = `https://www.youtube.com/embed/${videoId}?start=${startTime}&autoplay=1`;
             
-            // سحب الشاشة للأعلى لرؤية الفيديو بوضوح
             window.scrollTo({
                 top: document.getElementById('playerSection').offsetTop - 10,
                 behavior: 'smooth'
