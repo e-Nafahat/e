@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أَنَاشِيدُ البَرَاعِمِ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff7675; 
+            --accent-gold: #f1c40f;
+            --dark-space: #2d3436;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--primary-color);
+            font-family: 'Cairo', sans-serif;
+            background-image: radial-gradient(#fab1a0 15%, transparent 16%);
+            background-size: 30px 30px;
+        }
+
+        .top-nav {
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .btn-home {
+            width: 40px; height: 40px; background: var(--dark-space);
+            color: white; border-radius: 50%; border: 2px solid #fff;
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+
+        .page-title { color: white; font-size: 1.2rem; font-weight: 900; }
+
+        .cinema-screen-container {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--primary-color); padding: 10px 0;
+        }
+
+        .screen-frame {
+            width: 92%; max-width: 600px; margin: 0 auto;
+            background: #000; border: 8px solid var(--dark-space);
+            border-radius: 25px; overflow: hidden; position: relative;
+            padding-bottom: 56.25%; height: 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .screen-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        .playlist-container {
+            width: 92%; max-width: 600px; margin: 20px auto;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .video-item {
+            padding: 15px; border-radius: 20px;
+            display: flex; align-items: center; gap: 15px;
+            cursor: pointer; transition: 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-item:active { transform: scale(0.95); }
+
+        .color-1 { background-color: #55efc4; color: #2d3436; border-bottom: 5px solid #00b894; }
+        .color-2 { background-color: #81ecec; color: #2d3436; border-bottom: 5px solid #00cec9; }
+        .color-3 { background-color: #a29bfe; color: #2d3436; border-bottom: 5px solid #6c5ce7; }
+
+        .play-icon {
+            width: 40px; height: 40px; background: white;
+            border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .video-label { font-weight: 900; font-size: 0.95rem; }
+
+        .wisdom-bubble {
+            background: #fff; padding: 50px 20px 20px 20px;
+            border-radius: 25px; margin: 60px 0 10px 0;
+            border: 4px solid var(--accent-gold);
+            position: relative; text-align: center;
+        }
+
+        .wisdom-bubble img {
+            width: 100px;
+            position: absolute; top: -70px;
+            left: 50%;
+            transform: translateX(-50%); filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+        }
+
+        .wisdom-txt { font-size: 1rem; font-weight: 700; color: #34495e; line-height: 1.6; }
+
+        .footer-credits {
+            text-align: center;
+            color: white;
+            padding: 30px 20px;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="page-title">🎵 أَنَاشِيدُ البَرَاعِمِ</div>
+        <button class="btn-home" onclick="goBackHome()">🏠</button>
+    </div>
+
+    <div class="cinema-screen-container">
+        <div class="screen-frame">
+            <iframe id="videoPlayer" src="https://www.youtube.com/embed/TQ4L99coluY" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="playlist-container">
+        
+        <div class="wisdom-bubble">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"يَا أَحْبَابِي.. هَيَّا نُنْشِدْ لِدِينِنَا العَظِيمِ، دِينِ اليُسْرِ وَالجَمَالِ."</div>
+        </div>
+        <div class="video-item color-1" onclick="loadVideo('TQ4L99coluY')">
+            <div class="play-icon">🎵</div>
+            <span class="video-label">١. نَشِيدُ إِسْلَامُنَا</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #2ecc71;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"تَعَالَوْا نَتَعَرَّفْ عَلَى أَصْدِقَائِنَا الرَّائِعِينَ (عُمَرَ وَسَلْمَى وَمُهَنَّدٍ وَزَيْدٍ)."</div>
+        </div>
+        <div class="video-item color-2" onclick="loadVideo('3KiaHUUuniE')">
+            <div class="play-icon">🎵</div>
+            <span class="video-label">٢. نَشِيدُ بَنِينَ وَبَنَات</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #e67e22;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"مَا أَجْمَلَ أَنْ نَشْكُرَ اللَّهَ عَلَى نِعَمِهِ الكَثِيرَةِ.. رَدِّدُوا مَعِي (الحَمْدُ لَكَ)."</div>
+        </div>
+        <div class="video-item color-3" onclick="loadVideo('j3I-dO3BF_E')">
+            <div class="play-icon">🎵</div>
+            <span class="video-label">٣. نَشِيدُ الحَمْدُ لَكَ</span>
+        </div>
+
+    </div>
+
+    <div class="footer-credits">
+        🙏 شُكْرٌ خَاصٌّ لِمَوْقِعِ (بَنِينَ وَبَنَات - إِسْلَامُ وِيبْ)<br>
+        جَمِيعُ حُقُوقِ المُرْئِيَّاتِ مَحْفُوظَةٌ لَهُمْ.
+    </div>
+
+    <script>
+        function loadVideo(id) {
+            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function goBackHome() {
+            // الحل البرمجي المتفق عليه للعودة إلى صفحة البراعم
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '/Baraem/baraem.html';
+        }
+    </script>
+</body>
+</html>
