@@ -187,7 +187,7 @@
             user-select: none;
         }
 
-        /* --- تصميم زر المسابقة الرمضانية (الجديد) --- */
+        /* --- تصميم زر المسابقة الرمضانية --- */
         .quiz-entrance {
             display: flex;
             align-items: center;
@@ -223,6 +223,83 @@
         .quiz-tag { font-size: 0.55rem; background: var(--gold); color: #000; padding: 1px 6px; border-radius: 6px; font-weight: 900; display: inline-block; white-space: nowrap; }
         .quiz-desc { color: #e0e0e0; font-size: 0.56rem; margin-top: 1px; font-weight: 500; }
         .quiz-visual-img { width: 66px; height: auto; margin-right: -8px; z-index: 8; filter: drop-shadow(0 0 8px var(--gold)); }
+
+        /* --- تصميم زر بوابة البراعم (المطور والمميز) --- */
+        .baraem-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #00c6ff, #003366, #00c6ff);
+            background-size: 200% auto;
+            animation: rainbow-glow 4s linear infinite;
+            margin: 15px auto;
+            width: 95%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            border: 3px solid #ffffff;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 114, 255, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            overflow: visible; /* ليظهر البروز */
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        @keyframes rainbow-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .baraem-entrance:active { transform: scale(0.95) translateY(2px); }
+        .baraem-info { flex-grow: 1; z-index: 2; }
+        .baraem-title { 
+            color: #ffffff; 
+            font-size: 1.25rem; 
+            font-weight: 900; 
+            margin: 0; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-family: 'Cairo', sans-serif;
+        }
+        .baraem-desc { 
+            color: #ffffff; 
+            font-size: 0.55rem; 
+            margin-top: 3px; 
+            font-weight: 700; 
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .baraem-img-container {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin-right: -10px;
+            margin-top: -7px; /* رفع الصورة للأعلى قليلاً لتبرز */
+            margin-bottom: -15px;
+            z-index: 5;
+        }
+        .baraem-visual-img { 
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            animation: float-kid 3s ease-in-out infinite;
+        }
+        @keyframes float-kid {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+        /* تأثير النجوم المتساقطة داخل الزر */
+        .baraem-entrance::after {
+            content: '✨';
+            position: absolute;
+            left: 10%;
+            top: 20%;
+            font-size: 1rem;
+            animation: star-blink 2s infinite;
+            opacity: 0.6;
+        }
+        @keyframes star-blink { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
         /* --- تصميم بوابة المكتبة --- */
         .library-entrance {
@@ -449,6 +526,16 @@
                 <h3 class="quiz-title">اَلْمُسَابَقَةُ الرَّمَضَانِيَّةُ</h3>
             </div>
             <p class="quiz-desc">سؤال يومي سريع.. اختبر معلوماتك وانشر الفائدة مع أصحابك!</p>
+        </div>
+    </div>
+
+    <div onclick="location.href='../Baraem/baraem.html'" class="baraem-entrance">
+        <div class="baraem-info">
+            <h3 class="baraem-title">بَوَّابَةُ اَلْبَرَاعِمِ</h3>
+            <p class="baraem-desc">عالم مبهج من القصص والأنوار لصناع المستقبل.</p>
+        </div>
+        <div class="baraem-img-container">
+            <img src="https://i.postimg.cc/jSZsjy1n/CH3.png" class="baraem-visual-img" alt="براعم نفحات">
         </div>
     </div>
 
