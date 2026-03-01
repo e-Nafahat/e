@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مَعَ جَدِّي حَكِيمٍ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #27ae60; 
+            --accent-brown: #795548; 
+            --gold: #f1c40f;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--primary-color);
+            font-family: 'Cairo', sans-serif;
+            background-image: radial-gradient(#2ecc71 15%, transparent 16%);
+            background-size: 30px 30px;
+        }
+
+        .top-nav {
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .btn-home {
+            width: 40px; height: 40px; background: var(--accent-brown);
+            color: white; border-radius: 50%; border: 2px solid #fff;
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+
+        .page-title { color: white; font-size: 1.2rem; font-weight: 900; }
+
+        .grandfather-intro {
+            text-align: center;
+            padding: 20px 10px;
+            position: relative;
+        }
+
+        .grandfather-img {
+            width: 150px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
+            margin-bottom: 10px;
+        }
+
+        .welcome-msg {
+            background: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid var(--gold);
+            max-width: 80%;
+            margin: 0 auto;
+            font-weight: 700;
+            color: var(--accent-brown);
+            position: relative;
+        }
+
+        .welcome-msg::after {
+            content: '';
+            position: absolute;
+            top: -15px; left: 50%; transform: translateX(-50%);
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 15px solid #fff;
+        }
+
+        .video-section {
+            padding: 20px 10px;
+            display: flex; flex-direction: column; gap: 30px;
+            max-width: 600px; margin: 0 auto;
+        }
+
+        .wisdom-card {
+            background: #fff;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border-bottom: 6px solid var(--accent-brown);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; height: 0;
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; border: none;
+        }
+
+        .wisdom-label {
+            padding: 15px;
+            text-align: center;
+            font-weight: 900;
+            color: var(--accent-brown);
+            font-size: 1.1rem;
+            background: #f9f9f9;
+        }
+
+        .wisdom-note {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            color: #555;
+            text-align: center;
+            font-style: italic;
+            border-top: 1px inset #eee;
+        }
+
+        .academic-footer {
+            background: #ffffff;
+            margin: 30px 15px;
+            padding: 20px;
+            border-radius: 15px;
+            border-right: 5px solid var(--gold);
+            font-size: 0.85rem;
+            color: #2d3436;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .academic-footer hr { border: 0; border-top: 1px solid #eee; margin: 10px 0; }
+
+        .footer-credits {
+            text-align: center; color: white; padding: 20px;
+            font-size: 0.8rem; opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="page-title">👴 مَعَ جَدِّي حَكِيمٍ</div>
+        <button class="btn-home" onclick="goBackHome()">🏠</button>
+    </div>
+
+    <div class="grandfather-intro">
+        <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم" class="grandfather-img">
+        <div class="welcome-msg">
+            "مَرْحَباً بِكُمْ يَا أَبْنَائِي فِي مَجْلِسِ الخَيْرِ.. هَيَّا نُشَاهِدْ مَكَارِمَ الأَخْلَاقِ الَّتِي أَوْصَانَا بِهَا دِينُنَا الحَنِيفُ."
+        </div>
+    </div>
+
+    <div class="video-section">
+        
+        <div class="wisdom-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/WYKVmQNHLBM" allowfullscreen></iframe>
+            </div>
+            <div class="wisdom-label">🤝 التَّجَاوُزُ عَنِ المُعْسِرِ</div>
+            <div class="wisdom-note">"مَنْ يَسَّرَ عَلَى مُعْسِرٍ، يَسَّرَ اللَّهُ عَلَيْهِ فِي الدُّنْيَا وَالآخِرَةِ."</div>
+        </div>
+
+        <div class="wisdom-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/3ZgaFaou_zM" allowfullscreen></iframe>
+            </div>
+            <div class="wisdom-label">🦁 خُلُقُ الشَّجَاعَةِ</div>
+            <div class="wisdom-note">"الشَّجَاعَةُ هِيَ أَنْ تَقُولَ الحَقَّ وَتُواجِهَ الصِّعَابَ بِقَلْبٍ قَوِيٍّ."</div>
+        </div>
+
+        <div class="wisdom-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/COV0FHjpvmI" allowfullscreen></iframe>
+            </div>
+            <div class="wisdom-label">💰 فَضْلُ الصَّدَقَةِ</div>
+            <div class="wisdom-note">"مَا نَقَصَ مَالٌ مِنْ صَدَقَةٍ.. تَصَدَّقُوا وَلَوْ بِالقَلِيلِ."</div>
+        </div>
+
+        <div class="wisdom-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/33p3JMHzyzw" allowfullscreen></iframe>
+            </div>
+            <div class="wisdom-label">🏡 إِكْرَامُ الضَّيْفِ</div>
+            <div class="wisdom-note">"مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَاليَوْمِ الآخِرِ فَلْيُكْرِمْ ضَيْفَهُ."</div>
+        </div>
+
+        <div class="wisdom-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/Dw4YGIvYRWI" allowfullscreen></iframe>
+            </div>
+            <div class="wisdom-label">🆘 إِغَاثَةُ المَلْهُوفِ</div>
+            <div class="wisdom-note">"مُسَاعَدَةُ الآخَرِينَ عِنْدَ الحَاجَةِ هِيَ شِيمَةُ الأَبْطَالِ."</div>
+        </div>
+
+    </div>
+
+    <div class="academic-footer">
+        <strong>أُصُولٌ تَرْبَوِيَّةٌ مِنْ مَنْهَجِ النُّبُوَّةِ:</strong><hr>
+        نَحْرِصُ فِي هَذَا القِسْمِ عَلَى رَبْطِ الطِّفْلِ بِأَخْلَاقِ السَّلَفِ الصَّالِحِ، مُسْتَنِدِينَ إِلَى مَا صَحَّ عَنِ النَّبِيِّ ﷺ. قَالَ رَسُولُ اللَّهِ ﷺ: <strong>«إِنَّمَا بُعِثْتُ لِأُتَمِّمَ مَكَارِمَ الأَخْلَاقِ»</strong> [رَوَاهُ مَالِكٌ وَأَحْمَدُ]. وَقَدْ أَوْرَدَ البُخَارِيُّ فِي صَحِيحِهِ حَدِيثَ الرَّجُلِ الَّذِي كَانَ يُدَايِنُ النَّاسَ فَيَتَجَاوَزُ عَنْهُمْ، فَغَفَرَ اللَّهُ لَهُ.
+        <br><br>
+        <strong>المَصَادَرُ:</strong> صَحِيحُ البُخَارِيِّ، المُوَطَّأُ لِلإِمَامِ مَالِكٍ، وَإِنْتَاجَاتُ (بَنِينَ وَبَنَات).
+    </div>
+
+    <div class="footer-credits">
+        🙏 شُكْرٌ خَاصٌّ لِمَوْقِعِ (بَنِينَ وَبَنَات - إِسْلَامُ وِيبْ)<br>
+        جَمِيعُ حُقُوقِ المُرْئِيَّاتِ مَحْفُوظَةٌ لَهُمْ.
+    </div>
+
+    <script>
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '/Baraem/baraem.html';
+        }
+    </script>
+</body>
+</html>
