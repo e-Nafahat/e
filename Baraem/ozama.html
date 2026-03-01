@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سِينِمَا عُظَمَاءِ الإِسْلَامِ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9b59b6; 
+            --accent-gold: #f1c40f;
+            --dark-blue: #2c3e50;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--primary);
+            font-family: 'Cairo', sans-serif;
+            background-image: radial-gradient(#8e44ad 15%, transparent 16%);
+            background-size: 30px 30px;
+        }
+
+        .top-nav {
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.15);
+        }
+
+        .btn-home {
+            width: 40px; height: 40px; background: var(--dark-blue);
+            color: white; border-radius: 50%; border: 2px solid #fff;
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+
+        .page-title { color: white; font-size: 1.2rem; font-weight: 900; }
+
+        .cinema-screen-container {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--primary); padding: 10px 0;
+        }
+
+        .screen-frame {
+            width: 92%; max-width: 600px; margin: 0 auto;
+            background: #000; border: 8px solid var(--dark-blue);
+            border-radius: 25px; overflow: hidden; position: relative;
+            padding-bottom: 56.25%; height: 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .screen-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        .playlist-container {
+            width: 92%; max-width: 600px; margin: 20px auto;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .video-item {
+            padding: 15px; border-radius: 20px;
+            display: flex; align-items: center; gap: 15px;
+            cursor: pointer; transition: 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .video-item:active { transform: scale(0.95); }
+
+        .color-1 { background-color: #ff7675; color: white; border-bottom: 5px solid #d63031; }
+        .color-2 { background-color: #55efc4; color: #2d3436; border-bottom: 5px solid #00b894; }
+        .color-3 { background-color: #74b9ff; color: white; border-bottom: 5px solid #0984e3; }
+        .color-4 { background-color: #ffeaa7; color: #2d3436; border-bottom: 5px solid #fdcb6e; }
+        .color-5 { background-color: #fab1a0; color: #2d3436; border-bottom: 5px solid #e17055; }
+
+        .play-btn {
+            width: 45px; height: 45px; background: var(--white);
+            border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 1.2rem; color: var(--dark-blue);
+            animation: pulse 2s infinite; flex-shrink: 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        .video-title { font-weight: 900; font-size: 1rem; }
+
+        .wisdom-card {
+            background: #fff9e6; padding: 35px 20px 20px 20px;
+            border-radius: 25px; margin: 40px 0 5px 0;
+            border: 4px dashed var(--accent-gold);
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; position: relative;
+        }
+
+        .wisdom-card img {
+            width: 85px; height: auto; margin-top: -75px;
+            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.2)); z-index: 2;
+        }
+
+        .wisdom-text { font-size: 0.95rem; font-weight: 700; line-height: 1.6; color: #2c3e50; }
+
+        .footer-credits { text-align: center; color: white; padding: 30px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="page-title">🌟 عُظَمَاءُ الإِسْلَامِ</div>
+        <button class="btn-home" onclick="goBackHome()">🏠</button>
+    </div>
+
+    <div class="cinema-screen-container">
+        <div class="screen-frame">
+            <iframe id="mainPlayer" src="https://www.youtube.com/embed/oPVV6pJPsug" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="playlist-container">
+        
+        <div class="wisdom-card">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"مَنْ مِنَّا لَمْ يَحْلُمْ بِالطَّيَرَانِ مِثْلَ العَصَافِيرِ؟ عَبَّاس بْن فِرْنَاس كَانَ الشُّجَاعَ الَّذِي حَاوَلَ ذَلِكَ أَوَّلَ مَرَّةٍ!"</div>
+        </div>
+        <div class="video-item color-1" onclick="changeVideo('oPVV6pJPsug')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">١. عَبَّاس بْن فِرْنَاس | عَالِم الطَّيَرَان</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #e3f2fd; border-color: #2196f3;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"الصِّدِّيقُ الوَفِيُّ وَالرَّجُلُ الشُّجَاعُ.. تَعَالَوْا نَعْرِفْ قِصَّةَ أَبِي بَكْرٍ الصِّدِّيقِ رَضِيَ اللَّهُ عَنْهُ."</div>
+        </div>
+        <div class="video-item color-2" onclick="changeVideo('q7Fb39Hjgoc')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٢. أَبُو بَكْر الصِّدِّيق | خَيْرُ الصَّحَابَة</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #f1f8e9; border-color: #4caf50;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"كَيْفَ يَهْزِمُ رَجُلٌ وَاحِدٌ جَيْشًا كَبِيرًا بِذَكَائِهِ؟ إِنَّهُ البَطَلُ نَعِيمُ بْنُ مَسْعُودٍ."</div>
+        </div>
+        <div class="video-item color-3" onclick="changeVideo('jQOwDctRaho')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٣. نَعِيم بْن مَسْعُود | خُطَّةُ الذَّكَاء</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #fff3e0; border-color: #ff9800;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"أَبُو بَكْرٍ الرَّازِي، الطَّبِيبُ الذَّكِيُّ الَّذِي اسْتَخْدَمَ قِطَعَ اللَّحْمِ لِيَخْتَارَ مَكَانَ المُسْتَشْفَى!"</div>
+        </div>
+        <div class="video-item color-4" onclick="changeVideo('NBMDqrlTs60')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٤. أَبُو بَكْر الرَّازِي | طَبِيبُ العَرَب</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #ede7f6; border-color: #673ab7;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"البِيرُونِي.. العَالِمُ الَّذِي كَانَ يَعْرِفُ أَسْرَارَ الكَوَاكِبِ وَالنُّجُومِ وَالجَاذِبِيَّةِ."</div>
+        </div>
+        <div class="video-item color-5" onclick="changeVideo('Z5P23um5BYg')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٥. البِيرُونِي | عَالِمُ الفَلَك</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #e0f2f1; border-color: #009688;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"لُغَتُنَا العَرَبِيَّةُ جَمِيلَةٌ، وَالخَلِيل بْن أَحْمَد هُوَ مَنْ حَمَاهَا وَوَضَعَ لَهَا أَوَّلَ مُعْجَمٍ."</div>
+        </div>
+        <div class="video-item color-1" onclick="changeVideo('444jaDNkqb4')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٦. الخَلِيل بْن أَحْمَد | حَامِي اللُّغَة</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #fce4ec; border-color: #e91e63;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"الحَسَنُ البَصْرِيُّ، الإِمَامُ الطَّيِّبُ الَّذِي كَانَ كَلَامُهُ يَدْخُلُ القُلُوبَ مُبَاشَرَةً."</div>
+        </div>
+        <div class="video-item color-2" onclick="changeVideo('RdcJUrPOo64')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٧. الحَسَن البَصْرِي | عَالِمُ البَصْرَة</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #fffde7; border-color: #fbc02d;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"إِذَا أَرَدْتُمْ مَعْرِفَةَ التَّارِيخِ وَتَفْسِيرِ القُرْآنِ، فَعَلَيْكُمْ بِالإِمَامِ الطَّبَرِيِّ العَظِيمِ."</div>
+        </div>
+        <div class="video-item color-3" onclick="changeVideo('JEJ1rl_8_eA')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٨. الإِمَام الطَّبَرِي | شَيْخُ المُفَسِّرِين</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #efebe9; border-color: #795548;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"سُلْطَانُ العُلَمَاءِ الَّذِي لَمْ يَخَفْ إِلا مِنَ اللَّهِ.. قِصَّةُ شَجَاعَةِ العِزِّ بْنِ عَبْدِ السَّلَامِ."</div>
+        </div>
+        <div class="video-item color-4" onclick="changeVideo('exbWTz-g91k')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">٩. العِزّ بْن عَبْد السَّلَام | الشُّجَاع</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #e8eaf6; border-color: #3f51b5;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"سِيبَوَيْه.. مَنْ تَعَلَّمَ النَّحْوَ حَتَّى صَارَ أَمِيرَهُ، وَأَلَّفَ كِتَابًا سَمَّاهُ 'الكِتَاب'."</div>
+        </div>
+        <div class="video-item color-5" onclick="changeVideo('ENSAATpywoU')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">١٠. سِيبَوَيْه | أَمِيرُ النَّحْو</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #f3e5f5; border-color: #9c27b0;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">"آخِرُ عُظَمَائِنَا اليَوْمَ هُوَ ابْنُ النَّفِيسِ، الَّذِي عَلَّمَ العَالَمَ كَيْفَ تَعْمَلُ الدَّوْرَةُ الدَّمَوِيَّةُ."</div>
+        </div>
+        <div class="video-item color-1" onclick="changeVideo('bGnf_RJTgxE')">
+            <div class="play-btn">▶</div>
+            <span class="video-title">١١. ابْن النَّفِيس | عَالِمُ الطِّبّ</span>
+        </div>
+
+    </div>
+
+    <div class="footer-credits">
+        🙏 شُكْرٌ خَاصٌّ لِمَوْقِعِ (بَنِينَ وَبَنَات - إِسْلَامُ وِيبْ)<br>
+        جَمِيعُ حُقُوقِ المُرْئِيَّاتِ مَحْفُوظَةٌ لَهُمْ.
+    </div>
+
+    <script>
+        function changeVideo(videoId) {
+            document.getElementById('mainPlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
