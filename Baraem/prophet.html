@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سِينِمَا السِّيرَةِ النَّبَوِيَّةِ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00b894;
+            --accent-yellow: #f1c40f;
+            --accent-orange: #ff7675;
+            --dark: #2d3436;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary);
+            font-family: 'Cairo', sans-serif;
+            background-image: radial-gradient(#00a383 15%, transparent 16%);
+            background-size: 25px 25px;
+            color: var(--dark);
+        }
+
+        .top-nav {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .btn-home {
+            width: 40px;
+            height: 40px;
+            background: var(--dark);
+            color: white;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .cinema-screen-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--primary);
+            padding: 10px 0;
+        }
+
+        .screen-frame {
+            width: 92%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #000;
+            border: 8px solid var(--dark);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+        .screen-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .playlist-container {
+            width: 92%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .video-item {
+            background: var(--white);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-bottom: 4px solid #dfe6e9;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .video-item:active { transform: scale(0.95); }
+
+        .video-icon {
+            background: var(--accent-orange);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* الإطار المنقط المطور (جدو حكيم بالداخل) */
+        .wisdom-card {
+            background: var(--accent-yellow);
+            padding: 12px;
+            border-radius: 20px;
+            margin: 10px 0;
+            border: 3px dashed var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+.wisdom-card img {
+    width: 80px;
+    height: auto;
+    flex-shrink: 0;
+    margin-top: -20px; /* هذه هي النسبة التي ترفعه للأعلى */
+}
+
+        .wisdom-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #2d3436;
+            text-align: right;
+        }
+
+        .footer-credits {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="page-title">🌟 سِيرَةُ نَبِيِّنَا ﷺ</div>
+        <button class="btn-home" onclick="goBackHome()">🏠</button>
+    </div>
+
+    <div class="cinema-screen-container">
+        <div class="screen-frame">
+            <iframe id="mainPlayer" src="https://www.youtube.com/embed/ku3rd2u4q3c" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="playlist-container">
+        
+        <div class="video-item" onclick="changeVideo('ku3rd2u4q3c')">
+            <div class="video-icon">🎬</div>
+            <span>١. نَسَبُ النَّبِيِّ ﷺ الشَّرِيفُ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('iXH3eihb52A')">
+            <div class="video-icon">🎬</div>
+            <span>٢. بَشَائِرُ المَوْلِدِ النَّبَوِيِّ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('Zb9IuZeZ0rE')">
+            <div class="video-icon">🎬</div>
+            <span>٣. طُفُولَةُ النَّبِيِّ ﷺ وَرَضَاعَتُهُ</span>
+        </div>
+
+        <div class="wisdom-card">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">
+                "يَا بَرَاعِمِي الصِّغَار.. هَلْ تَعْلَمُونَ أَنَّ النَّبِيِّ ﷺ كَانَ يُلَقَّبُ قَبْلَ النُّبُوَّةِ بِـ (الصَّادِقِ الأَمِينِ)؟ فَلْنَكُنْ مِثْلَهُ دَائِمًا!"
+            </div>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('aaakaEnKqKY')">
+            <div class="video-icon">🎬</div>
+            <span>٤. حَادِثَةُ شَقِّ الصَّدْرِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('zd0cEfaPsPo')">
+            <div class="video-icon">🎬</div>
+            <span>٥. شَبَابُ النَّبِيِّ ﷺ وَعَمَلُهُ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('Pv5scINb4MM')">
+            <div class="video-icon">🎬</div>
+            <span>٦. زَوَاجُهُ مِنْ خَدِيجَةَ رَضِيَ اللَّهُ عَنْهَا</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #a29bfe;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">
+                "عَنْ أَنَسٍ رَضِيَ اللَّهُ عَنْهُ قَالَ: كَانَ رَسُولُ اللَّهِ ﷺ أَحْسَنَ النَّاسِ خُلُقًا. (رَوَاهُ البُخَارِيُّ)"
+            </div>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('W620DfCFfrc')">
+            <div class="video-icon">🎬</div>
+            <span>٧. قِصَّةُ بِنَاءِ الكَعْبَةِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('tCzKpGQKjas')">
+            <div class="video-icon">🎬</div>
+            <span>٨. بِدَايَةُ نُزُولِ الوَحْيِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('qbvSyZPwGtA')">
+            <div class="video-icon">🎬</div>
+            <span>٩. الدَّعْوَةُ الجَهْرِيَّةُ لِلإِسْلَامِ</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #fab1a0;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">
+                "قَالَ النَّبِيُّ ﷺ: (إِنَّمَا بُعِثْتُ لِأُتَمِّمَ مَكَارِمَ الأَخْلَاقِ). فَلْنَتَحَلَّى بِأَخْلَاقِ الإِسْلَامِ الجَمِيلَةِ."
+            </div>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('O05DYHKRp64')">
+            <div class="video-icon">🎬</div>
+            <span>١٠. رِحْلَةُ الإِسْرَاءِ وَالمِعْرَاجِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('voOmdxLfV5U')">
+            <div class="video-icon">🎬</div>
+            <span>١١. الهِجْرَةُ إِلَى المَدِينَةِ المُنَوَّرَةِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('OIfHzMHklv4')">
+            <div class="video-icon">🎬</div>
+            <span>١٢. غَزْوَةُ بَدْرٍ الكُبْرَى</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #81ecec;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">
+                "كَانَ النَّبِيُّ ﷺ يُحِبُّ التَّفَاؤُلَ وَيَكْرَهُ التشاؤم، وَكَانَ دَائِمَ البِشْرِ وَالتَّبَسُّمِ فِي وُجُوهِ أَصْحَابِهِ."
+            </div>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('YWQ9y4CPCSM')">
+            <div class="video-icon">🎬</div>
+            <span>١٣. فَتْحُ مَكَّةَ المُكَرَّمَةِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('rTxsXQ2fFrk')">
+            <div class="video-icon">🎬</div>
+            <span>١٤. حَجَّةُ الوَدَاعِ</span>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('7_C66led4Yk')">
+            <div class="video-icon">🎬</div>
+            <span>١٥. وَفَاةُ النَّبِيِّ ﷺ</span>
+        </div>
+
+        <div class="wisdom-card" style="background: #ffeaa7;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-text">
+                "قَالَ ﷺ: (خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ، وَأَنَا خَيْرُكُمْ لِأَهْلِي). صَدَقَ رَسُولُ اللَّهِ ﷺ."
+            </div>
+        </div>
+
+        <div class="video-item" onclick="changeVideo('l2Bfz0oKZuU')">
+            <div class="video-icon">🎬</div>
+            <span>١٦. صِفَاتُ وَأَخْلَاقُ النَّبِيِّ ﷺ</span>
+        </div>
+
+    </div>
+
+    <div class="footer-credits">
+        🙏 شُكْرٌ خَاصٌّ لِمَوْقِعِ (بَنِينَ وَبَنَات - إِسْلَامُ وِيبْ)<br>
+        جَمِيعُ حُقُوقِ المُرْئِيَّاتِ مَحْفُوظَةٌ لَهُمْ.
+    </div>
+
+    <script>
+        function changeVideo(videoId) {
+            const player = document.getElementById('mainPlayer');
+            player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
