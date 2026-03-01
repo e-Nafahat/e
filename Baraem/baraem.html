@@ -1,1 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بَرَاعِمُ الإِيمَانِ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #00b894; 
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(#00a383 15%, transparent 16%);
+            background-size: 30px 30px;
+        }
+
+        /* حاوية الرأس */
+        .header-wrapper {
+            position: relative;
+            width: 100%;
+            line-height: 0;
+        }
+
+        .top-border-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .page-title-overlay {
+            position: absolute;
+            top: 38%; 
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            width: 100%;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .main-title {
+            font-size: 1.8rem; 
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
+            margin: 0;
+            font-weight: 900;
+        }
+
+        .kids-auth-nav {
+            position: absolute;
+            top: 10px; 
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            box-sizing: border-box;
+            z-index: 30;
+        }
+
+        /* حاوية الأزرار اليمينية */
+        .right-nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center; 
+        }
+
+        .joy-auth-btn {
+            padding: 8px 15px; 
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 900;
+            border: 1.5px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #fff;
+        }
+
+        /* زر البيت الصغير */
+        .btn-home-icon {
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            background: #2d3436;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1.5px solid #fff;
+        }
+
+        .btn-login { background: linear-gradient(135deg, #ff7675, #d63031); height: fit-content; }
+        .btn-signup { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #2d3436; }
+
+        .welcome-banner-container {
+            width: 95%; 
+            max-width: 600px;
+            margin: -190px auto 10px auto; 
+            position: relative;
+            z-index: 10;
+            background: transparent;
+            border: none;
+            padding: 0;
+            box-shadow: none;
+        }
+
+        .welcome-banner-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+        }
+
+        .content-area {
+            padding: 20px 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 35px 15px; 
+            justify-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .topic-card {
+            position: relative;
+            cursor: pointer;
+            width: 100%; 
+            max-width: 140px; 
+            text-align: center;
+        }
+
+        .img-container {
+            width: 100%;
+            height: 120px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .char-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain; 
+            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.2));
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .img-large { transform: scale(1.3); } 
+
+        .topic-card:active .char-img { 
+            transform: scale(1.1) translateY(-10px);
+        }
+
+        .topic-label {
+            background: #ffffff;
+            color: #2d3436;
+            padding: 8px 4px;
+            border-radius: 15px;
+            font-weight: 900;
+            font-size: 0.8rem; 
+            margin-top: -8px; 
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 3px solid #dfe6e9;
+            width: 100%; 
+            box-sizing: border-box;
+            min-height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card:nth-child(odd) .topic-label { border-color: #0984e3; color: #0984e3; }
+        .card:nth-child(even) .topic-label { border-color: #6c5ce7; color: #6c5ce7; }
+
+        .page-footer-spacer {
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-wrapper">
+        <div class="kids-auth-nav">
+            <div class="right-nav-group">
+                <a href="../Account/register.html" class="joy-auth-btn btn-signup">✨ صَدِيقٌ جَدِيدٌ</a>
+                <button class="joy-auth-btn btn-home-icon" onclick="goBackHome()">🏠</button>
+            </div>
+            
+            <a href="../Account/login.html" class="joy-auth-btn btn-login">👤 دُخُولٌ</a>
+        </div>
+        <img src="https://i.postimg.cc/wTWLQgzH/CH1.png" alt="Top Border" class="top-border-img">
+        <div class="page-title-overlay">
+            <h1 class="main-title">بَرَاعِمُ الإِيمَانِ</h1>
+        </div>
+    </div>
+
+    <div class="welcome-banner-container">
+        <img src="https://i.postimg.cc/jjTXhP3V/CH41.png" alt="مرح تعلم قيم" class="welcome-banner-img">
+    </div>
+
+    <div class="content-area">
+        <div class="topic-card card" onclick="location.href='quran.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/LsS9qgWK/CH5.png" alt="القرآن" class="char-img"></div>
+            <div class="topic-label">القُرْآنُ الكَرِيمُ</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='prophet.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/W483JD3V/CH19.png" alt="نبينا" class="char-img"></div>
+            <div class="topic-label">نَبِيُّنَا مُحَمَّدٌ ﷺ</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='anbiya.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/5tVYzdS8/CH17.png" alt="الأنبياء" class="char-img"></div>
+            <div class="topic-label">قِصَصُ الأَنْبِيَاءِ</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='ozama.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/cLcvBytD/CH47.png" alt="عظماء الإسلام" class="char-img"></div>
+            <div class="topic-label">عُظَمَاءُ الإِسْلَامِ</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='grandfather.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدي حكيم" class="char-img"></div>
+            <div class="topic-label">مَعَ جَدِّي حَكِيمٍ</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='kids_stories.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/qq1hwX9J/CH2.png" alt="قصص" class="char-img img-large"></div>
+            <div class="topic-label">قِصَصُ البَرَاعِمِ</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='islam.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/CKvxWLcv/CH8.png" alt="اسلامنا" class="char-img"></div>
+            <div class="topic-label">إِسْلَامُنَا</div>
+        </div>
+
+        <div class="topic-card card" onclick="location.href='songs.html'">
+            <div class="img-container"><img src="https://i.postimg.cc/cHHNYRMp/CH7.png" alt="أناشيد" class="char-img"></div>
+            <div class="topic-label">أَنَاشِيدُ البَرَاعِمِ</div>
+        </div>
+    </div>
+
+    <div class="page-footer-spacer"></div>
+
+    <script>
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
 
