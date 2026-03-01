@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>قِصَصُ البَرَاعِمِ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7; 
+            --accent-gold: #f1c40f;
+            --dark-space: #2d3436;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--primary-color);
+            font-family: 'Cairo', sans-serif;
+            background-image: radial-gradient(#a29bfe 15%, transparent 16%);
+            background-size: 30px 30px;
+        }
+
+        .top-nav {
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .btn-home {
+            width: 40px; height: 40px; background: var(--dark-space);
+            color: white; border-radius: 50%; border: 2px solid #fff;
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+
+        .page-title { color: white; font-size: 1.2rem; font-weight: 900; }
+
+        .cinema-screen-container {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--primary-color); padding: 10px 0;
+        }
+
+        .screen-frame {
+            width: 92%; max-width: 600px; margin: 0 auto;
+            background: #000; border: 8px solid var(--dark-space);
+            border-radius: 25px; overflow: hidden; position: relative;
+            padding-bottom: 56.25%; height: 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .screen-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        .playlist-container {
+            width: 92%; max-width: 600px; margin: 20px auto;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .video-item {
+            padding: 12px 15px; border-radius: 20px;
+            display: flex; align-items: center; gap: 15px;
+            cursor: pointer; transition: 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .video-item:active { transform: scale(0.95); }
+
+        .color-1 { background-color: #fab1a0; color: #2d3436; border-bottom: 5px solid #ff7675; }
+        .color-2 { background-color: #81ecec; color: #2d3436; border-bottom: 5px solid #00cec9; }
+        .color-3 { background-color: #ffeaa7; color: #2d3436; border-bottom: 5px solid #f1c40f; }
+        .color-4 { background-color: #55efc4; color: #2d3436; border-bottom: 5px solid #00b894; }
+        .color-5 { background-color: #ff7675; color: #fff; border-bottom: 5px solid #d63031; }
+        .color-6 { background-color: #74b9ff; color: #fff; border-bottom: 5px solid #0984e3; }
+
+        .play-icon {
+            width: 35px; height: 35px; background: white;
+            border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 1rem; color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .video-label { font-weight: 900; font-size: 0.9rem; }
+
+        .wisdom-bubble {
+            background: #fff; padding: 50px 20px 20px 20px;
+            border-radius: 25px; margin: 50px 0 10px 0;
+            border: 4px solid var(--accent-gold);
+            position: relative; text-align: center;
+        }
+
+        .wisdom-bubble img {
+            width: 100px;
+            position: absolute; top: -70px;
+            left: 50%;
+            transform: translateX(-50%); filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+        }
+
+        .wisdom-txt { font-size: 1rem; font-weight: 700; color: #34495e; line-height: 1.6; }
+
+        .academic-footer {
+            background: #ffffff;
+            margin: 30px 15px;
+            padding: 20px;
+            border-radius: 15px;
+            border-right: 5px solid var(--accent-gold);
+            font-size: 0.85rem;
+            color: #2d3436;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .academic-footer hr { border: 0; border-top: 1px solid #eee; margin: 10px 0; }
+
+        .footer-credits {
+            text-align: center;
+            color: white;
+            padding: 30px 20px;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="page-title">📚 قِصَصُ البَرَاعِمِ</div>
+        <button class="btn-home" onclick="goBackHome()">🏠</button>
+    </div>
+
+    <div class="cinema-screen-container">
+        <div class="screen-frame">
+            <iframe id="videoPlayer" src="https://www.youtube.com/embed/tzRwcaZxIP4" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="playlist-container">
+        
+        <div class="wisdom-bubble">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"يَا بَرَاعِمِي.. المَكَانُ الَّذِي نَعِيشُ فِيهِ أَمَانَةٌ، فَلَا نُؤْذِ البِيئَةَ بِالمُهْمَلَاتِ."</div>
+        </div>
+        <div class="video-item color-1" onclick="loadVideo('tzRwcaZxIP4')">
+            <div class="play-icon">🎬</div>
+            <span class="video-label">١. التَّخَلُّصُ مِنَ المُهْمَلَاتِ</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #81ecec;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"فَكِّرُوا دَائِماً كَيْفَ نُعِيدُ اسْتِخْدَامَ الأَشْيَاءِ لِنَنْفَعَ غَيْرَنَا.. تِلْكَ هِيَ الفِكْرَةُ الذَّكِيَّةُ."</div>
+        </div>
+        <div class="video-item color-2" onclick="loadVideo('R_mcRVktygE')">
+            <div class="play-icon">🎬</div>
+            <span class="video-label">٢. الفِكْرَةُ النَّافِعَةُ</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #ffeaa7;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"إِنَّ اللَّهَ يُحِبُّ الإِتْقَانَ.. لَا نَسْتَعْجِلِ النَّتَائِجَ، بَلْ نَعْمَلُ بِصِدْقٍ وَتَرْتِيبٍ."</div>
+        </div>
+        <div class="video-item color-3" onclick="loadVideo('DXsirHa7Vbk')">
+            <div class="play-icon">🎬</div>
+            <span class="video-label">٣. العَمَلُ المُثْمِرُ</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #55efc4;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"تَذَكَّرُوا أَنَّ الجَزَاءَ مِنْ جِنْسِ العَمَلِ، فَمَنْ حَافَظَ عَلَى نِعَمِ اللَّهِ بَارَكَ اللَّهُ لَهُ فِيهَا."</div>
+        </div>
+        <div class="video-item color-4" onclick="loadVideo('C8sFZv8duKs')">
+            <div class="play-icon">🎬</div>
+            <span class="video-label">٤. رِحْلَةٌ بَحْرِيَّةٌ (سَمَكَةُ نَاصِرٍ)</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #ff7675;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"الرَّحْمَةُ شُعْبَةٌ مِنَ الإِيمَانِ، وَمَنْ رَحِمَ حَيَوَاناً ضَعِيفاً رَحِمَهُ الرَّحْمَنُ."</div>
+        </div>
+        <div class="video-item color-5" onclick="loadVideo('lde617BFt24')">
+            <div class="play-icon">🎬</div>
+            <span class="video-label">٥. القِطَّةُ المَحْظُوظَةُ</span>
+        </div>
+
+        <div class="wisdom-bubble" style="border-color: #74b9ff;">
+            <img src="https://i.postimg.cc/L5vDPW2M/CH14.png" alt="جدو حكيم">
+            <div class="wisdom-txt">"العِلْمُ نُورٌ، وَلَكِنَّ العِلْمَ يَحْتَاجُ إِلَى أَخْلَاقٍ تُزَيِّنُهُ وَصَبْرٍ يُقَوِّيهِ."</div>
+        </div>
+        <div class="video-item color-6" onclick="loadVideo('ufXP1xRrsFI')">
+            <div class="play-icon">🎬</div>
+            <span class="video-label">٦. المَشْرُوبُ العَجِيبُ (طَلَبُ العِلْمِ)</span>
+        </div>
+
+    </div>
+
+    <div class="academic-footer">
+        <strong>تَوْجِيهَاتٌ مَنْهَجِيَّةٌ لِوَلِيِّ الأَمْرِ:</strong><hr>
+        جَاءَ فِي الصَّحِيحَيْنِ مِنْ حَدِيثِ عَبْدِ اللَّهِ بْنِ عُمَرَ رَضِيَ اللَّهُ عَنْهُمَا أَنَّ رَسُولَ اللَّهِ ﷺ قَالَ: <strong>«كُلُّكُمْ رَاعٍ وَكُلُّكُمْ مَسْئُولٌ عَنْ رَعِيَّتِهِ»</strong>. فَالقَصَصُ المَعْرُوضَةُ تَهْدِفُ إِلَى غَرْسِ مَكَارِمِ الأَخْلَاقِ المُنْبَثِقَةِ مِنْ أُصُولِ العَقِيدَةِ الصَّافِيَةِ، مُلْتَزِمِينَ بِمَا كَانَ عَلَيْهِ السَّلَفُ الصَّالِحُ.
+        <br><br>
+        <strong>المَصَادَرُ:</strong> صَحِيحُ البُخَارِيِّ، صَحِيحُ مُسْلِمٍ، وَمَوْقِعُ إِسْلَامِ وِيبْ.
+    </div>
+
+    <div class="footer-credits">
+        🙏 شُكْرٌ خَاصٌّ لِمَوْقِعِ (بَنِينَ وَبَنَات - إِسْلَامُ وِيبْ)<br>
+        جَمِيعُ حُقُوقِ المُرْئِيَّاتِ مَحْفُوظَةٌ لَهُمْ.
+    </div>
+
+    <script>
+        function loadVideo(id) {
+            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '/Baraem/baraem.html';
+        }
+    </script>
+</body>
+</html>
