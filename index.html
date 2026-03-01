@@ -143,6 +143,7 @@
         .c-mehrab { background: linear-gradient(to bottom, rgba(60, 60, 60, 0.7), rgba(20, 20, 20, 0.9)); } 
         .c-khatma { background: linear-gradient(to bottom, rgba(179, 147, 89, 0.7), rgba(100, 80, 40, 0.9)); } 
         .c-library { background: linear-gradient(to bottom, rgba(101, 67, 33, 0.7), rgba(50, 30, 10, 0.9)); } 
+        .c-baraem { background: linear-gradient(to bottom, rgba(0, 150, 255, 0.7), rgba(0, 80, 180, 0.9)); } /* لون مخصص للبراعم */
         .c-4 { background: linear-gradient(to bottom, rgba(200, 100, 40, 0.7), rgba(120, 50, 10, 0.9)); }
 
         .glass-tab.active { 
@@ -186,7 +187,8 @@
         <div class="nav-item-magic" onclick="closeMagicAndSwitch('mehrab-frame', 3)">💎 تَأَمُّلَاتٌ</div>
         <div class="nav-item-magic" onclick="closeMagicAndSwitch('khatma-frame', 4)">📖 الختمة</div>
         <div class="nav-item-magic" onclick="closeMagicAndSwitch('library-frame', 5)">📚 المكتبة</div>
-        <div class="nav-item-magic" onclick="closeMagicAndSwitch('more-frame', 6)">✨ أخرى</div>
+        <div class="nav-item-magic" onclick="closeMagicAndSwitch('baraem-frame', 6)">👶 براعم</div>
+        <div class="nav-item-magic" onclick="closeMagicAndSwitch('more-frame', 7)">✨ أخرى</div>
     </div>
 
     <div id="main-site-content">
@@ -197,6 +199,7 @@
             <button id="mehrab-btn" class="glass-tab c-mehrab" onclick="switchPage('mehrab-frame', this)">تأملات</button>
             <button id="khatma-btn" class="glass-tab c-khatma" onclick="switchPage('khatma-frame', this)">الختمة</button>
             <button id="lib-btn" class="glass-tab c-library" onclick="switchPage('library-frame', this)">المكتبة</button>
+            <button id="baraem-btn" class="glass-tab c-baraem" onclick="switchPage('baraem-frame', this)">براعم</button>
             <button id="more-btn" class="glass-tab c-4" onclick="switchPage('more-frame', this)">أخرى</button>
         </nav>
         
@@ -207,6 +210,7 @@
             <iframe id="mehrab-frame" src="leader/Mehrab.html?mode=full"></iframe>
             <iframe id="khatma-frame" src="leader/khatma.html"></iframe>
             <iframe id="library-frame" src="Library/library.html"></iframe>
+            <iframe id="baraem-frame" src="Baraem/baraem.html"></iframe>
             <iframe id="more-frame" src="leader/more.html"></iframe>
         </div>
     </div>
@@ -255,6 +259,7 @@
             else if (frameId === 'library-frame') document.body.style.backgroundColor = "#b0b0b0";
             else if (frameId === 'khatma-frame') document.body.style.backgroundColor = "#0f172a"; 
             else if (frameId === 'mehrab-frame') document.body.style.backgroundColor = "#001226"; 
+            else if (frameId === 'baraem-frame') document.body.style.backgroundColor = "#e0f2fe"; 
             else if (frameId === 'more-frame') document.body.style.backgroundColor = "#FDFBF0";
             else document.body.style.backgroundColor = "#F5F5DC";
             
@@ -276,6 +281,7 @@
                     'mehrab': { id: 'mehrab-frame', btn: 'mehrab-btn' },
                     'khatma': { id: 'khatma-frame', btn: 'khatma-btn' },
                     'library': { id: 'library-frame', btn: 'lib-btn' },
+                    'baraem': { id: 'baraem-frame', btn: 'baraem-btn' },
                     'more': { id: 'more-frame', btn: 'more-btn' }
                 };
                 const target = pageMap[event.data.page];
