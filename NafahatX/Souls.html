@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NafahatX | Souls Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --nx-pulse: #ff4757; --nx-void: #0a0510; --nx-gray: #888; --nx-violet: #8e44ad;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background: var(--nx-void); color: #fff; font-family: 'Cairo', sans-serif;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* 1. العدادات الذكية */
+        .top-status-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 15px; background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid rgba(255, 71, 87, 0.1);
+            font-family: 'Orbitron'; font-size: 0.6rem; color: var(--nx-pulse);
+            position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(5px);
+        }
+
+        /* 2. اللوحة العلوية (نبض القلب الرقمي) */
+        .live-viewport-container {
+            width: 100%; height: 280px; position: relative; overflow: hidden;
+            border-bottom: 2px solid var(--nx-pulse);
+            background: radial-gradient(circle at center, #1a0a2a 0%, #050208 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .heart-rate-svg {
+            width: 80%; stroke: var(--nx-pulse); stroke-width: 2; fill: none;
+            filter: drop-shadow(0 0 10px var(--nx-pulse));
+        }
+
+        .meta-tag {
+            position: absolute; top: 15px; right: 15px;
+            font-family: 'Orbitron'; font-size: 0.55rem; color: var(--nx-gray);
+            letter-spacing: 1px;
+        }
+
+        /* 3. عبارة التأمل (تصميم انسيابي) */
+        .live-indicator {
+            position: absolute; bottom: 15px; left: 15px;
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 20px;
+        }
+        .pulse-dot {
+            width: 8px; height: 8px; background: var(--nx-pulse); border-radius: 50%;
+            animation: heartBeat 1.2s infinite;
+        }
+        @keyframes heartBeat { 
+            0% { transform: scale(1); opacity: 1; } 
+            25% { transform: scale(1.3); } 
+            50% { transform: scale(1); opacity: 0.4; } 
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .live-text { font-family: 'Orbitron'; font-size: 0.55rem; color: #fff; letter-spacing: 1px; font-weight: bold; }
+
+        /* 4. شريط العنوان المبتكر */
+        .page-mission-bar {
+            background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.1), transparent);
+            padding: 15px; text-align: center; border-bottom: 1px solid rgba(255, 71, 87, 0.2);
+        }
+        .mission-title {
+            font-size: 0.8rem; color: var(--nx-pulse); font-family: 'Orbitron';
+            letter-spacing: 4px; display: block; margin-bottom: 5px;
+        }
+        .mission-desc { font-size: 1.1rem; font-weight: 700; color: #fff; }
+
+        /* مقدمة الغرض والهدف */
+        .page-intro {
+            padding: 20px; max-width: 700px; margin: 0 auto;
+            text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .intro-text {
+            font-size: 0.95rem; line-height: 1.8; color: var(--nx-gray);
+            font-style: italic;
+        }
+
+        /* 5. هيكل التغذية */
+        .feed-section { padding: 20px; max-width: 700px; margin: 0 auto; }
+        
+        .topic-dropdown {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(142, 68, 173, 0.1);
+            margin-bottom: 12px; cursor: pointer; transition: 0.3s; border-radius: 4px;
+        }
+        .topic-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .topic-header:hover { background: rgba(255, 71, 87, 0.05); }
+        .topic-title { font-weight: 700; font-size: 1rem; color: var(--nx-pulse); }
+        .topic-icon { font-family: 'Orbitron'; font-size: 0.7rem; color: var(--nx-gray); }
+
+        .topic-content {
+            display: none; padding: 25px; border-top: 1px solid rgba(255, 71, 87, 0.1);
+            line-height: 2.2; color: #ccc; background: rgba(0,0,0,0.2);
+        }
+
+        .verse-card {
+            border-right: 4px solid var(--nx-pulse); padding: 20px;
+            background: rgba(255, 71, 87, 0.03); margin: 20px 0;
+        }
+        .verse-text { font-size: 1.4rem; font-weight: 900; text-align: center; line-height: 2.2; color: #fff; }
+
+        /* زر العودة المطور (بيضاوي وصغير) */
+        .back-nav { 
+            padding: 15px; position: sticky; bottom: 0; 
+            background: rgba(10, 5, 16, 0.95); text-align: center;
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 71, 87, 0.1);
+        }
+        .btn-back {
+            display: inline-block; width: auto; min-width: 150px; padding: 8px 30px; 
+            background: transparent; border: 1px solid var(--nx-pulse);
+            color: var(--nx-pulse); font-family: 'Orbitron'; cursor: pointer; 
+            letter-spacing: 3px; font-size: 0.7rem; border-radius: 50px;
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--nx-pulse); color: #000; box-shadow: 0 0 15px var(--nx-pulse); }
+    </style>
+</head>
+<body>
+
+    <div class="top-status-bar">
+        <span id="utc-clock">UTC_TIME: 00:00:00</span>
+        <span>SECTOR: BIOLOGICAL_OBSERVATORY</span>
+        <span id="session-timer">SYNC: 00:00</span>
+    </div>
+
+    <div class="live-viewport-container">
+        <div class="meta-tag">BIO_REF: HEART_RATE_MONITOR_01</div>
+        
+        <svg class="heart-rate-svg" viewBox="0 0 200 60">
+            <path d="M0,30 L40,30 L50,10 L60,50 L70,30 L200,30">
+                <animate attributeName="stroke-dashoffset" from="400" to="0" dur="3s" repeatCount="indefinite" />
+                <animate attributeName="stroke-dasharray" values="0,400;400,0" dur="3s" repeatCount="indefinite" />
+            </path>
+        </svg>
+        
+        <div class="live-indicator">
+            <div class="pulse-dot"></div>
+            <div class="live-text">PONDER: THE CREATION OF ALLAH</div>
+        </div>
+    </div>
+
+    <div class="page-mission-bar">
+        <span class="mission-title">BIOLOGICAL_MISSION</span>
+        <span class="mission-desc">تَشْرِيحُ الإِعْجَازِ فِي خَلْقِ الإِنْسَانِ</span>
+    </div>
+
+    <div class="page-intro">
+        <p class="intro-text">
+            نُبْحِرُ هُنَا فِي أَعْمَاقِ الذَّاتِ البَشَرِيَّةِ (The Human Soul)، حَيْثُ تَلْتَقِي الفِيزْيُولُوجْيَا بِالقُدْرَةِ الإِلَهِيَّةِ، لِنَكْتَشِفَ أَنَّ كُلَّ نَبْضَةِ قَلْبٍ هِيَ ذِكْرٌ صَامِتٌ لِعَظَمَةِ مَنْ سَوَّاك فَأَعْدَلَك.
+        </p>
+    </div>
+
+    <div class="feed-section">
+        <div class="topic-dropdown" onclick="toggleTopic('topic1')">
+            <div class="topic-header">
+                <span class="topic-title">01. وَفِي أَنْفُسِكُمْ أَفَلَا تُبْصِرُونَ</span>
+                <span class="topic-icon">DNA_DECODE +</span>
+            </div>
+            <div id="topic1" class="topic-content">
+                <section class="verse-card">
+                    <div class="verse-text">"وَفِي أَنفُسِكُمْ ۚ أَفَلَا تُبْصِرُونَ"</div>
+                </section>
+                <p>إِنَّ هَذِهِ الأَجْهِزَةَ المُعَقَّدَةَ الَّتِي تَعْمَلُ فِي تَنَاغُمٍ مُذْهِلٍ (Internal Harmony)، لَيْسَتْ إِلَّا دَلِيلاً قَاطِعاً عَلَى وُجُودِ الخَالِقِ المُدَبِّرِ الَّذِي أَحْسَنَ كُلَّ شَيْءٍ خَلَقَهُ.</p>
+                <div style="text-align: center; color: var(--nx-pulse); padding-top: 20px; font-weight: 700;">
+                    وَتَحْسَبُ أَنَّكَ جِرْمٌ صَغِيرٌ <br>
+                    وَفِيكَ انْطَوَى العَالَمُ الأَكْبَرُ
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-dropdown">
+            <div class="topic-header">
+                <span class="topic-title">02. نَاصِيَةٍ كَاذِبَةٍ (PREFRONTAL CORTEX)</span>
+                <span class="topic-icon">LOCKED_CHANNEL</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-nav">
+        <button class="btn-back" onclick="goBackHome()">EXIT_PORTAL</button>
+    </div>
+
+    <script>
+        function toggleTopic(id) {
+            const content = document.getElementById(id);
+            const allContent = document.querySelectorAll('.topic-content');
+            allContent.forEach(el => { if(el.id !== id) el.style.display = 'none'; });
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function updateGauges() {
+            const now = new Date();
+            document.getElementById('utc-clock').innerText = `UTC_TIME: ${now.toUTCString().split(' ')[4]}`;
+        }
+        setInterval(updateGauges, 1000);
+
+        let sec = 0;
+        setInterval(() => {
+            sec++;
+            let m = Math.floor(sec / 60); let s = sec % 60;
+            document.getElementById('session-timer').innerText = `SYNC: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }, 1000);
+
+        function goBackHome() {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage('CLOSE_IFRAME', '*');
+            }
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
