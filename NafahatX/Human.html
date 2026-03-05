@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NafahatX | Human Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --nx-green: #2ecc71; --nx-gold: #f1c40f; --nx-void: #05100a; --nx-gray: #888;
+            --nx-red-3d: #e74c3c; --nx-whatsapp: #25d366;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background: var(--nx-void); color: #fff; font-family: 'Cairo', sans-serif;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* حيلة الذكاء الاصطناعي لتلاشي أخطاء البداية */
+        .video-mask-init {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 50; pointer-events: none;
+            animation: fadeOutMask 2.5s forwards;
+        }
+        @keyframes fadeOutMask {
+            0% { opacity: 1; }
+            80% { opacity: 1; } /* الانتظار ثانيتين لضمان استقرار الفيديو */
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* منع ظهور أزرار التشغيل الافتراضية في المتصفحات */
+        video::-webkit-media-controls { display:none !important; }
+        video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+
+        .top-status-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px; background: #000;
+            border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+            font-family: 'Orbitron'; font-size: 0.65rem; color: var(--nx-green);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .live-viewport-container {
+            width: 100%; 
+            height: 56.25vw; 
+            max-height: 350px; 
+            position: relative; overflow: hidden;
+            border-bottom: 2px solid var(--nx-green); background: #000;
+        }
+        
+        #bg-video-frame {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            background: #000;
+            /* منع ظهور أي أيقونات تحميل */
+            outline: none;
+        }
+
+        .video-ctrl-min {
+            position: absolute; bottom: 8px; right: 8px; z-index: 100;
+            background: rgba(0,0,0,0.7); border: 1px solid var(--nx-green);
+            color: var(--nx-green); font-family: 'Orbitron'; font-size: 8px;
+            padding: 2px 6px; cursor: pointer; border-radius: 3px;
+            text-transform: uppercase; transition: 0.3s;
+            letter-spacing: 1px;
+        }
+        .video-ctrl-min:hover { background: var(--nx-green); color: #000; }
+
+        .scifi-top-right {
+            position: absolute; top: 15px; right: 15px; z-index: 10;
+            display: flex; align-items: center;
+            background: linear-gradient(145deg, #ff5e4d, #c0392b);
+            padding: 3px 10px; border-radius: 50px;
+            box-shadow: 0 4px 0 #922b21, 0 6px 15px rgba(231, 76, 60, 0.4);
+            border: 1px solid #a93226; animation: pulse-red 2s infinite;
+        }
+
+        .status-led {
+            width: 5px; height: 5px; background-color: #fff;
+            border-radius: 50%; margin-left: 6px; box-shadow: 0 0 5px #fff;
+        }
+
+        .meditation-text {
+            font-family: 'Orbitron', sans-serif; font-size: 0.45rem; color: #ffffff; 
+            font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 3px 0 #922b21, 0 5px 12px rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 3px 0 #922b21, 0 5px 20px rgba(231, 76, 60, 0.7); }
+        }
+
+        .scifi-bottom-left {
+            position: absolute; bottom: 10px; left: 10px; z-index: 10;
+            font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: var(--nx-green);
+            text-align: left; line-height: 1.3;
+            background: rgba(0,0,0,0.6); padding: 4px 8px; border-left: 2px solid var(--nx-green);
+        }
+
+        .sync-label { color: var(--nx-gold); font-weight: bold; }
+
+        .page-mission-bar {
+            background: linear-gradient(90deg, transparent, rgba(46, 204, 113, 0.1), transparent);
+            padding: 12px; text-align: center; border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+        }
+        .mission-title { font-size: 0.65rem; color: var(--nx-green); font-family: 'Orbitron'; letter-spacing: 2px; }
+        .mission-desc { font-size: 1.1rem; font-weight: 700; color: #fff; display: block; margin-top: 4px; }
+
+        .feed-section { padding: 20px; max-width: 900px; margin: 0 auto; line-height: 2.1; text-align: justify; }
+        
+        .miracle-card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(46, 204, 113, 0.1);
+            border-radius: 12px; padding: 25px; margin-bottom: 25px;
+        }
+
+        .numeric-display {
+            display: flex; justify-content: center; gap: 15px; margin: 25px 0;
+            font-family: 'Orbitron';
+        }
+        .num-box {
+            background: rgba(46, 204, 113, 0.1); border: 1px solid var(--nx-green);
+            padding: 12px 15px; border-radius: 8px; text-align: center;
+            flex: 1; max-width: 160px;
+        }
+        .num-val { display: block; font-size: 2rem; font-weight: 900; color: var(--nx-green); }
+        .num-label { font-size: 0.6rem; color: #fff; text-transform: uppercase; }
+
+        .media-box {
+            width: 100%; border-radius: 8px; margin: 20px 0 2px 0; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1); position: relative;
+            background: #000; box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            cursor: zoom-in; transition: transform 0.3s ease;
+        }
+        .media-box img { width: 100%; height: auto; display: block; filter: contrast(110%); }
+
+        .media-caption {
+            font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: var(--nx-green);
+            text-align: left; text-transform: uppercase; font-weight: 700;
+            margin-top: 2px; margin-bottom: 30px; padding-left: 5px; opacity: 0.7;
+        }
+
+        .video-container {
+            width: 100%; aspect-ratio: 16/9; margin-top: 2px;
+            margin-bottom: 30px; border-radius: 8px; overflow: hidden;
+            border: 1px solid var(--nx-green); background: #000;
+        }
+        .video-container iframe { width: 100%; height: 100%; display: block; }
+
+        .video-caption {
+            font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: var(--nx-green);
+            text-align: left; text-transform: uppercase; font-weight: 700;
+            margin-top: 30px; margin-bottom: 2px; padding-left: 5px; opacity: 0.7;
+        }
+
+        .verse-highlight {
+            font-size: 1.4rem; font-weight: 900; color: #fff; text-align: center;
+            padding: 20px; border-right: 3px solid var(--nx-green);
+            background: rgba(46, 204, 113, 0.05); margin: 25px 0; line-height: 1.5;
+        }
+
+        .whatsapp-footer-btn {
+            display: flex; align-items: center; justify-content: center;
+            background: #075e54; color: white; padding: 12px;
+            margin: 15px auto; border-radius: 10px; text-decoration: none;
+            max-width: 280px; font-weight: bold; border: 1px solid var(--nx-green);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3); transition: 0.3s; font-size: 0.9rem;
+        }
+        .whatsapp-footer-btn:hover { background: var(--nx-whatsapp); transform: translateY(-2px); }
+        .whatsapp-footer-btn svg { width: 20px; height: 20px; fill: white; margin-left: 8px; }
+
+        #image-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 9999; display: none;
+            justify-content: center; align-items: center; cursor: zoom-out;
+        }
+        #image-overlay img { max-width: 98%; max-height: 98%; border: 1px solid var(--nx-green); }
+
+        .back-nav { 
+            padding: 15px; position: sticky; bottom: 0; background: rgba(5,16,10,0.98);
+            text-align: center; border-top: 1px solid rgba(46, 204, 113, 0.2); z-index: 2000;
+        }
+        .btn-back {
+            padding: 10px 50px; background: transparent; border: 1px solid var(--nx-green);
+            color: var(--nx-green); font-family: 'Orbitron'; cursor: pointer; border-radius: 50px;
+            transition: all 0.3s ease; font-weight: 700; letter-spacing: 1px; font-size: 0.8rem;
+        }
+        .btn-back:hover { background: var(--nx-green); color: #000; box-shadow: 0 0 15px var(--nx-green); }
+
+        footer.footnote {
+            font-size: 0.8rem; color: var(--nx-gray); padding: 30px 20px; 
+            border-top: 1px solid rgba(255,255,255,0.05); line-height: 1.7; text-align: justify;
+        }
+        .highlight-text { color: var(--nx-green); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div id="image-overlay" onclick="closeImage()">
+        <img id="overlay-img" src="" alt="Zoomed View">
+    </div>
+
+    <div class="top-status-bar">
+        <span id="utc-clock">UTC_TIME: 00:00:00</span>
+        <span>SECTOR: HUMAN_GENETICS_PORTAL</span>
+    </div>
+
+    <div class="live-viewport-container">
+        <div class="video-mask-init"></div>
+
+        <video autoplay muted loop playsinline preload="auto" id="bg-video-frame" onended="this.play()">
+            <source src="https://res.cloudinary.com/diugjghwa/video/upload/v1772679515/CONCEPTION_TO_FETUS_The_Miracle_of_Life_Medical_3D_Animation_of_Conception_Fertilization_WhpbWkrLs9g_b4pain.mp4" type="video/mp4">
+        </video>
+        
+        <button class="video-ctrl-min" id="video-toggle" onclick="toggleVideo()">PAUSE_SYS</button>
+
+        <div class="scifi-top-right">
+            <span class="meditation-text">Ponder creation</span>
+            <div class="status-led"></div>
+        </div>
+
+        <div class="scifi-bottom-left">
+            <span class="sync-label" id="session-timer">SYNC: 00:00</span><br>
+            ST_ID: NF-774 | SYS_ARCH: HUMAN_CODE_V3<br>
+            DS_MODE: GENETIC_PULSE | AUTH: SECURE
+        </div>
+    </div>
+
+    <div class="page-mission-bar">
+        <span class="mission-title">MISSION: HUMAN_DIGITAL_CODE</span>
+        <span class="mission-desc">تَوْحِيدُ الصَّانِعِ فِي دِقَّةِ الخَلائِقِ: مِيزَانُ الزَّوْجِيَّةِ</span>
+    </div>
+
+    <article class="feed-section">
+        <div class="miracle-card">
+            <p>تَأَمَّلْ مَعِي يَا أَخِي فِي هَذَا الكَوْنِ الفَسِيحِ، كَيْفَ أَنَّ اللهَ تَعَالَى لَمْ يَخْلُقْ شَيْئاً هَبَاءً، بَلْ جَعَلَ لِكُلِّ نَفَسٍ مِيزَاناً يَنْطِقُ بِالحَقِّ. يَقُولُ اللهُ عَزَّ وَجَلَّ فِي سُورَةِ النَّجْمِ، كَأَنَّهُ يَكْشِفُ لَنَا سِرَّ الخَلِيقَةِ قَبْلَ أَنْ تَعْرِفَهُ المَخَابِرُ بِقُرُونٍ:</p>
+            
+            <div class="verse-highlight">
+                "وَأَنَّهُ خَلَقَ الزَّوجَيْنِ الذَّكَرَ وَالأُنثَىٰ * مِن نُّطْفَةٍ إِذَا تُمْنَىٰ"
+            </div>
+            
+            <div class="video-caption">_EMBRYOLOGY_MIRACLE_ANALYSIS</div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/s-Xpa5UZAZs" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <p>هُنَا يَتَجَلَّى لَكَ أَنَّ تَقْدِيرَ هَوِيَّةِ الإِنْسَانِ، ذَكَراً كَانَ أَمْ أُنْثَى، مَحْسُومٌ فِي تِلْكَ النُّطْفَةِ الصَّغِيرَةِ الَّتِي حَمَلَتْ عِلْمَ اللهِ وَقَدَرَهُ. وَلَوْ نَظَرْتَ يَا قَارِئِي إِلَى لُغَةِ الأَرْقَامِ فِي هَذَا الوَحْيِ العَظِيمِ، لَأَصَابَكَ الذُّهُولُ؛ فَقَدْ جَاءَ التَّوَازُنُ كَالتَّالِي:</p>
+
+            <div class="numeric-display">
+                <div class="num-box">
+                    <span class="num-val">24</span>
+                    <span class="num-label">تكرار كلمة (الرجل)</span>
+                </div>
+                <div class="num-box">
+                    <span class="num-val">24</span>
+                    <span class="num-label">تكرار كلمة (المرأة)</span>
+                </div>
+            </div>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/d1S5gcnz/30320-httpscdn-savemyexams-comuploads202103human-karyogram-showing-homologous-pairs.png" alt="الكروموسومات البشرية">
+            </div>
+            <div class="media-caption">DATA_SCAN: KARYOGRAM_MAPPING</div>
+
+            <p>فَفِي دَاخِلِ المُخْتَبَرَاتِ الَّتِي تَبْحَثُ فِي أَسْرَارِ الخَلِيَّةِ، وَجَدَ العُلَمَاءُ أَنَّ كُلَّ طَرَفٍ مِنَ الزَّوْجَيْنِ يُشَارِكُ فِي صِنَاعَةِ هَذِهِ الحَيَاةِ بِنَفْسِ المِقْدَارِ الرَّقَمِيِّ المَوْزُونِ:</p>
+            
+            <div class="numeric-display">
+                <div class="num-box">
+                    <span class="num-val">24</span>
+                    <span class="num-label">كروموسوم من الرجل</span>
+                </div>
+                <div class="num-box">
+                    <span class="num-val">24</span>
+                    <span class="num-label">كروموسوم من المرأة</span>
+                </div>
+            </div>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/hv63QRdJ/x-chromosome-dna-strand-inside-600nw-2529992513.jpg" alt="هيكل الـ DNA داخل الكروموسوم">
+            </div>
+            <div class="media-caption">STRAND_STRUCT: DNA_HELIX_CORE</div>
+
+            <p>لِيَلْتَقِيَ الرَّقَمَانِ وَيَخْرُجَ لَنَا هَذَا البُنْيَانُ البَشَرِيُّ المَحْكَمُ. وَمِنْ أَعْجَبِ مَا تَقْرَأُ، هُوَ رَدُّ فِعْلِ العُلَمَاءِ الَّذِينَ أَفْنَوْا أَعْمَارَهُمْ بَيْنَ المَجَاهِرِ؛ فَهَذَا العَالِمُ الكَنَدِيُّ الشَّهِيرُ <span class="highlight-text">(كِيث مُور - Keith L. Moore)</span>، صَاحِبُ المَرْجِعِ الأَهَمِّ فِي عِلْمِ الأَجِنَّةِ، حِينَمَا رَأَى هَذِهِ الدِّقَّةَ فِي وَصْفِ مَرَاحِلِ الخَلْقِ وَتَقْدِيرِ النُّطْفَةِ، لَمْ يَمْلِكْ إِلَّا أَنْ يَقُولَ بِكُلِّ إِنْصَافٍ: <span class="highlight-text">"إِنَّ هَذَا العِلْمَ لَا يُمْكِنُ أَنْ يَكُونَ قَدْ جَاءَ مِنْ عِنْدِ مُحَمَّدٍ نَفْسِهِ، بَلْ هُوَ وَحْيٌ مِنْ خَالِقٍ يَعْلَمُ السِّرَّ فِي السَّمَاوَاتِ وَالأَرْضِ"</span>.</p>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/vBPKMV8c/81db2si9z-YL.jpg" alt="كتاب كيث مور">
+            </div>
+            <div class="media-caption">ARCHIVE_REF: MOORE_EMBRYOLOGY_V3</div>
+
+            <div class="video-caption">_CLINICAL_VALIDATION_SEQUENCE</div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/Z-hhTHe5FbQ" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/dVMxqvFp/NHGRI-FLuorescence-in-Situ-Hybridization-thumbnail-1040x1040-70.jpg" alt="صورة مجهرية متطورة">
+            </div>
+            <div class="media-caption">NANO_OPTICS: FLUORESCENCE_SCAN</div>
+
+            <p>فَكَيْفَ لِنَبِيٍّ أُمِّيٍّ ﷺ، عَاشَ فِي صَحْرَاءَ قَاحِلةٍ قَبْلَ أَكْثَرَ مِنْ 1400 عَامٍ، أَنْ يَنْطِقَ بِهَذِهِ الحَقَائِقِ المِجْهَرِيَّةِ؟ كَيْفَ عَرَفَ أَنَّ مِيزَانَ الرَّجُلِ وَالمَرْأَةِ يَلْتَقِي عِنْدَ هَذَا الرَّقَمِ (24) تَمَاماً؟ إِنَّهُ اليَقِينُ بِأَنَّ مَنْ أَنْزَلَ القُرْآنَ هُوَ مَنْ شَقَّ النُّطْفَةِ وَبَرَأَ النَّسَمَةَ.</p>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/ryPHPxPs/glowing-blue-green-shaped-chromosome-structures-floating-microscopic-space-bright-light-flares-bokeh.jpg" alt="كروموسومات عائمة">
+            </div>
+            <div class="media-caption">VISUAL_GENE: CHROMOSOME_FLOW</div>
+
+            <div class="video-caption">_QUANTUM_GENETIC_PULSE_FEED</div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/4bQKwB38j6U" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/63QHHpVw/chromosomes-under-fluorescent-microscope-fluorescent-in-situ-hybridization-technique.jpg" alt="تقنية المجهر الفلوري">
+            </div>
+            <div class="media-caption">LAB_REPORT: FISH_TECH_V2</div>
+
+            <div class="media-box" onclick="openImage(this)">
+                <img src="https://i.postimg.cc/zXHQZvsC/360-F-844412560-LB3ZW37t-KWk-QQZUJSl-Hx-AC4F3h-Fk1n7k.jpg" alt="وحدة الخلية التناسلية">
+            </div>
+            <div class="media-caption">CELL_CORE: UNIT_DYNAMICS</div>
+
+            <p>يَقُولُ الصَّحَابِيُّ الجَلِيلُ <span class="highlight-text">عَبْدُ اللهِ بْنُ عَبَّاسٍ -رَضِيَ اللهُ عَنْهُمَا-</span> فِي تَأَمُّلِهِ لِبِدَايَةِ الخَلْقِ: "النُّطْفَةُ مَشِيجٌ، خَلِيطٌ بَيْنَ مَاءِ الرَّجُلِ وَمَاءِ المَرْأَةِ، جَعَلَ اللهُ فِيهَا كُلَّ مَقْدُورٍ لِلْخَلْقِ". كَمَا أَكَّدَ التَّابِعِيُّ الجَلِيلُ <span class="highlight-text">مُجَاهِدُ بْنُ جَبْرٍ (تَـ 104هـ)</span> أَنَّ هَذَا التَّوَازُنَ هُوَ مِيزَانُ اللهِ الَّذِي لَا يَعْتَرِيهِ خَلَلٌ.</p>
+        </div>
+
+        <a href="#" class="whatsapp-footer-btn" onclick="shareOnWhatsApp(event)">
+            <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.1-3.2-5.5-.3-8.5 2.4-11.2 2.5-2.4 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.5 5.5-9.3 1.9-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.5 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+            مشاركة المقال عبر واتساب
+        </a>
+    </article>
+
+    <div class="back-nav">
+        <button class="btn-back" onclick="goBackHome()">EXIT_PORTAL</button>
+    </div>
+
+    <footer class="footnote">
+        <strong>الحاشية والمصادر:</strong><br>
+        1. تَفْسِيرُ القُرْآنِ العَظِيمِ لِلإِمَامِ ابْنِ كثِيرٍ (تَـ 774هـ).<br>
+        2. المَعْجَمُ المُفَهْرَسُ لِأَلْفَاظِ القُرْآنِ الكَرِيمِ (مُحَمَّد فُؤَاد عَبْد البَاقِي).<br>
+        3. كِتابُ "The Developing Human" لِلْعَالِمِ كِيث مُور (Keith L. Moore).<br>
+        4. تَمَّ التَّحَقُّقُ مِنَ المَنْطِقِ البَرْمَجِيِّ وَالتَّشْكِيلِ اللُّغَوِيِّ بِوَاسِطَةِ NafahatX.
+    </footer>
+
+    <script>
+        const video = document.getElementById('bg-video-frame');
+        let isPlaying = true;
+
+        // منطق احترافي لضمان التشغيل التلقائي ومعالجة أخطاء أندرويد 14
+        window.addEventListener('load', () => {
+            // كتم الصوت برمجياً لضمان قبول المتصفح للتشغيل التلقائي
+            video.muted = true;
+            video.play().catch(error => {
+                console.log("Autoplay policy: Interaction required.");
+                document.body.addEventListener('touchstart', () => { video.play(); }, {once: true});
+                document.body.addEventListener('click', () => { video.play(); }, {once: true});
+            });
+        });
+
+        function toggleVideo() {
+            const btn = document.getElementById('video-toggle');
+            if (isPlaying) {
+                video.pause();
+                btn.innerText = "PLAY_SYS";
+                video.style.opacity = "0.3";
+            } else {
+                video.play();
+                btn.innerText = "PAUSE_SYS";
+                video.style.opacity = "1";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function updateGauges() {
+            const now = new Date();
+            const utcTime = now.toUTCString().split(' ')[4];
+            const clockEl = document.getElementById('utc-clock');
+            if(clockEl) clockEl.innerText = `UTC_TIME: ${utcTime}`;
+        }
+        setInterval(updateGauges, 1000);
+
+        let sec = 0;
+        setInterval(() => {
+            sec++;
+            let m = Math.floor(sec / 60); let s = sec % 60;
+            const timerEl = document.getElementById('session-timer');
+            if(timerEl) timerEl.innerText = `SYNC: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }, 1000);
+
+        function goBackHome() {
+            // تطبيق حل JavaScript المتفق عليه في الذاكرة
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage('CLOSE_IFRAME', '*');
+            }
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+
+        function openImage(container) {
+            const img = container.querySelector('img');
+            const overlay = document.getElementById('image-overlay');
+            const overlayImg = document.getElementById('overlay-img');
+            overlayImg.src = img.src;
+            overlay.style.display = 'flex';
+        }
+
+        function closeImage() {
+            document.getElementById('image-overlay').style.display = 'none';
+        }
+
+        function shareOnWhatsApp(e) {
+            e.preventDefault();
+            const title = "🧬 توحيد الصانع في دقة الخلائق: ميزان الزوجية";
+            const summary = "تأمل في عظمة الرب العظيم وكيف تطابقت لغة الأرقام في القرآن مع أسرار الجينات البشرية.";
+            const url = window.location.href;
+            const fullMsg = `${title}\n\n${summary}\n\nرابط المقال عبر NafahatX:\n${url}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(fullMsg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
