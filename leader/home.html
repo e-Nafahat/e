@@ -301,6 +301,34 @@
         }
         @keyframes star-blink { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
+        /* --- تصميم زر معرض التصاميم (Gallery) المضاف حديثاً --- */
+        .gallery-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #121212, #2c3e50);
+            margin: 15px auto;
+            width: 92%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid var(--accent-color, #d4af37);
+            position: relative;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .gallery-entrance:active { transform: scale(0.97); }
+        .gallery-info { flex-grow: 1; }
+        .gallery-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .gallery-title-ar { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin: 0; }
+        .gallery-title-en { color: #8b7346; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+        .gallery-desc { color: #dcdde1; font-size: 0.65rem; margin: 0; line-height: 1.3; font-weight: 500; }
+        .gallery-visual { font-size: 1.7rem; filter: drop-shadow(0 0 5px var(--gold)); }
+
         /* --- تصميم بوابة المكتبة --- */
         .library-entrance {
             display: flex;
@@ -537,6 +565,17 @@
         <div class="baraem-img-container">
             <img src="https://i.postimg.cc/jSZsjy1n/CH3.png" class="baraem-visual-img" alt="براعم نفحات">
         </div>
+    </div>
+
+    <div onclick="location.href='gallery.html'" class="gallery-entrance">
+        <div class="gallery-info">
+            <div class="gallery-title-row">
+                <h3 class="gallery-title-ar">مَعرضُ نَفَحَات</h3>
+                <span class="gallery-title-en">DIGITAL GALLERY</span>
+            </div>
+            <p class="gallery-desc">أرشيف التصاميم اليومية بجودة عالية.. شاهد، حمّل، وشارك الجمال.</p>
+        </div>
+        <div class="gallery-visual">🎨</div>
     </div>
 
     <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'more'}, '*')" class="more-trigger">
