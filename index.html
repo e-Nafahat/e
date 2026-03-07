@@ -18,25 +18,25 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="نفحات إيمانية">
 
-    <link rel="icon" type="image/png" sizes="48x48" href="leader/LogoNafahat.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="leader/LogoNafahat.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="leader/LogoNafahat.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="leader/LogoNafahat.png">
-    <link rel="shortcut icon" href="leader/LogoNafahat.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="leader/LogoNafahat.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://e-nafahat.github.io/e/LogoNafahat.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://e-nafahat.github.io/e/LogoNafahat.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://e-nafahat.github.io/e/LogoNafahat.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://e-nafahat.github.io/e/LogoNafahat.png">
+    <link rel="shortcut icon" href="https://e-nafahat.github.io/e/LogoNafahat.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://e-nafahat.github.io/e/LogoNafahat.png">
 
     <meta name="description" content="نفحات إيمانية هي بوابتكم اليومية لعيش أنوار السنة النبوية والمنهج الصافي. نقدم محتوى إسلامي موثق، إذاعة قرآن كريم، ومكتبة شاملة على منهج أهل السنة والجماعة.">
     <meta name="keywords" content="نفحات إيمانية، المنهج الصافي، أهل السنة والجماعة، أحاديث نبوية، مكتبة إسلامية، مصحح القراءة، اختبارات الإجازة، الختمة، أذكار، تأملات إيمانية">
     
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="نفحات إيمانية">
-    <meta property="og:title" content="نفحات إيمانية | ميراث نبوي يضيء حياتك">
+    <meta property="og:title" content="نفحات إيمانية | المنهج الصافي والذكر الحكيم">
     <meta property="og:description" content="نفحات إيمانية حيث يطمئن القلب بالذكر الحكيم والنص الصحيح. منهج أهل السنة والجماعة، ميراث نبوي يضيء حياتك صوتاً وكتابةً.">
-    <meta property="og:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
+    <meta property="og:image" content="https://e-nafahat.github.io/e/LogoNafahat.png">
     <meta property="og:url" content="https://e-nafahat.github.io/e/">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://e-nafahat.github.io/e/leader/LogoNafahat.png">
+    <meta name="twitter:image" content="https://e-nafahat.github.io/e/LogoNafahat.png">
 
     <script type="application/ld+json">
     {
@@ -59,7 +59,7 @@
       "@type": "Organization",
       "name": "نفحات إيمانية",
       "url": "https://e-nafahat.github.io/e/",
-      "logo": "https://e-nafahat.github.io/e/leader/LogoNafahat.png",
+      "logo": "https://e-nafahat.github.io/e/LogoNafahat.png",
       "sameAs": [
         "https://www.facebook.com/NafahatImaniya"
       ]
@@ -143,7 +143,7 @@
         .c-mehrab { background: linear-gradient(to bottom, rgba(60, 60, 60, 0.7), rgba(20, 20, 20, 0.9)); } 
         .c-khatma { background: linear-gradient(to bottom, rgba(179, 147, 89, 0.7), rgba(100, 80, 40, 0.9)); } 
         .c-library { background: linear-gradient(to bottom, rgba(101, 67, 33, 0.7), rgba(50, 30, 10, 0.9)); } 
-        .c-baraem { background: linear-gradient(to bottom, rgba(0, 150, 255, 0.7), rgba(0, 80, 180, 0.9)); } /* لون مخصص للبراعم */
+        .c-baraem { background: linear-gradient(to bottom, rgba(0, 150, 255, 0.7), rgba(0, 80, 180, 0.9)); }
         .c-4 { background: linear-gradient(to bottom, rgba(200, 100, 40, 0.7), rgba(120, 50, 10, 0.9)); }
 
         .glass-tab.active { 
@@ -241,7 +241,10 @@
             const postsBtn = document.getElementById('posts-btn');
             switchPage('FrontSmart-frame', postsBtn);
             setTimeout(() => {
-                document.getElementById('FrontSmart-frame').contentWindow.postMessage({ type: 'OPEN_SPECIFIC_POST', id: postId }, '*');
+                const frame = document.getElementById('FrontSmart-frame');
+                if (frame && frame.contentWindow) {
+                    frame.contentWindow.postMessage({ type: 'OPEN_SPECIFIC_POST', id: postId }, '*');
+                }
             }, 600);
         };
 
@@ -255,13 +258,15 @@
             document.querySelectorAll('.glass-tab').forEach(b => b.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
             
-            if (frameId === 'masbaha-frame') document.body.style.backgroundColor = "#000000";
-            else if (frameId === 'library-frame') document.body.style.backgroundColor = "#b0b0b0";
-            else if (frameId === 'khatma-frame') document.body.style.backgroundColor = "#0f172a"; 
-            else if (frameId === 'mehrab-frame') document.body.style.backgroundColor = "#001226"; 
-            else if (frameId === 'baraem-frame') document.body.style.backgroundColor = "#e0f2fe"; 
-            else if (frameId === 'more-frame') document.body.style.backgroundColor = "#FDFBF0";
-            else document.body.style.backgroundColor = "#F5F5DC";
+            const colors = {
+                'masbaha-frame': "#000000",
+                'library-frame': "#b0b0b0",
+                'khatma-frame': "#0f172a",
+                'mehrab-frame': "#001226",
+                'baraem-frame': "#e0f2fe",
+                'more-frame': "#FDFBF0"
+            };
+            document.body.style.backgroundColor = colors[frameId] || "#F5F5DC";
             
             document.querySelectorAll('iframe').forEach(f => f.classList.remove('active'));
             const targetFrame = document.getElementById(frameId);
@@ -290,7 +295,7 @@
 
             if (event.data.type === 'SCROLL_TO_POST') {
                 const mehrabFrame = document.getElementById('mehrab-frame');
-                if (mehrabFrame) {
+                if (mehrabFrame && mehrabFrame.contentWindow) {
                     mehrabFrame.contentWindow.postMessage({ type: 'SCROLL_TO_POST', postId: event.data.postId }, '*');
                 }
             }
@@ -310,8 +315,10 @@
             const holder = document.getElementById('intro-holder');
             if(holder) holder.remove();
             const mainContent = document.getElementById('main-site-content');
-            mainContent.style.display = 'flex';
-            mainContent.style.opacity = '1';
+            if(mainContent) {
+                mainContent.style.display = 'flex';
+                mainContent.style.opacity = '1';
+            }
             document.body.style.backgroundColor = "#F5F5DC";
         } else {
             fetch('leader/intro.html')
