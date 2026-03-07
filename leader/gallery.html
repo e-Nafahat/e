@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معرض نَفحات الرقمي | Nafahat Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #d4af37;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+        }
+
+        /* Back Button - الصغير والأنيق */
+        .back-nav {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* منع ظهور حدود الزر عند النقر - الطلب الأساسي */
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-back:focus {
+            outline: none;
+        }
+
+        .btn-back:hover {
+            background: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .btn-back:active {
+            transform: scale(0.9);
+            background: var(--accent-color);
+        }
+
+        /* Gallery Container */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .gallery-grid {
+            column-count: 3;
+            column-gap: 15px;
+        }
+
+        @media (max-width: 992px) { .gallery-grid { column-count: 2; } }
+        @media (max-width: 600px) { .gallery-grid { column-count: 1; } }
+
+        /* Card Style */
+        .poster-card {
+            background: white;
+            margin-bottom: 15px;
+            break-inside: avoid;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .poster-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            loading: lazy;
+        }
+
+        .card-overlay {
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            padding: 5px;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn:focus {
+            outline: none;
+        }
+
+        .action-btn:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .download-btn { color: #2ecc71; }
+        .share-btn { color: #3498db; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.5;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="back-nav">
+            <button class="btn-back" onclick="goBackHome()" title="العودة">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <h1>مَعرض نَفحات</h1>
+    </header>
+
+    <div class="container">
+        <div class="gallery-grid" id="galleryGrid">
+            </div>
+    </div>
+
+    <footer>
+        نَفحات &copy; 2026 | مَعرض التصاميم الرقمية
+    </footer>
+
+    <script>
+        // الروابط المحدثة
+        const images = [
+            "https://i.postimg.cc/MKqMGQXp/20260307-070024.png",
+            "https://i.postimg.cc/bv7dfGKq/20260306-082625.png",
+            "https://i.postimg.cc/cHG15pn1/20260306-074849.png",
+            "https://i.postimg.cc/VLkfTBdX/20260305-080455.png",
+            "https://i.postimg.cc/C140rz04/20260304-073722.png",
+            "https://i.postimg.cc/LsKMHz6N/20260303-100039.png",
+            "https://i.postimg.cc/bNW7TQbP/naf1.png",
+            "https://i.postimg.cc/NMsSMbhd/20260227-092725.jpg",
+            "https://i.postimg.cc/cCjbFSKW/20260226-090011.jpg",
+            "https://i.postimg.cc/mrR6XVrB/20260225-093830.jpg",
+            "https://i.postimg.cc/VsTZQz61/20260224-211231.jpg",
+            "https://i.postimg.cc/qRqwSFHT/20260224-090500.jpg"
+        ];
+
+        const grid = document.getElementById('galleryGrid');
+
+        // بناء المعرض
+        images.forEach((url, index) => {
+            const card = document.createElement('div');
+            card.className = 'poster-card';
+            card.innerHTML = `
+                <img src="${url}" alt="Nafahat Poster">
+                <div class="card-overlay">
+                    <button class="action-btn download-btn" title="تحميل مباشر" onclick="downloadDirectly('${url}', 'Nafahat-${index+1}')">
+                        <i class="fas fa-cloud-download-alt"></i>
+                    </button>
+                    <button class="action-btn share-btn" title="مشاركة" onclick="shareImg('${url}')">
+                        <i class="fas fa-share-nodes"></i>
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // وظيفة التحميل المباشر بدون مغادرة الموقع
+        async function downloadDirectly(url, filename) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename + ".png";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (error) {
+                window.open(url, '_blank');
+            }
+        }
+
+        // وظيفة العودة البرمجية المتفق عليها في الذاكرة لضمان عدم تكرار العناصر
+        function goBackHome() {
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+
+        // وظيفة المشاركة مع نص دعوي ورابط الموقع
+        async function shareImg(imgUrl) {
+            const siteUrl = "https://e-nafahat.github.io/e";
+            const shareText = `شاهد هذا التصميم من مَعرض نَفحات الرقمي ✨\nللمزيد من التصاميم والروائع زوروا موقعنا:`;
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'مَعرض نَفحات',
+                        text: `${shareText}\n${siteUrl}`,
+                        url: imgUrl 
+                    });
+                } catch (err) {
+                    console.log('Share cancelled');
+                }
+            } else {
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + "\n" + siteUrl + "\n" + imgUrl)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
