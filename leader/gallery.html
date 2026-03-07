@@ -41,6 +41,13 @@
             letter-spacing: 1px;
         }
 
+        header p {
+            margin: 8px 0 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
         /* Back Button - الصغير والأنيق */
         .back-nav {
             position: absolute;
@@ -164,6 +171,7 @@
             </button>
         </div>
         <h1>مَعرض نَفحات</h1>
+        <p>نفحات إيمانية | المنهج الصافي والذكر الحكيم</p>
     </header>
 
     <div class="container">
@@ -172,7 +180,7 @@
     </div>
 
     <footer>
-        نَفحات &copy; 2026 | مَعرض التصاميم الرقمية
+        نَفحات إيمانية &copy; 2026 | مَعرض التصاميم الرقمية
     </footer>
 
     <script>
@@ -204,7 +212,7 @@
                     <button class="action-btn download-btn" title="تحميل مباشر" onclick="downloadDirectly('${url}', 'Nafahat-${index+1}')">
                         <i class="fas fa-cloud-download-alt"></i>
                     </button>
-                    <button class="action-btn share-btn" title="مشاركة" onclick="shareImg('${url}')">
+                    <button class="action-btn share-btn" title="مشاركة" onclick="shareImg()">
                         <i class="fas fa-share-nodes"></i>
                     </button>
                 </div>
@@ -237,23 +245,22 @@
             window.top.location.href = '../index.html';
         }
 
-        // وظيفة المشاركة مع نص دعوي ورابط الموقع
-        async function shareImg(imgUrl) {
-            const siteUrl = "https://e-nafahat.github.io/e";
-            const shareText = `شاهد هذا التصميم من مَعرض نَفحات الرقمي ✨\nللمزيد من التصاميم والروائع زوروا موقعنا:`;
+        // وظيفة المشاركة مع الاسم الجديد والرابط الصحيح والمباشر للمعرض
+        async function shareImg() {
+            const galleryFullUrl = "https://e-nafahat.github.io/e/leader/gallery.html";
+            const shareText = `شاهد هذا التصميم من نفحات إيمانية | المنهج الصافي والذكر الحكيم ✨\n\nللمزيد من التصاميم والروائع زوروا مَعرضنا الرقمي:\n${galleryFullUrl}`;
             
             if (navigator.share) {
                 try {
                     await navigator.share({
                         title: 'مَعرض نَفحات',
-                        text: `${shareText}\n${siteUrl}`,
-                        url: imgUrl 
+                        text: shareText
                     });
                 } catch (err) {
                     console.log('Share cancelled');
                 }
             } else {
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + "\n" + siteUrl + "\n" + imgUrl)}`;
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                 window.open(whatsappUrl, '_blank');
             }
         }
