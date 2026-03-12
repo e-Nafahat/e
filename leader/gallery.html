@@ -48,7 +48,7 @@
             font-weight: 400;
         }
 
-        /* Back Button - الصغير والأنيق */
+        /* Back Button */
         .back-nav {
             position: absolute;
             top: 15px;
@@ -68,35 +68,55 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* منع ظهور حدود الزر عند النقر - الطلب الأساسي */
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-back:focus {
+        .btn-back:focus { outline: none; }
+        .btn-back:hover { background: var(--accent-color); transform: scale(1.1); }
+
+        /* Filter Tabs - النظام الجديد لسهولة التصفح */
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 25px 0;
+            padding: 0 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--primary-color);
+            font-weight: 500;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-back:hover {
-            background: var(--accent-color);
-            transform: scale(1.1);
-        }
-
-        .btn-back:active {
-            transform: scale(0.9);
-            background: var(--accent-color);
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(44, 62, 80, 0.2);
         }
 
         /* Gallery Container */
         .container {
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 0 auto 20px;
             padding: 0 15px;
         }
 
         .gallery-grid {
             column-count: 3;
             column-gap: 15px;
+            transition: opacity 0.3s ease-in-out;
         }
 
         @media (max-width: 992px) { .gallery-grid { column-count: 2; } }
@@ -112,6 +132,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: 0.3s;
             position: relative;
+            display: block; /* للتحكم في الإخفاء والإظهار */
         }
 
         .poster-card img {
@@ -142,15 +163,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .action-btn:focus {
-            outline: none;
-        }
-
-        .action-btn:hover {
-            color: var(--accent-color);
-            transform: translateY(-2px);
-        }
-
+        .action-btn:hover { color: var(--accent-color); transform: translateY(-2px); }
         .download-btn { color: #2ecc71; }
         .share-btn { color: #3498db; }
 
@@ -174,6 +187,12 @@
         <p>نفحات إيمانية | المنهج الصافي والذكر الحكيم</p>
     </header>
 
+    <div class="filter-tabs">
+        <button class="tab-btn active" onclick="filterGallery('all')">الكل</button>
+        <button class="tab-btn" onclick="filterGallery('tafakkur')">سِلْسِلَةُ تَفَكَّــــرْ</button>
+        <button class="tab-btn" onclick="filterGallery('general')">تصاميم دَعوية</button>
+    </div>
+
     <div class="container">
         <div class="gallery-grid" id="galleryGrid">
             </div>
@@ -184,8 +203,17 @@
     </footer>
 
     <script>
-        // الروابط المحدثة - تم إضافة البوستر الجديد (9 مارس) في البداية
-        const images = [
+        // تعريف مصفوفات الصور مع تصنيفها
+        const tafakkurImages = [
+            "https://i.postimg.cc/htdtfGvv/20260312-081449.png",
+            "https://i.postimg.cc/mDDx1djS/20260311-202731.png",
+            "https://i.postimg.cc/5tfWb9FD/20260311-093805.png",
+            "https://i.postimg.cc/9Xk2ZjvJ/20260310-073538.png",
+            "https://i.postimg.cc/wM1dZWsM/20260310-064422.png",
+            "https://i.postimg.cc/DyW2Mzr3/20260309-121748.png"
+        ];
+
+        const generalImages = [
             "https://i.postimg.cc/5N65bFR3/20260309-062543.png",
             "https://i.postimg.cc/mZ5CcZzc/20260308-065231.png",
             "https://i.postimg.cc/d1QrCLjW/20260307-193821.png",
@@ -205,14 +233,22 @@
 
         const grid = document.getElementById('galleryGrid');
 
-        // بناء المعرض
-        images.forEach((url, index) => {
+        // وظيفة بناء المعرض بالكامل
+        function initGallery() {
+            grid.innerHTML = '';
+            // إضافة صور تفكر أولاً
+            tafakkurImages.forEach((url, i) => createCard(url, 'tafakkur', `Tafakkur-${i+1}`));
+            // ثم الصور العامة
+            generalImages.forEach((url, i) => createCard(url, 'general', `Nafahat-${i+1}`));
+        }
+
+        function createCard(url, category, filename) {
             const card = document.createElement('div');
-            card.className = 'poster-card';
+            card.className = `poster-card ${category}`;
             card.innerHTML = `
                 <img src="${url}" alt="Nafahat Poster">
                 <div class="card-overlay">
-                    <button class="action-btn download-btn" title="تحميل مباشر" onclick="downloadDirectly('${url}', 'Nafahat-${index+1}')">
+                    <button class="action-btn download-btn" title="تحميل مباشر" onclick="downloadDirectly('${url}', '${filename}')">
                         <i class="fas fa-cloud-download-alt"></i>
                     </button>
                     <button class="action-btn share-btn" title="مشاركة" onclick="shareImg()">
@@ -221,9 +257,34 @@
                 </div>
             `;
             grid.appendChild(card);
-        });
+        }
 
-        // وظيفة التحميل المباشر بدون مغادرة الموقع
+        // وظيفة الفلترة السحرية
+        function filterGallery(category) {
+            // تحديث الأزرار
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const cards = document.querySelectorAll('.poster-card');
+            
+            grid.style.opacity = '0';
+            
+            setTimeout(() => {
+                cards.forEach(card => {
+                    if (category === 'all' || card.classList.contains(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                grid.style.opacity = '1';
+            }, 300);
+        }
+
+        // تشغيل المعرض عند التحميل
+        initGallery();
+
         async function downloadDirectly(url, filename) {
             try {
                 const response = await fetch(url);
@@ -241,14 +302,12 @@
             }
         }
 
-        // وظيفة العودة البرمجية المتفق عليها في الذاكرة لضمان عدم تكرار العناصر
         function goBackHome() {
             window.parent.postMessage('CLOSE_IFRAME', '*');
             window.history.back();
             window.top.location.href = '../index.html';
         }
 
-        // وظيفة المشاركة مع الاسم الجديد والرابط الصحيح والمباشر للمعرض
         async function shareImg() {
             const galleryFullUrl = "https://e-nafahat.github.io/e/leader/gallery.html";
             const shareText = `شاهد هذا التصميم من نفحات إيمانية | المنهج الصافي والذكر الحكيم ✨\n\nللمزيد من التصاميم والروائع زوروا مَعرضنا الرقمي:\n${galleryFullUrl}`;
