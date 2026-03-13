@@ -2,7 +2,8 @@
   "name": "نفحات إيمانية",
   "short_name": "نفحات",
   "description": "المنهج الصافي والذكر الحكيم - منصة إيمانية شاملة",
-  "start_url": "/e/index.html",
+  "start_url": "https://e-nafahat.github.io/e/index.html",
+  "scope": "https://e-nafahat.github.io/e/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#b39359",
@@ -12,13 +13,28 @@
       "src": "https://e-nafahat.github.io/e/LogoNafahat.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://e-nafahat.github.io/e/LogoNafahat.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "https://e-nafahat.github.io/e/LogoNafahat.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://e-nafahat.github.io/e/LogoNafahat.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["education", "books", "lifestyle"],
+  "lang": "ar",
+  "dir": "rtl"
 }
