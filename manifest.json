@@ -1,7 +1,7 @@
 {
   "name": "نفحات إيمانية",
   "short_name": "نفحات",
-  "description": "المنهج الصافي والذكر الحكيم - منصة إيمانية شاملة",
+  "description": "نفحات إيمانية: منصة دعوية جامعة، تُعنى بالتأصيل العلمي على منهج أهل السنة والجماعة، ونشر صحيح السنة وسير السلف الصالح بأسلوبٍ عصري موثق.",
   "start_url": "https://e-nafahat.github.io/e/index.html",
   "scope": "https://e-nafahat.github.io/e/",
   "display": "standalone",
@@ -34,7 +34,25 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["education", "books", "lifestyle"],
+  "categories": [
+    "education",
+    "books",
+    "lifestyle",
+    "social"
+  ],
   "lang": "ar",
-  "dir": "rtl"
+  "dir": "rtl",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "المكتبة",
+      "url": "https://e-nafahat.github.io/e/Library/library.html",
+      "icons": [{ "src": "https://e-nafahat.github.io/e/LogoNafahat.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "الختمة",
+      "url": "https://e-nafahat.github.io/e/leader/khatma.html",
+      "icons": [{ "src": "https://e-nafahat.github.io/e/LogoNafahat.png", "sizes": "192x192" }]
+    }
+  ]
 }
