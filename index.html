@@ -15,7 +15,7 @@
     <meta name="application-name" content="نفحات إيمانية">
     <meta name="apple-mobile-web-app-title" content="نفحات إيمانية">
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="https://e-nafahat.github.io/e/manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -222,7 +222,8 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
+                // تعديل مسار الخدمة لضمان التسجيل الصحيح من المجلد الفرعي
+                navigator.serviceWorker.register('https://e-nafahat.github.io/e/sw.js').catch(err => console.log('SW registration failed', err));
             });
         }
 
