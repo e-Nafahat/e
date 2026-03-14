@@ -75,7 +75,7 @@
         .btn-back:focus { outline: none; }
         .btn-back:hover { background: var(--accent-color); transform: scale(1.1); }
 
-        /* Filter Tabs - النظام الجديد لسهولة التصفح */
+        /* Filter Tabs */
         .filter-tabs {
             display: flex;
             justify-content: center;
@@ -132,7 +132,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: 0.3s;
             position: relative;
-            display: block; /* للتحكم في الإخفاء والإظهار */
+            display: block;
         }
 
         .poster-card img {
@@ -191,6 +191,7 @@
         <button class="tab-btn active" onclick="filterGallery('all')">الكل</button>
         <button class="tab-btn" onclick="filterGallery('tafakkur')">سِلْسِلَةُ تَفَكَّــــرْ</button>
         <button class="tab-btn" onclick="filterGallery('general')">تصاميم دَعوية</button>
+        <button class="tab-btn" onclick="filterGallery('events')">مناسبات إسلامية</button>
     </div>
 
     <div class="container">
@@ -203,14 +204,20 @@
     </footer>
 
     <script>
-        // تعريف مصفوفات الصور مع تصنيفها
+        // تعريف مصفوفات الصور مع تصنيفها - تم إضافة الصور الجديدة في المقدمة
         const tafakkurImages = [
+            "https://i.postimg.cc/T2L65h2S/20260314-082104.png",
+            "https://i.postimg.cc/13Nsxt2t/20260313-095628.png",
             "https://i.postimg.cc/htdtfGvv/20260312-081449.png",
             "https://i.postimg.cc/mDDx1djS/20260311-202731.png",
             "https://i.postimg.cc/5tfWb9FD/20260311-093805.png",
             "https://i.postimg.cc/9Xk2ZjvJ/20260310-073538.png",
             "https://i.postimg.cc/wM1dZWsM/20260310-064422.png",
             "https://i.postimg.cc/DyW2Mzr3/20260309-121748.png"
+        ];
+
+        const eventImages = [
+            "https://i.postimg.cc/8C538njK/20260314-012553.png"
         ];
 
         const generalImages = [
@@ -236,9 +243,11 @@
         // وظيفة بناء المعرض بالكامل
         function initGallery() {
             grid.innerHTML = '';
-            // إضافة صور تفكر أولاً
+            // إضافة صور تفكر
             tafakkurImages.forEach((url, i) => createCard(url, 'tafakkur', `Tafakkur-${i+1}`));
-            // ثم الصور العامة
+            // إضافة صور المناسبات
+            eventImages.forEach((url, i) => createCard(url, 'events', `Event-${i+1}`));
+            // إضافة الصور العامة
             generalImages.forEach((url, i) => createCard(url, 'general', `Nafahat-${i+1}`));
         }
 
@@ -259,15 +268,12 @@
             grid.appendChild(card);
         }
 
-        // وظيفة الفلترة السحرية
         function filterGallery(category) {
-            // تحديث الأزرار
             const btns = document.querySelectorAll('.tab-btn');
             btns.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
             const cards = document.querySelectorAll('.poster-card');
-            
             grid.style.opacity = '0';
             
             setTimeout(() => {
@@ -282,7 +288,6 @@
             }, 300);
         }
 
-        // تشغيل المعرض عند التحميل
         initGallery();
 
         async function downloadDirectly(url, filename) {
