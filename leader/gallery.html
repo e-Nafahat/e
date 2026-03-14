@@ -140,6 +140,7 @@
             height: auto;
             display: block;
             loading: lazy;
+            cursor: pointer;
         }
 
         .card-overlay {
@@ -204,9 +205,9 @@
     </footer>
 
     <script>
-        // تعريف مصفوفات الصور مع تصنيفها - تم إضافة الصور الجديدة في المقدمة
+        // تعريف مصفوفات الصور - تم استبدال بوستر 14 مارس بالنسخة النهائية
         const tafakkurImages = [
-            "https://i.postimg.cc/T2L65h2S/20260314-082104.png",
+            "https://i.postimg.cc/vH5tPRtD/20260314-084930.png", // النسخة النهائية المعدلة
             "https://i.postimg.cc/13Nsxt2t/20260313-095628.png",
             "https://i.postimg.cc/htdtfGvv/20260312-081449.png",
             "https://i.postimg.cc/mDDx1djS/20260311-202731.png",
@@ -216,8 +217,12 @@
             "https://i.postimg.cc/DyW2Mzr3/20260309-121748.png"
         ];
 
+        // مصفوفة المناسبات مع الرابط المخصص
         const eventImages = [
-            "https://i.postimg.cc/8C538njK/20260314-012553.png"
+            {
+                url: "https://i.postimg.cc/8C538njK/20260314-012553.png",
+                link: "https://e-nafahat.github.io/e/leader/Kholud.html"
+            }
         ];
 
         const generalImages = [
@@ -240,22 +245,22 @@
 
         const grid = document.getElementById('galleryGrid');
 
-        // وظيفة بناء المعرض بالكامل
         function initGallery() {
             grid.innerHTML = '';
-            // إضافة صور تفكر
             tafakkurImages.forEach((url, i) => createCard(url, 'tafakkur', `Tafakkur-${i+1}`));
-            // إضافة صور المناسبات
-            eventImages.forEach((url, i) => createCard(url, 'events', `Event-${i+1}`));
-            // إضافة الصور العامة
+            eventImages.forEach((item, i) => createCard(item.url, 'events', `Event-${i+1}`, item.link));
             generalImages.forEach((url, i) => createCard(url, 'general', `Nafahat-${i+1}`));
         }
 
-        function createCard(url, category, filename) {
+        function createCard(url, category, filename, redirectUrl = null) {
             const card = document.createElement('div');
             card.className = `poster-card ${category}`;
+            
+            // إضافة خاصية النقر للصور التي تملك رابطاً خارجياً
+            const onclickAttr = redirectUrl ? `onclick="window.open('${redirectUrl}', '_blank')"` : "";
+            
             card.innerHTML = `
-                <img src="${url}" alt="Nafahat Poster">
+                <img src="${url}" alt="Nafahat Poster" ${onclickAttr}>
                 <div class="card-overlay">
                     <button class="action-btn download-btn" title="تحميل مباشر" onclick="downloadDirectly('${url}', '${filename}')">
                         <i class="fas fa-cloud-download-alt"></i>
