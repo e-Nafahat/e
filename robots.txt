@@ -1,27 +1,25 @@
 User-agent: *
-Allow: /
+Allow: /e/
 
-# [Logic Check] حماية المسارات الإدارية والخاصة لضمان الاحترافية
-Disallow: /leader/admin.html
-Disallow: /leader/FrontSmart.html
-Disallow: /Account/
+# [Logic Check] حماية المسارات الإدارية والخاصة
+# لاحظ إضافة /e/ قبل كل مسار لضمان دقة التنفيذ على GitHub Pages
+Disallow: /e/leader/admin.html
+Disallow: /e/leader/FrontSmart.html
+Disallow: /e/Account/
 
-# [System Files] منع أرشفة ملفات النظام لتركيز الزحف على المحتوى
-Disallow: /css/
-Disallow: /js/
-Disallow: /vendor/
-Disallow: /assets/
-Disallow: /manifest.json
-Disallow: /sw.js
-Disallow: /.nojekyll
+# [System Files] 
+# لا ننصح بمنع CSS و JS بالكامل لأن جوجل يحتاجها لتحليل تجربة المستخدم
+Disallow: /e/manifest.json
+Disallow: /e/sw.js
+Disallow: /e/.nojekyll
 
-# [Content Focus] السماح الكامل للأقسام الدعوية الجديدة (Verified from Screenshots)
-Allow: /leader/gallery.html
-Allow: /Baraem/
-Allow: /Textbook/
-Allow: /Library/
-Allow: /Tasmee/
-Allow: /NafahatX/
+# [Content Focus] السماح الكامل للأقسام الأساسية
+Allow: /e/leader/gallery.html
+Allow: /e/Baraem/
+Allow: /e/Textbook/
+Allow: /e/Library/
+Allow: /e/Tasmee/
+Allow: /e/NafahatX/
 
-# [Indexing] الربط بخريطة الموقع المحدثة
+# [Indexing] الربط بخريطة الموقع (الرابط سليم تماماً هنا)
 Sitemap: https://e-nafahat.github.io/e/sitemap.xml
