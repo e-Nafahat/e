@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* التنسيقات الخاصة بقسم تأملات إيمانية */
         .quran-dynamic-section { margin: 10px 0 0 0; padding: 0; position: relative; }
         .dynamic-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 5px; }
         .dynamic-label { 
@@ -26,7 +27,7 @@
             padding: 0;
         }
 
-        /* --- أيقونة القائمة --- */
+        /* --- أيقونة القائمة (تتفاعل مع index.html) --- */
         .menu-icon {
             width: 35px;
             height: 35px;
@@ -87,7 +88,7 @@
             align-items: center;
         }
 
-        /* --- تنسيق الهيدر المطور --- */
+        /* --- تنسيق الهيدر المطور بلمسة نفحات --- */
         .site-header {
             position: relative;
             display: flex;
@@ -170,7 +171,6 @@
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
-            -webkit-touch-callout: none;
         }
         .kholud-entrance:active { transform: scale(0.97); }
         .kholud-info { flex-grow: 1; text-align: right; pointer-events: none; }
@@ -184,7 +184,6 @@
             margin-right: 5px;
             filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
             pointer-events: none;
-            user-select: none;
         }
 
         /* --- تصميم زر المسابقة الرمضانية --- */
@@ -224,7 +223,7 @@
         .quiz-desc { color: #e0e0e0; font-size: 0.56rem; margin-top: 1px; font-weight: 500; }
         .quiz-visual-img { width: 66px; height: auto; margin-right: -8px; z-index: 8; filter: drop-shadow(0 0 8px var(--gold)); }
 
-        /* --- تصميم زر بوابة البراعم (المطور والمميز) --- */
+        /* --- تصميم زر بوابة البراعم (المطور) --- */
         .baraem-entrance {
             display: flex;
             align-items: center;
@@ -242,7 +241,7 @@
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 30px rgba(0, 114, 255, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.3);
             cursor: pointer;
-            overflow: visible; /* ليظهر البروز */
+            overflow: visible;
             user-select: none;
             -webkit-user-select: none;
         }
@@ -274,7 +273,7 @@
             width: 85px;
             height: 85px;
             margin-right: -10px;
-            margin-top: -7px; /* رفع الصورة للأعلى قليلاً لتبرز */
+            margin-top: -7px;
             margin-bottom: -15px;
             z-index: 5;
         }
@@ -289,7 +288,6 @@
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-8px) rotate(3deg); }
         }
-        /* تأثير النجوم المتساقطة داخل الزر */
         .baraem-entrance::after {
             content: '✨';
             position: absolute;
@@ -301,7 +299,7 @@
         }
         @keyframes star-blink { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-        /* --- تصميم زر معرض التصاميم (Gallery) المضاف حديثاً --- */
+        /* --- تصميم زر معرض التصاميم (Gallery) --- */
         .gallery-entrance {
             display: flex;
             align-items: center;
@@ -728,6 +726,7 @@
             } 
         }
         
+        // التحقق من حالة المستخدم المسجل وعرض الصورة الشخصية
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const currentUser = localStorage.getItem('currentUser');
