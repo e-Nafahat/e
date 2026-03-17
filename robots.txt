@@ -1,24 +1,27 @@
 User-agent: *
 Allow: /
 
-# منع أرشفة صفحات الإدارة والتحكم لضمان الخصوصية والمنطق البرمجي
+# [Logic Check] حماية المسارات الإدارية والخاصة لضمان الاحترافية
 Disallow: /leader/admin.html
 Disallow: /leader/FrontSmart.html
-Disallow: /Account/login.html
-Disallow: /Account/profile.html
+Disallow: /Account/
 
-# منع أرشفة المجلدات التقنية والبرمجية لتركيز الزحف على المحتوى الدعوي
+# [System Files] منع أرشفة ملفات النظام لتركيز الزحف على المحتوى
 Disallow: /css/
 Disallow: /js/
 Disallow: /vendor/
 Disallow: /assets/
+Disallow: /manifest.json
+Disallow: /sw.js
+Disallow: /.nojekyll
 
-# السماح الكامل لأقسام المحتوى الرئيسية (Logic Check: Verified)
+# [Content Focus] السماح الكامل للأقسام الدعوية الجديدة (Verified from Screenshots)
 Allow: /leader/gallery.html
 Allow: /Baraem/
 Allow: /Textbook/
 Allow: /Library/
 Allow: /Tasmee/
+Allow: /NafahatX/
 
-# تعيين خريطة الموقع المحدثة لمحركات البحث
+# [Indexing] الربط بخريطة الموقع المحدثة
 Sitemap: https://e-nafahat.github.io/e/sitemap.xml
