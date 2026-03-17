@@ -72,6 +72,9 @@
     </script>
 
     <style>
+        /* [Cairo Font] استدعاء الخط المعتمد في الذاكرة */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
         html, body { 
             background-color: #000000 !important; 
             overscroll-behavior: none; 
@@ -105,6 +108,7 @@
             overflow: hidden;
         }
 
+        /* [UI/UX] القائمة السحرية العائمة */
         .magic-nav {
             position: fixed; top: 75px; left: 50%; transform: translateX(-50%) translateY(-20px);
             background: rgba(10, 25, 41, 0.95); backdrop-filter: blur(15px); 
@@ -127,6 +131,7 @@
             box-shadow: 0 0 15px rgba(179, 147, 89, 0.5);
         }
 
+        /* [3D Header] أزرار التنقل الزجاجية */
         .header-3d { 
             display: flex; justify-content: center; perspective: 1000px; 
             width: 100%; z-index: 2000; height: 55px; margin-bottom: 5px;
@@ -142,6 +147,7 @@
             box-shadow: 0 5px 10px rgba(0,0,0,0.3);
         }
         
+        /* ألوان الأقسام المعتمدة */
         .c-1 { background: linear-gradient(to bottom, rgba(0, 90, 80, 0.7), rgba(0, 40, 35, 0.9)); } 
         .c-2 { background: linear-gradient(to bottom, rgba(41, 128, 185, 0.7), rgba(20, 70, 110, 0.9)); } 
         .c-3 { background: linear-gradient(to bottom, rgba(184, 134, 11, 0.7), rgba(100, 70, 0, 0.9)); } 
@@ -172,6 +178,23 @@
         .seo-hidden-layer {
             position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; 
             overflow: hidden; clip: rect(0,0,0,0); border: 0;
+        }
+
+        /* [Welcome Message Style] تصميم رسالة الترحيب "أفضل الأفضل" */
+        .welcome-notification {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9); color: #b39359; padding: 20px 30px;
+            border-radius: 15px; border: 1px solid #b39359; font-family: 'Cairo', sans-serif;
+            text-align: center; direction: rtl; z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideUpWelcome 0.8s ease-out;
+        }
+        @keyframes slideUpWelcome {
+            from { opacity: 0; bottom: -50px; }
+            to { opacity: 1; bottom: 30px; }
+        }
+        .welcome-notification .close-btn {
+            display: block; margin-top: 10px; font-size: 13px; color: #fff;
+            cursor: pointer; text-decoration: underline;
         }
     </style>
 </head>
@@ -221,6 +244,7 @@
     </div>
 
     <script>
+        // [Logic Check] تسجيل الـ Service Worker للأداء العالي (PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('https://e-nafahat.github.io/e/sw.js').catch(err => console.log('SW registration failed', err));
@@ -230,6 +254,26 @@
         const globalIntroAudio = new Audio('leader/lindo.mp3');
         globalIntroAudio.preload = 'auto';
 
+        // [Logic Check] دالة إظهار رسالة الترحيب مرة واحدة يومياً
+        function showNafahatGreeting() {
+            const key = 'last_greet_date';
+            const today = new Date().toDateString();
+
+            if (localStorage.getItem(key) !== today) {
+                const div = document.createElement('div');
+                div.className = 'welcome-notification';
+                div.innerHTML = `
+                    <div>🌸 مرحباً بك في منصة نفحات الإيمانية 🌸</div>
+                    <div style="font-size: 14px; color: #eee; margin-top: 5px;">طبتَ وطابَ ممشاك.. نرجو لك رحلة إيمانية نافعة</div>
+                    <span class="close-btn" onclick="this.parentElement.remove()">إغلاق</span>
+                `;
+                document.body.appendChild(div);
+                localStorage.setItem(key, today);
+                // اختفاء تلقائي بعد 8 ثوانٍ لضمان عدم الإزعاج
+                setTimeout(() => { if(div) div.remove(); }, 8000);
+            }
+        }
+
         function executeSiteEntry() {
             const holder = document.getElementById('intro-holder');
             const mainContent = document.getElementById('main-site-content');
@@ -238,6 +282,8 @@
             setTimeout(() => {
                 mainContent.style.opacity = '1';
                 document.body.style.backgroundColor = "#F5F5DC";
+                // تشغيل الترحيب بعد الدخول الناجح للموقع
+                showNafahatGreeting();
             }, 100);
             setTimeout(() => { if(holder) holder.remove(); }, 1500);
         }
@@ -278,6 +324,7 @@
             if(targetFrame) targetFrame.classList.add('active');
         }
 
+        // [Logic Check] نظام الرسائل المتبادلة بين الـ Iframes والنافذة الرئيسية
         window.addEventListener('message', function(event) {
             if (event.data === 'START_SITE_NOW') executeSiteEntry();
             if (event.data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
@@ -316,6 +363,7 @@
         document.body.style.visibility = 'visible';
         document.body.style.opacity = '1';
 
+        // [Logic Check] إدارة حالة الزيارة المتكررة لمنع تكرار الانترو
         if (sessionStorage.getItem('hasSeenIntro')) {
             const holder = document.getElementById('intro-holder');
             if(holder) holder.remove();
@@ -325,6 +373,8 @@
                 mainContent.style.opacity = '1';
             }
             document.body.style.backgroundColor = "#F5F5DC";
+            // تشغيل الترحيب حتى في حالة تجاوز الانترو
+            showNafahatGreeting();
         } else {
             fetch('leader/intro.html')
                 .then(res => res.text())
