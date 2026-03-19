@@ -28,177 +28,27 @@
             z-index: 2;
         }
 
-        /* الهلال المضيء الأنيق (تعديل الاتجاه واللون) */
-        .moon-container {
+        /* زينة العيد (الرابط رقم 2) */
+        .eid-decoration-top {
             position: absolute;
-            top: 85px;
-            right: 195px; /* تم نقله لليمين ليتناسب مع الاتجاه الجديد */
-            width: 10px;
-            height: 10px;
-            z-index: 15;
-            filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
-            animation: moonPulse 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-        .crescent-moon {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            /* اتجاه الهلال الصحيح ولونه المضيء */
-            box-shadow: -10px 8px 0 0 rgba(245, 245, 245, 0.95); 
-            transform: rotate(-10deg);
-        }
-
-        @keyframes moonPulse {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.03); }
-        }
-
-        /* زينة الأعلام السينمائية */
-        .decoration-string {
-            position: absolute;
-            top: -5px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
+            top: -6%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 77%;
+            max-width: 600px;
             z-index: 25;
             pointer-events: none;
+            opacity: 0.9;
         }
-        .string-arc {
-            display: flex;
-            gap:0px;
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
-        .flag-item {
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 40px solid;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
-            animation: flagSwing 4s ease-in-out infinite alternate;
-            transform-origin: top center;
-        }
-        .flag-item:nth-child(4n+1) { border-top-color: #d4af37; } 
-        .flag-item:nth-child(4n+2) { border-top-color: #7a1a1a; } 
-        .flag-item:nth-child(4n+3) { border-top-color: #1a4d1a; } 
-        .flag-item:nth-child(4n+4) { border-top-color: #b8860b; } 
+        .eid-decoration-top img {
+            width: 100%;
+            display: block;
 
-        @keyframes flagSwing {
-            from { transform: rotateX(-10deg); }
-            to { transform: rotateX(15deg); }
         }
 
-        /* حاوية الفوانيس الراقية */
-        .lanterns-lux-container {
-            position: absolute;
-            top: 0;
-            width: 110%;
-            display: flex;
-            justify-content: space-around;
-            padding: 0 5%;
-            z-index: 20;
-            pointer-events: none;
-        }
-        .lantern-wire {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: lanternSwing 3s ease-in-out infinite alternate;
-            transform-origin: top center;
-        }
-        .wire {
-            width: 1.5px;
-            height: 65px;
-            background: linear-gradient(to bottom, #444, #d4af37);
-        }
-
-        /* الفانوس الملكي المطور */
-        .royal-lantern {
-            position: relative;
-            width: 42px;
-            height: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* قمة الفانوس مع حلقة التعليق */
-        .lantern-cap {
-            width: 10px;
-            height: 10px;
-            background: #d4af37;
-            border-radius: 50% 50% 0 0;
-            border: 1px solid #b8860b;
-        }
-        .lantern-roof {
-            width: 30px;
-            height: 15px;
-            background: linear-gradient(to bottom, #d4af37, #b8860b);
-            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-            margin-top: -1px;
-        }
-
-        /* جسم الفانوس مع تأثير الزجاج والنقوش */
-        .lantern-glass {
-            width: 30px;
-            height: 35px;
-            background: radial-gradient(circle, #fff9e6 10%, #ebd07d 70%, #d4af37 100%);
-            clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-left: 2px solid #b8860b;
-            border-right: 2px solid #b8860b;
-            overflow: hidden;
-        }
-
-        /* تأثير النقوش الإسلامية الداخلية */
-        .lantern-glass::before {
-            content: "✦";
-            color: rgba(184, 134, 11, 0.3);
-            font-size: 10px;
-            position: absolute;
-            animation: rotatePattern 10s linear infinite;
-        }
-
-        /* الوهج المتحرك (الشعلة) */
-        .lantern-flame {
-            width: 15px;
-            height: 22px;
-            background: #fff;
-            border-radius: 50% 50% 40% 40%;
-            filter: blur(4px);
-            box-shadow: 0 0 20px 8px #fff, 0 0 35px 15px rgba(212, 175, 55, 0.6);
-            animation: flickerIntensity 2s infinite alternate;
-        }
-
-        /* قاعدة الفانوس المزخرفة */
-        .lantern-base {
-            width: 28px;
-            height: 8px;
-            background: #b8860b;
-            border-radius: 2px;
-            margin-top: -1px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-        @keyframes rotatePattern {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        @keyframes flickerIntensity {
-            0% { opacity: 0.7; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1.1); }
-        }
-        @keyframes lanternSwing {
-            from { transform: rotate(-5deg); }
-            to { transform: rotate(5deg); }
-        }
+        @keyframes rotatePattern { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes flickerIntensity { 0% { opacity: 0.7; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
+        @keyframes lanternSwing { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
         /* محتوى المقدمة */
         .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 8px; z-index: 5; }
@@ -211,25 +61,27 @@
             z-index: 10;
         }
         
-        .ramadan-decoration {
+        /* تعديل: الرابط رقم 1 بدل الآية */
+        .eid-sub-decoration {
             position: relative;
             width: 65%;
-            max-width: 300px;
+            max-width: 170px;
             z-index: 10;
             margin: 5px 0;
-            opacity: 0.95;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 1s;
         }
-        .ramadan-decoration img { width: 100%; display: block; }
+        .eid-sub-decoration img { width: 100%; display: block; }
 
         .elegant-line { height: 1px; width: 60%; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 4px 0; }
         
         .elegant-sub { 
             font-weight: 400; 
-            font-size: 0.95rem; 
+            font-size: 1rem; 
             color: #f0f0f0; 
             opacity: 0; 
             text-align: center; 
-            line-height: 1.6; 
+            line-height: 1.8; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
         }
         
@@ -245,6 +97,17 @@
             animation: fadeIn 3s ease forwards 3.5s;
             border-top: 1px solid rgba(212, 175, 55, 0.15);
             padding-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* تعديل: أيقونة الرابط رقم 3 */
+        .mini-icon {
+            width: 18px;
+            height: auto;
+            vertical-align: middle;
         }
 
         .mini-btn-solid {
@@ -273,24 +136,19 @@
     </audio>
 
     <div id="cinema-intro">
-        <div class="moon-container">
-            <div class="crescent-moon"></div>
+        <div class="eid-decoration-top">
+            <img src="https://i.postimg.cc/Qt9wS05c/20260319-131157.png" alt="Eid Decoration">
         </div>
 
-        <div class="decoration-string">
-            <div class="string-arc">
-                <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
-                <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
-                <div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div><div class="flag-item"></div>
-            </div>
+        <div class="moon-container">
+            <div class="crescent-moon"></div>
         </div>
 
         <div class="lanterns-lux-container">
             <div class="lantern-wire" style="animation-delay: 0s;">
                 <div class="wire"></div>
                 <div class="royal-lantern">
-                    <div class="lantern-cap"></div>
-                    <div class="lantern-roof"></div>
+                    <div class="lantern-cap"></div><div class="lantern-roof"></div>
                     <div class="lantern-glass"><div class="lantern-flame"></div></div>
                     <div class="lantern-base"></div>
                 </div>
@@ -298,8 +156,7 @@
             <div class="lantern-wire" style="animation-delay: -2.5s;">
                 <div class="wire" style="height: 75px;"></div>
                 <div class="royal-lantern">
-                    <div class="lantern-cap"></div>
-                    <div class="lantern-roof"></div>
+                    <div class="lantern-cap"></div><div class="lantern-roof"></div>
                     <div class="lantern-glass"><div class="lantern-flame"></div></div>
                     <div class="lantern-base"></div>
                 </div>
@@ -307,8 +164,7 @@
             <div class="lantern-wire" style="animation-delay: -1.2s;">
                 <div class="wire" style="height: 55px;"></div>
                 <div class="royal-lantern">
-                    <div class="lantern-cap"></div>
-                    <div class="lantern-roof"></div>
+                    <div class="lantern-cap"></div><div class="lantern-roof"></div>
                     <div class="lantern-glass"><div class="lantern-flame"></div></div>
                     <div class="lantern-base"></div>
                 </div>
@@ -318,21 +174,24 @@
         <div class="intro-content">
             <img src="https://e-nafahat.github.io/e/leader/LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
             
-            <div class="ramadan-decoration">
-                <img src="https://e-nafahat.github.io/e/leader/phram1.png">
+            <div class="eid-sub-decoration">
+                <img src="https://i.postimg.cc/MpYSjPbb/2026031014.png" alt="Eid Greeting">
             </div>
 
             <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
+            
             <p class="elegant-sub fade-in" style="animation-delay: 1.8s;">
-                طال الغياب.. وآن أوان اللقاء بنور الطاعات<br>
-                اشتاقت الأرواح لنفحاتك.. فأهلاً بقلب الشهور<br>
-                هنا تولد القلوب من جديد.. في رحاب الله
+                نَسْأَلُ اللهَ أَنْ يَتَقَبَّلَ مِنَّا وَمِنْكُمْ صَالِحَ الأَعْمَالِ،<br>
+                وَأَنْ يَجْعَلَ عِيدَنَا مَغْفِرَةً وَرِضْوَانًا.<br>
+                كُلُّ عَامٍ وَأَنْتُمْ إِلَى اللهِ أَقْرَبُ.. تَقَبَّلَ اللهُ طَاعَتَكُمْ.
             </p>
+            
             <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.5s;">دخول</button>
         </div>
 
         <div class="imam-malik-quote">
-     قال الإمام مالك رحمه الله - لا يصلح آخر هذه الأمة إلا ما أصلح أولها
+            <img src="https://i.postimg.cc/DwpxD123/20260319-131306.png" class="mini-icon" alt="Icon">
+            <span>قال الإمام مالك رحمه الله - لا يصلح آخر هذه الأمة إلا ما أصلح أولها</span>
         </div>
     </div>
 
@@ -361,10 +220,7 @@
                     speed: 0.04 + Math.random() * 0.08
                 });
             }
-            
-            for(let i=0; i<5; i++) {
-                setTimeout(createMeteor, i * 800); 
-            }
+            for(let i=0; i<5; i++) { setTimeout(createMeteor, i * 800); }
         }
 
         function createMeteor() {
@@ -381,7 +237,6 @@
         function draw() {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-            
             const grad = ctx.createRadialGradient(window.innerWidth/2, window.innerHeight/2, 0, window.innerWidth/2, window.innerHeight/2, window.innerWidth);
             grad.addColorStop(0, '#001220');
             grad.addColorStop(1, '#000');
@@ -393,7 +248,6 @@
                 if(s.opacity > 1 || s.opacity < 0.2) s.blink *= -1;
                 s.x += s.speed;
                 if(s.x > window.innerWidth) s.x = 0;
-
                 ctx.beginPath();
                 const starGrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size);
                 starGrad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
@@ -406,12 +260,10 @@
             meteors.forEach((m, index) => {
                 ctx.save();
                 ctx.globalAlpha = m.opacity;
-                
                 const meteorGrad = ctx.createLinearGradient(m.x, m.y, m.x - m.len, m.y + m.len);
                 meteorGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)'); 
                 meteorGrad.addColorStop(0.2, 'rgba(212, 175, 55, 0.5)'); 
                 meteorGrad.addColorStop(1, 'rgba(212, 175, 55, 0)'); 
-                
                 ctx.strokeStyle = meteorGrad;
                 ctx.lineWidth = m.thickness;
                 ctx.lineCap = 'round';
@@ -419,19 +271,12 @@
                 ctx.moveTo(m.x, m.y);
                 ctx.lineTo(m.x - m.len, m.y + m.len);
                 ctx.stroke();
-                
-                m.x -= m.speed;
-                m.y += m.speed;
-                m.opacity -= 0.006;
-
-                if(m.opacity <= 0 || m.y > window.innerHeight + m.len) {
-                    meteors.splice(index, 1);
-                }
+                m.x -= m.speed; m.y += m.speed; m.opacity -= 0.006;
+                if(m.opacity <= 0 || m.y > window.innerHeight + m.len) meteors.splice(index, 1);
                 ctx.restore();
             });
 
             if(Math.random() < 0.012) createMeteor();
-
             requestAnimationFrame(draw);
         }
 
