@@ -168,11 +168,18 @@
 
     <div class="main-display" id="playerSection">
         <div class="video-wrapper">
-            <iframe id="mainFrame" src="https://www.youtube.com/embed/Dl83P4blbUs?start=43" allowfullscreen loading="lazy"></iframe>
+            <iframe id="mainFrame" src="https://www.youtube.com/embed/rnHCp5c0Ro4?start=42" allowfullscreen loading="lazy"></iframe>
         </div>
     </div>
 
     <div class="episodes-list">
+
+        <div class="episode-card">
+            <div class="episode-info">
+                <span class="episode-name">رِحْلَةُ الْخُلُودِ | دَارُ النَّعِيمِ الَّتِي لَا حَزَنَ فِيهَا، كُلُّ مَا تَشْتَهِي الْقُلُوبُ يَتَحَقَّقُ بِلَا حُدُودٍ | حَلْقَةُ 30</span>
+            </div>
+            <button class="play-btn" onclick="changeVideo('rnHCp5c0Ro4', 42)">تَشْغِيلٌ</button>
+        </div>
 
         <div class="episode-card">
             <div class="episode-info">
@@ -387,11 +394,13 @@
         // وَظِيفَةُ الْعَوْدَةِ الْمُتَّفَقُ عَلَيْهَا فِي الذَّاكِرَةِ
         function goBackHome() {
             try {
+                // تَنْفِيذُ طُرُقِ الْإِغْلَاقِ الْمُخْتَلِفَةِ لِضَمَانِ التَّوَافُقِيَّةِ
                 window.parent.postMessage('CLOSE_IFRAME', '*');
                 window.history.back();
             } catch (e) {
                 console.log("Navigation error", e);
             }
+            // التَّوَجُّهُ لِلرَّئِيسِيَّةِ كَخِيَارٍ نِهَائِيٍّ
             setTimeout(() => {
                 window.top.location.href = '../index.html';
             }, 100);
