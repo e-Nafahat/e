@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نَفَحَاتٌ إِيمَانِيَّةٌ | الرئيسية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -223,7 +224,7 @@
         .quiz-desc { color: #e0e0e0; font-size: 0.56rem; margin-top: 1px; font-weight: 500; }
         .quiz-visual-img { width: 66px; height: auto; margin-right: -8px; z-index: 8; filter: drop-shadow(0 0 8px var(--gold)); }
 
-        /* --- تصميم زر بوابة البراعم (المطور) --- */
+        /* --- تصميم زر بوابة البراعم --- */
         .baraem-entrance {
             display: flex;
             align-items: center;
@@ -501,6 +502,33 @@
             transition: 0.3s;
             text-decoration: none;
         }
+
+        /* --- تصميم زر البودكاست (PodcastX) --- */
+        .podcast-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #2c3e50, #000000);
+            margin: 15px auto;
+            width: 92%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid #e74c3c;
+            position: relative;
+            transition: 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .podcast-entrance:active { transform: scale(0.97); }
+        .podcast-info { flex-grow: 1; }
+        .podcast-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .podcast-title-ar { color: #e74c3c; font-size: 0.95rem; font-weight: 900; margin: 0; }
+        .podcast-title-en { color: #c0392b; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+        .podcast-desc { color: #ecf0f1; font-size: 0.65rem; margin: 0; line-height: 1.3; }
+        .podcast-visual { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(231, 76, 60, 0.4)); }
     </style>
 </head>
 <body>
@@ -549,7 +577,7 @@
         <div class="quiz-info">
             <div class="quiz-header-row">
                 <div class="quiz-tag">تحدي جديد</div>
-                <h3 class="quiz-title">اَلْمُسَابَقَةُ الرَّمَضَانِيَّةُ</h3>
+                <h3 class="quiz-title">المسابقة اليومية</h3>
             </div>
             <p class="quiz-desc">سؤال يومي سريع.. اختبر معلوماتك وانشر الفائدة مع أصحابك!</p>
         </div>
@@ -558,7 +586,7 @@
     <div onclick="location.href='../Baraem/baraem.html'" class="baraem-entrance">
         <div class="baraem-info">
             <h3 class="baraem-title">بَوَّابَةُ اَلْبَرَاعِمِ</h3>
-            <p class="baraem-desc">عالم مبهج من القصص والأنوار لصناع المستقبل.</p>
+            <p class="baraem-desc">عالم مبهج من القصص والأنوار لصناع المستقبل (قصص الأنبياء والصحابة).</p>
         </div>
         <div class="baraem-img-container">
             <img src="https://i.postimg.cc/jSZsjy1n/CH3.png" class="baraem-visual-img" alt="براعم نفحات">
@@ -574,6 +602,17 @@
             <p class="gallery-desc">أرشيف التصاميم اليومية بجودة عالية.. شاهد، حمّل، وشارك الجمال.</p>
         </div>
         <div class="gallery-visual">🎨</div>
+    </div>
+
+    <div onclick="location.href='../Podcast/indexpc.html'" class="podcast-entrance">
+        <div class="podcast-info">
+            <div class="podcast-title-row">
+                <h3 class="podcast-title-ar">بُودْكاست نَفَحَات</h3>
+                <span class="podcast-title-en">PODCAST X</span>
+            </div>
+            <p class="podcast-desc">استمع الآن إلى سلسلة "الغريب" ومقاطع صوتية إيمانية مؤثرة.</p>
+        </div>
+        <div class="podcast-visual">🎙️</div>
     </div>
 
     <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'more'}, '*')" class="more-trigger">
@@ -726,7 +765,6 @@
             } 
         }
         
-        // التحقق من حالة المستخدم المسجل وعرض الصورة الشخصية
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const currentUser = localStorage.getItem('currentUser');
