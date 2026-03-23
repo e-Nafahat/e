@@ -50,7 +50,7 @@
         /* 1. شاشة العرض المركزية (Video Display) */
         .video-hero {
             width: 100%;
-            height: 60vh; /* مساحة كافية لعرض الفيديو بحجم طبيعي */
+            height: 60vh; 
             background: #000;
             display: flex;
             align-items: center;
@@ -63,7 +63,7 @@
         #main-video {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* للحفاظ على أبعاد الفيديو السينمائية */
+            object-fit: contain; 
             background: #000;
         }
 
@@ -116,8 +116,8 @@
     <button class="back-btn" onclick="goBackHome()">رجوع</button>
 
     <section class="video-hero">
-        <video id="main-video" controls poster="https://i.postimg.cc/SKbK6JYM/20260322-235751.png">
-            <source src="/Podcast/Al-Gharib.mp4" type="video/mp4">
+        <video id="main-video" controls playsinline poster="https://i.postimg.cc/SKbK6JYM/20260322-235751.png">
+            <source src="Al-Gharib.mp4" type="video/mp4">
             متصفحك لا يدعم تشغيل الفيديو.
         </video>
     </section>
@@ -138,18 +138,16 @@
     <script>
         // دالة العودة الملتزمة بتعليمات الذاكرة
         function goBackHome() {
-            // إيقاف الفيديو قبل الخروج لضمان عدم استمرار الصوت
             const video = document.getElementById('main-video');
-            video.pause();
+            if (video) video.pause();
             
             window.parent.postMessage('CLOSE_IFRAME', '*');
             window.history.back();
             window.top.location.href = '../index.html';
         }
 
-        // تحسين تجربة المستخدم: تشغيل الفيديو تلقائياً عند الرغبة (اختياري)
         window.onload = function() {
-            console.log("مشغل أثير النفحات جاهز.");
+            console.log("مشغل أثير النفحات جاهز - تم تصحيح منطق المسارات.");
         };
     </script>
 </body>
