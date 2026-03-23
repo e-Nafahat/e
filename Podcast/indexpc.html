@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>أثير النفحات - مشغل فيديو الغريب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-navy: #0a192f;
+            --royal-green: #0d2c1d;
+            --royal-gold: #c9a050;
+            --royal-beige: #d1c7b7;
+            --royal-orange: #e67e22;
+            --bg-black: #050a0f;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--royal-beige);
+            font-family: 'Cairo', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* زر العودة المعتمد في الذاكرة */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 25, 47, 0.8);
+            border: 1px solid var(--royal-gold);
+            color: var(--royal-gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* 1. شاشة العرض المركزية (Video Display) */
+        .video-hero {
+            width: 100%;
+            height: 60vh; /* مساحة كافية لعرض الفيديو بحجم طبيعي */
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid var(--royal-gold);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        #main-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* للحفاظ على أبعاد الفيديو السينمائية */
+            background: #000;
+        }
+
+        /* 2. منطقة معلومات الحلقة السفلى */
+        .info-section {
+            flex: 1;
+            padding: 25px 20px;
+            background: linear-gradient(to bottom, var(--bg-black), #080d14);
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .info-section h1 {
+            font-size: 20px;
+            color: var(--royal-gold);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .info-section .series-tag {
+            display: inline-block;
+            background: rgba(230, 126, 34, 0.15);
+            color: var(--royal-orange);
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--royal-orange);
+        }
+
+        .description {
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--royal-beige);
+            opacity: 0.9;
+            text-align: justify;
+        }
+
+        /* إخفاء شريط التمرير للمظهر الأنيق */
+        .info-section::-webkit-scrollbar { display: none; }
+
+        /* ميزة اللمس: إخفاء عناصر التحكم عند عدم الاستخدام */
+        video::-webkit-media-controls-enclosure {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back-btn" onclick="goBackHome()">رجوع</button>
+
+    <section class="video-hero">
+        <video id="main-video" controls poster="https://i.postimg.cc/SKbK6JYM/20260322-235751.png">
+            <source src="/Podcast/Al-Gharib.mp4" type="video/mp4">
+            متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+    </section>
+
+    <main class="info-section">
+        <span class="series-tag">سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (١)</span>
+        <h1>سَيِّدُ التَّابِعِينَ: سَعِيدُ بْنُ الْمُسَيِّبِ</h1>
+        
+        <div class="description">
+            <p>
+                نَبْتَدِئُ بِأَوَّلِ هَؤُلَاءِ الْغُرَبَاءِ، الرَّجُلُ الَّذِي لَمْ تُغْرِهِ دُنْيَا الْمُلُوكِ، وَلَمْ تَكْسِرْهُ سِيَاطُ الْجَلَّادِ. 
+                هُوَ سَعِيدُ بْنُ الْمُسَيِّبِ، مَنْ قَالَ فِيهِ الْعُلَمَاءُ: كَانَ النَّاسُ يَهَابُونَهُ مِثْلَمَا يَهَابُونَ الْأَمِيرَ، 
+                وَمَا زَادَهُ ذَلِكَ إِلَّا تَوَاضُعاً وَخَشْيَةً. سَرْدٌ كَامِلٌ وَمُوَثَّقٌ مِنْ أُصُولِ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // دالة العودة الملتزمة بتعليمات الذاكرة
+        function goBackHome() {
+            // إيقاف الفيديو قبل الخروج لضمان عدم استمرار الصوت
+            const video = document.getElementById('main-video');
+            video.pause();
+            
+            window.parent.postMessage('CLOSE_IFRAME', '*');
+            window.history.back();
+            window.top.location.href = '../index.html';
+        }
+
+        // تحسين تجربة المستخدم: تشغيل الفيديو تلقائياً عند الرغبة (اختياري)
+        window.onload = function() {
+            console.log("مشغل أثير النفحات جاهز.");
+        };
+    </script>
+</body>
+</html>
