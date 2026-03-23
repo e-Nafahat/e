@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* التنسيقات الخاصة بقسم تأملات إيمانية */
+        .quran-dynamic-section { margin: 10px 0 0 0; padding: 0; position: relative; }
+        .dynamic-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 5px; }
+        .dynamic-label { 
+            color: var(--gold); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; 
+            cursor: pointer; user-select: none;
+        }
+        
+        .slider-stop-btn { display: none; }
+        
+        .mehrab-frame { 
+            width: 100%; 
+            border: none; 
+            height: 255px; 
+            background: transparent; 
+            overflow: hidden;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- أيقونة القائمة (تتفاعل مع index.html) --- */
+        .menu-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 1001;
+            background: rgba(197, 160, 89, 0.1); 
+            border-radius: 8px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .menu-icon span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- زر الحساب/تسجيل الدخول --- */
+        .user-auth-btn {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            z-index: 1001;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .user-auth-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-auth-btn:active { transform: scale(0.9); background: var(--gold); color: #000; }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* --- تنسيق الهيدر المطور بلمسة نفحات --- */
+        .site-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 65px;
+            padding: 0 15px;
+            overflow: visible; 
+            margin-bottom: 40px; 
+        }
+
+        .header-center-titles {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .site-title {
+            font-size: 1.15rem;
+            margin: 0;
+            color: var(--gold);
+            font-weight: 900;
+            transform: translateY(45px); 
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .sub-title-eng {
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.65rem;
+            color: #8b7346; 
+            font-weight: 700;
+            white-space: nowrap;
+            letter-spacing: 0.8px;
+            margin-top: 54px; 
+            pointer-events: auto;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .floating-logo-left {
+            position: absolute;
+            left: 5px;
+            top: 15px; 
+            height: 85px; 
+            width: auto;
+            z-index: 1000;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            pointer-events: none;
+        }
+
+        .showcase-slider {
+            margin-top: 10px !important; 
+        }
+
+        /* --- تصميم بوابة رحلة الخلود --- */
+        .kholud-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #001f3f, #3d4921);
+            margin: 8px auto;
+            width: 95%;
+            padding: 3px 0px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid #d4af37;
+            position: relative;
+            transition: 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .kholud-entrance:active { transform: scale(0.97); }
+        .kholud-info { flex-grow: 1; text-align: right; pointer-events: none; }
+        .kholud-title-ar { color: #d4af37; font-size: 1rem; font-weight: 900; margin: 0; }
+        .kholud-title-en { color: rgba(255,255,255,0.6); font-size: 0.65rem; font-weight: 700; display: block; }
+        .kholud-desc { color: #ffffff; font-size: 0.60rem; margin: 4px 0 0 0; opacity: 0.9; }
+        
+        .kholud-visual { 
+            width: 70px;
+            height: auto;
+            margin-right: 5px;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+            pointer-events: none;
+        }
+
+        /* --- تصميم زر المسابقة الرمضانية --- */
+        .quiz-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #4b1212, #2d0a0a);
+            margin: 4px auto;
+            width: 95%;
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid var(--gold);
+            position: relative;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .quiz-entrance::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -60%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            animation: rotate-glow 10s linear infinite;
+        }
+        @keyframes rotate-glow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .quiz-entrance:active { transform: scale(0.95); }
+        .quiz-info { flex-grow: 1; z-index: 2; }
+        .quiz-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+        .quiz-title { color: var(--gold); font-size: 1.05rem; font-weight: 900; margin: 0; font-family: 'Amiri', serif; }
+        .quiz-tag { font-size: 0.55rem; background: var(--gold); color: #000; padding: 1px 6px; border-radius: 6px; font-weight: 900; display: inline-block; white-space: nowrap; }
+        .quiz-desc { color: #e0e0e0; font-size: 0.56rem; margin-top: 1px; font-weight: 500; }
+        .quiz-visual-img { width: 66px; height: auto; margin-right: -8px; z-index: 8; filter: drop-shadow(0 0 8px var(--gold)); }
+
+        /* --- تصميم زر بوابة البراعم (المطور) --- */
+        .baraem-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #00c6ff, #003366, #00c6ff);
+            background-size: 200% auto;
+            animation: rainbow-glow 4s linear infinite;
+            margin: 15px auto;
+            width: 95%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            border: 3px solid #ffffff;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 114, 255, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            overflow: visible;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        @keyframes rainbow-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .baraem-entrance:active { transform: scale(0.95) translateY(2px); }
+        .baraem-info { flex-grow: 1; z-index: 2; }
+        .baraem-title { 
+            color: #ffffff; 
+            font-size: 1.25rem; 
+            font-weight: 900; 
+            margin: 0; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-family: 'Cairo', sans-serif;
+        }
+        .baraem-desc { 
+            color: #ffffff; 
+            font-size: 0.55rem; 
+            margin-top: 3px; 
+            font-weight: 700; 
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .baraem-img-container {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin-right: -10px;
+            margin-top: -7px;
+            margin-bottom: -15px;
+            z-index: 5;
+        }
+        .baraem-visual-img { 
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            animation: float-kid 3s ease-in-out infinite;
+        }
+        @keyframes float-kid {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+        .baraem-entrance::after {
+            content: '✨';
+            position: absolute;
+            left: 10%;
+            top: 20%;
+            font-size: 1rem;
+            animation: star-blink 2s infinite;
+            opacity: 0.6;
+        }
+        @keyframes star-blink { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* --- تصميم زر معرض التصاميم (Gallery) --- */
+        .gallery-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #121212, #2c3e50);
+            margin: 15px auto;
+            width: 92%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid var(--accent-color, #d4af37);
+            position: relative;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .gallery-entrance:active { transform: scale(0.97); }
+        .gallery-info { flex-grow: 1; }
+        .gallery-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .gallery-title-ar { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin: 0; }
+        .gallery-title-en { color: #8b7346; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+        .gallery-desc { color: #dcdde1; font-size: 0.65rem; margin: 0; line-height: 1.3; font-weight: 500; }
+        .gallery-visual { font-size: 1.7rem; filter: drop-shadow(0 0 5px var(--gold)); }
+
+        /* --- تصميم بوابة المكتبة --- */
+        .library-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #0a2d53, #001529);
+            margin: 20px auto; 
+            width: 92%;
+            padding: 8px 20px; 
+            border-radius: 18px; 
+            text-decoration: none;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 15px rgba(197, 160, 89, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .library-entrance:active { transform: scale(0.98); }
+        .lib-text h3 { color: var(--gold); font-size: 1rem; margin-bottom: 0px; font-weight: 900; }
+        .lib-text p { color: #eee; font-size: 0.6rem; line-height: 1.2; max-width: 190px; margin: 0; }
+
+        .lib-3d-icon {
+            position: relative;
+            width: 90px;
+            height: 55px; 
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .mini-shelf {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            transform: rotateX(10deg) rotateY(-15deg);
+        }
+
+        .m-book {
+            width: 16px; 
+            border-radius: 2px 4px 4px 2px;
+            position: relative;
+            box-shadow: 3px 0 5px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .b1 { background: #1b4d3e; height: 38px; transform: rotateZ(-5deg); border-left: 2px solid #2d6a54; } 
+        .b2 { background: #7b1113; height: 46px; transform: translateY(-2px); border-left: 2px solid #a52a2a; } 
+        .b3 { background: #c5a059; height: 35px; transform: rotateZ(3deg); border-left: 2px solid #e2c08d; } 
+        .b4 { background: #003366; height: 42px; transform: rotateZ(1deg); border-left: 2px solid #0055aa; }
+
+        .m-book::before {
+            content: "";
+            position: absolute;
+            top: 10%;
+            left: 3px;
+            width: 2px;
+            height: 80%;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .library-entrance:hover .m-book { transform: translateY(-5px) rotateZ(0deg); }
+
+        /* --- تصميم زر البث المباشر --- */
+        .live-stream-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 15px auto;
+            width: 92%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            transition: 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .live-stream-box:active { transform: scale(0.97); }
+        .live-info { flex-grow: 1; }
+        .live-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .live-title-ar { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin: 0; }
+        .live-title-en { color: #8b7346; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+        .live-desc { color: #9b86a4; font-size: 0.65rem; margin: 0; line-height: 1.3; font-weight: 500; }
+        .live-visual { display: flex; flex-direction: column-reverse; align-items: center; gap: 6px; min-width: 40px; }
+        .pulse-indicator { width: 8px; height: 8px; background: #ff3b3b; border-radius: 50%; position: relative; box-shadow: 0 0 10px #ff3b3b; }
+        .pulse-indicator::after { content: ""; position: absolute; width: 100%; height: 100%; background: inherit; border-radius: inherit; animation: pulse-ring 1.5s infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(3); opacity: 0; } }
+        .live-icon-3d { font-size: 1.5rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); line-height: 1; }
+
+        /* --- تصميم زر مُصَحِّحُ النَّفَحَاتِ --- */
+        .tasmee-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #1a4731, #0a1f16);
+            margin: 15px auto 10px auto;
+            width: 92%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid rgba(46, 204, 113, 0.3);
+            position: relative;
+            transition: 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .tasmee-entrance:active { transform: scale(0.97); }
+        .tasmee-info { flex-grow: 1; }
+        .tasmee-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .tasmee-title-ar { color: #2ecc71; font-size: 0.95rem; font-weight: 900; margin: 0; }
+        .tasmee-title-en { color: #1e8449; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+        .tasmee-desc { color: #a9dfbf; font-size: 0.65rem; margin: 0; line-height: 1.3; }
+        .tasmee-visual { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4)); }
+
+        /* --- تصميم زر اِخْتِبَارَاتُ اَلْإِجَازَةِ --- */
+        .ejaza-entrance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #3d2b1f, #1e140d);
+            margin: 0 auto 15px auto;
+            width: 92%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid rgba(179, 147, 89, 0.3);
+            position: relative;
+            transition: 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .ejaza-entrance:active { transform: scale(0.97); }
+        .ejaza-info { flex-grow: 1; }
+        .ejaza-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .ejaza-title-ar { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin: 0; }
+        .ejaza-title-en { color: #8b7346; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+        .ejaza-desc { color: #d4bc82; font-size: 0.65rem; margin: 0; line-height: 1.3; }
+        .ejaza-visual { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(179, 147, 89, 0.4)); }
+
+        /* --- زر المحرك الذكي العائم --- */
+        .floating-smart-btn {
+            position: fixed;
+            bottom: 85px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+            color: white;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-controls">
+            <div class="menu-icon" onclick="window.parent.postMessage('TOGGLE_MENU', '*')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="../Account/login.html" class="user-auth-btn" id="userAuthBtn" title="تسجيل الدخول / حسابي">
+                👤
+            </a>
+        </div>
+
+        <div class="header-center-titles">
+            <h1 class="site-title">نَفَحَاتٌ إِيمَانِيَّةٌ</h1>
+            <span class="sub-title-eng">Nafahat Imaniyah</span>
+        </div>
+
+        <img src="LogoNafahat.png" class="floating-logo-left" alt="Logo">
+    </header>
+
+    <a href="Nresearch.html" class="floating-smart-btn" title="محرك نفحات الذكي">🔎</a>
+
+    <div class="showcase-slider">
+        <div class="ticker-label">جديدنا</div>
+        <div class="slider-window">
+            <div class="slider-track" id="sliderTrack"><span class="slider-item">جاري تحميل النفحات...</span></div>
+        </div>
+        <div class="slider-controls"><button id="toggleSlider">⏸</button></div>
+    </div>
+
+    <div onclick="location.href='Kholud.html'" class="kholud-entrance">
+        <img src="https://i.postimg.cc/XYnKDrQM/fanos1.gif" class="kholud-visual" alt="فانوس">
+        <div class="kholud-info">
+            <h3 class="kholud-title-ar">رِحْلَةُ الْخُلُودِ</h3>
+            <span class="kholud-title-en">JOURNEY TO ETERNITY</span>
+            <p class="kholud-desc">دروس إيمانية رمضانية مع فضيلة الدكتور حاتم عبد العظيم.</p>
+        </div>
+    </div>
+
+    <div onclick="location.href='race1.html'" class="quiz-entrance">
+        <img src="https://i.postimg.cc/q7wjxWLf/vecteezy-ramadan-lantern-fanous-islamic-decoration-ornate-metal-light-77219020.png" class="quiz-visual-img" alt="فانوس المسابقة">
+        <div class="quiz-info">
+            <div class="quiz-header-row">
+                <div class="quiz-tag">تحدي جديد</div>
+                <h3 class="quiz-title">اَلْمُسَابَقَةُ الرَّمَضَانِيَّةُ</h3>
+            </div>
+            <p class="quiz-desc">سؤال يومي سريع.. اختبر معلوماتك وانشر الفائدة مع أصحابك!</p>
+        </div>
+    </div>
+
+    <div onclick="location.href='../Baraem/baraem.html'" class="baraem-entrance">
+        <div class="baraem-info">
+            <h3 class="baraem-title">بَوَّابَةُ اَلْبَرَاعِمِ</h3>
+            <p class="baraem-desc">عالم مبهج من القصص والأنوار لصناع المستقبل.</p>
+        </div>
+        <div class="baraem-img-container">
+            <img src="https://i.postimg.cc/jSZsjy1n/CH3.png" class="baraem-visual-img" alt="براعم نفحات">
+        </div>
+    </div>
+
+    <div onclick="location.href='gallery.html'" class="gallery-entrance">
+        <div class="gallery-info">
+            <div class="gallery-title-row">
+                <h3 class="gallery-title-ar">مَعرضُ نَفَحَات</h3>
+                <span class="gallery-title-en">DIGITAL GALLERY</span>
+            </div>
+            <p class="gallery-desc">أرشيف التصاميم اليومية بجودة عالية.. شاهد، حمّل، وشارك الجمال.</p>
+        </div>
+        <div class="gallery-visual">🎨</div>
+    </div>
+
+    <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'more'}, '*')" class="more-trigger">
+        <span class="more-icon">✨</span><span class="more-text">مَوَاقِيتُ الصَّلَاةِ وَإِضَافَاتٌ ذَكِيَّةٌ</span><span class="more-icon">🕋</span>
+    </div>
+
+    <div class="main-radio-box">
+        <img src="https://i.postimg.cc/vmyLcv33/copilot-image-1753881433233.png" class="radio-img" alt="إذاعة القرآن">
+        <div style="flex-grow: 1; z-index: 2;">
+            <strong style="font-size: 1rem; color: #fff; display: block;">إِذَاعَةُ الْقُرْآنِ الْكَرِيمِ</strong>
+            <span style="font-size: 0.65rem; color: var(--gold); font-weight: 700;">بث مباشر على مدار الساعة</span>
+        </div>
+        <button class="play-btn" onclick="toggleAudio('https://s34.radiolize.com/radio/8050/radio.mp3', this)">▶</button>
+    </div>
+
+    <div onclick="location.href='live.html'" class="live-stream-box">
+        <div class="live-info">
+            <div class="live-title-row">
+                <h3 class="live-title-ar">اَلْبَثُّ الْمُبَاشِرُ</h3>
+                <span class="live-title-en">LIVE STREAM</span>
+            </div>
+            <p class="live-desc">مشاهدة مباشرة للحرمين الشريفين وقنوات الدروس العلمية على مدار الساعة.</p>
+        </div>
+        <div class="live-visual">
+            <span class="live-icon-3d">📺</span>
+            <div class="pulse-indicator"></div>
+        </div>
+    </div>
+
+    <div onclick="location.href='../Tasmee/quran1.html'" class="tasmee-entrance">
+        <div class="tasmee-info">
+            <div class="tasmee-title-row">
+                <h3 class="tasmee-title-ar">مُصَحِّحُ النَّفَحَاتِ</h3>
+                <span class="tasmee-title-en">AL-QURAN TEST</span>
+            </div>
+            <p class="tasmee-desc">اختبر حفظك واسترجع الآيات بدقة مع خاصية التلميح الصوتي لأشهر القراء.</p>
+        </div>
+        <div class="tasmee-visual">🎙️</div>
+    </div>
+
+    <div onclick="location.href='../Tasmee/ejaza-tests.html'" class="ejaza-entrance">
+        <div class="ejaza-info">
+            <div class="ejaza-title-row">
+                <h3 class="ejaza-title-ar">اِخْتِبَارَاتُ اَلْإِجَازَةِ</h3>
+                <span class="ejaza-title-en">IJAZA TESTS</span>
+            </div>
+            <p class="ejaza-desc">قيّم مهاراتك في ضبط فواصل الآيات ومواضع الوقف والابتداء في القرآن الكريم.</p>
+        </div>
+        <div class="ejaza-visual">📜</div>
+    </div>
+
+    <section class="quran-dynamic-section">
+        <div class="dynamic-header">
+            <div class="dynamic-label" onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'mehrab'}, '*')">
+                <span>💎</span> تَأَمُّلَاتٌ إِيمَانِيَّةٌ
+            </div>
+        </div>
+        <iframe src="Mehrab.html?mode=home" id="mehrabIframe" class="mehrab-frame" scrolling="no" allowtransparency="true"></iframe>
+    </section>
+
+    <div class="glass-dashboard">
+        <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'masbaha'}, '*')" class="glass-btn btn-masbaha"><span class="btn-icon">📿</span><span class="btn-label">المسبحة</span></div>
+        <div onclick="location.href='../Textbook/azkar.html'" class="glass-btn btn-morning"><span class="btn-icon">☀️</span><span class="btn-label">الصباح</span></div>
+        <div onclick="location.href='../Textbook/azkarNight.html'" class="glass-btn btn-evening"><span class="btn-icon">🌙</span><span class="btn-label">المساء</span></div>
+        <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'khatma'}, '*')" class="glass-btn btn-khatma"><span class="btn-icon">📖</span><span class="btn-label">الختمة</span></div>
+    </div>
+
+    <div class="podium-container">
+        <div class="book-showcase-text">
+            <h2>مِائَةُ دُعَاءٍ مِنْ جَوَامِعِ الكَلِمِ وَصِحَاحِ السُّنةِ</h2>
+            <p>أدعية مختارة من مشكاة النبوة تجمع خير الدنيا والآخرة.</p>
+            <a href="../Textbook/hadith100.html" class="explore-btn">تصفح الكتاب</a>
+        </div>
+        <div class="floating-book">
+            <div class="book-side-pages"></div><div class="book-top-pages"></div>
+            <div class="book-cover-design">
+                <div style="color: #fff; font-size: 0.55rem; font-weight: 700; text-align: center; line-height: 1.4;"><span style="color: var(--gold); font-size: 0.7rem;">مِائَةُ دُعَاءٍ</span><br>مِنْ جَوَامِعِ الكَلِمِ</div>
+                <div style="width: 25px; height: 1px; background: var(--gold); margin-top: 8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="audio-section">
+        <div class="audio-strip s1"><div class="strip-header"><div class="strip-title">اَلْمُخْتَصَرُ فِي التَّفْسِيرِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/mukhtasartafsir', this)">▶</button></div><div class="strip-desc">تَفْسِيرٌ مُخْتَصَرٌ لِكُلِّ آيَةٍ.</div></div>
+        <div class="audio-strip s2"><div class="strip-header"><div class="strip-title">حَيَاةُ الصَّحَابَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/sahabah', this)">▶</button></div><div class="strip-desc">صُوَرٌ مِنْ حَيَاةِ الصَّحَابَةِ.</div></div>
+        <div class="audio-strip s3"><div class="strip-header"><div class="strip-title">فِي ظِلَالِ اَلسِّيرَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/fi_zilal_alsiyra', this)">▶</button></div><div class="strip-desc">سيرة نبينا محمد ﷺ.</div></div>
+        <div class="audio-strip s4"><div class="strip-header"><div class="strip-title">اَلرُّقْيَةُ الشَّرْعِيَّةُ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/roqiah', this)">▶</button></div><div class="strip-desc">آيَاتٌ مِنَ الْقُرْآنِ لِلتَّحْصِينِ.</div></div>
+        <div class="audio-strip s5"><div class="strip-header"><div class="strip-title">آيَاتُ السَّكِينَةِ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/sakeenah', this)">▶</button></div><div class="strip-desc">آيَاتٌ تُرِيحُ الْقُلُوبَ.</div></div>
+        <div class="audio-strip s6"><div class="strip-header"><div class="strip-title">تِلَاوَاتٌ خَاشِعَةٌ</div><button class="mini-play" onclick="toggleAudio('https://backup.qurango.net/radio/salma', this)">▶</button></div><div class="strip-desc">تلاوات مؤثرة ومختارة.</div></div>
+    </div>
+
+    <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'library'}, '*')" class="library-entrance">
+        <div class="lib-text">
+            <h3>📖 المَكْتَبَةُ الإِسْلَامِيَّةُ</h3>
+            <p>خَيْرُ جَلِيسٍ في الزَّمَانِ كِتَابُ .. وَمِنْهُ لِأَنْوَارِ الهُدَى أَبْوَابُ</p>
+        </div>
+        <div class="lib-3d-icon">
+            <div class="mini-shelf">
+                <div class="m-book b1"></div>
+                <div class="m-book b2"></div>
+                <div class="m-book b4"></div>
+                <div class="m-book b3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin: 35px auto 20px auto; width: 92%; max-width: 400px;">
+        <a href="contact.html" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(145deg, #c5a059, #b38c47);
+            color: #1a1a1a;
+            padding: 14px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.15);
+            user-select: none;
+            -webkit-user-select: none;
+        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(197, 160, 89, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(197, 160, 89, 0.3)';">
+            <span style="font-size: 1.3rem;">✉️</span>
+            راسل إدارة نفحات (مقترحات وشكاوى)
+        </a>
+    </div>
+
+    <footer class="final-footer"><div class="footer-content"><span>جميع الحقوق محفوظة لموقع</span> <span style="font-weight:900; color:var(--gold);">نَفَحَاتٌ إِيمَانِيَّةٌ</span> <span>| 2026</span></div></footer>
+
+    <audio id="globalAudio"></audio>
+
+    <script src="main.js" type="module"></script>
+    <script>
+        const audio = document.getElementById('globalAudio');
+        let lastBtn = null;
+        function toggleAudio(url, btn) { 
+            if (audio.src === url && !audio.paused) { 
+                audio.pause(); 
+                btn.innerText = "▶"; 
+            } else { 
+                if (lastBtn) lastBtn.innerText = "▶"; 
+                audio.src = url; 
+                audio.play(); 
+                btn.innerText = "⏸"; 
+                lastBtn = btn; 
+            } 
+        }
+        
+        // التحقق من حالة المستخدم المسجل وعرض الصورة الشخصية
+        window.onload = function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = localStorage.getItem('currentUser');
+            const authBtn = document.getElementById('userAuthBtn');
+
+            if(isLoggedIn === 'true' && currentUser) {
+                const user = JSON.parse(currentUser);
+                authBtn.href = '../Account/profile.html';
+                if (user.picture) {
+                    authBtn.innerHTML = `<img src="${user.picture}" alt="User">`;
+                } else {
+                    authBtn.innerHTML = '👤';
+                }
+            } else {
+                authBtn.href = '../Account/login.html';
+                authBtn.innerHTML = '👤';
+            }
+        }
+    </script>
+</body>
+</html>
