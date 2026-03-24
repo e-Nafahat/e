@@ -156,7 +156,7 @@
             pointer-events: none;
         }
 
-        /* --- بطاقة الترحيب الملكية البديلة لجديدنا --- */
+        /* --- بطاقة الترحيب المنضبطة --- */
         .welcome-card-premium {
             margin: 10px auto 15px auto;
             width: 92%;
@@ -274,7 +274,7 @@
         .quiz-desc { color: #e0e0e0; font-size: 0.56rem; margin-top: 1px; font-weight: 500; }
         .quiz-visual-img { width: 66px; height: auto; margin-right: -8px; z-index: 8; filter: drop-shadow(0 0 8px var(--gold)); }
 
-        /* --- تصميم زر بوابة البراعم (المطور) --- */
+        /* --- تصميم زر بوابة البراعم --- */
         .baraem-entrance {
             display: flex;
             align-items: center;
@@ -350,7 +350,7 @@
         }
         @keyframes star-blink { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-        /* --- تصميم زر معرض التصاميم (Gallery) --- */
+        /* --- تصميم زر معرض التصاميم --- */
         .gallery-entrance {
             display: flex;
             align-items: center;
@@ -552,6 +552,23 @@
             transition: 0.3s;
             text-decoration: none;
         }
+
+        /* تنسيق قسم الـ "More" ليكون متناسقاً */
+        .more-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(197, 160, 89, 0.1);
+            margin: 10px auto;
+            width: 92%;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--gold);
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -628,15 +645,6 @@
 
     <div onclick="window.parent.postMessage({type: 'OPEN_PAGE', page: 'more'}, '*')" class="more-trigger">
         <span class="more-icon">✨</span><span class="more-text">مَوَاقِيتُ الصَّلَاةِ وَإِضَافَاتٌ ذَكِيَّةٌ</span><span class="more-icon">🕋</span>
-    </div>
-
-    <div class="main-radio-box">
-        <img src="https://i.postimg.cc/vmyLcv33/copilot-image-1753881433233.png" class="radio-img" alt="إذاعة القرآن">
-        <div style="flex-grow: 1; z-index: 2;">
-            <strong style="font-size: 1rem; color: #fff; display: block;">إِذَاعَةُ الْقُرْآنِ الْكَرِيمِ</strong>
-            <span style="font-size: 0.65rem; color: var(--gold); font-weight: 700;">بث مباشر على مدار الساعة</span>
-        </div>
-        <button class="play-btn" onclick="toggleAudio('https://s34.radiolize.com/radio/8050/radio.mp3', this)">▶</button>
     </div>
 
     <div onclick="location.href='live.html'" class="live-stream-box">
