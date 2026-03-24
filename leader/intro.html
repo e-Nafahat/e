@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         body, html { 
             margin: 0; padding: 0; overflow: hidden; background: #000; height: 100%; 
             font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; 
         }
         
-        /* خلفية الكون */
+        /* خلفية الكون السينمائية */
         #star-canvas {
             position: fixed;
             top: 0;
@@ -28,101 +28,98 @@
             z-index: 2;
         }
 
-        /* زينة العيد (الرابط رقم 2) */
-        .eid-decoration-top {
-            position: absolute;
-            top: -6%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 77%;
-            max-width: 600px;
-            z-index: 25;
-            pointer-events: none;
-            opacity: 0.9;
+        /* محتوى المقدمة - تقليل المسافات */
+        .intro-content { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            width: 100%; gap: 8px; z-index: 5; 
         }
-        .eid-decoration-top img {
-            width: 100%;
-            display: block;
-
-        }
-
-        @keyframes rotatePattern { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes flickerIntensity { 0% { opacity: 0.7; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
-        @keyframes lanternSwing { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
-
-        /* محتوى المقدمة */
-        .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 8px; z-index: 5; }
         
         .elegant-logo-img { 
-            width: 110px; 
+            width: 115px; 
             height: auto; 
             opacity: 0; 
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); 
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); 
             z-index: 10;
+            transform: scale(0.85);
+            margin-bottom: 5px;
         }
         
-        /* تعديل: الرابط رقم 1 بدل الآية */
-        .eid-sub-decoration {
-            position: relative;
-            width: 65%;
-            max-width: 170px;
-            z-index: 10;
-            margin: 5px 0;
+        .platform-title {
+            color: #d4af37;
+            font-weight: 900;
+            font-size: 1.6rem;
+            margin: 0;
             opacity: 0;
-            animation: fadeIn 2s ease forwards 1s;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            line-height: 1.2;
         }
-        .eid-sub-decoration img { width: 100%; display: block; }
 
-        .elegant-line { height: 1px; width: 60%; background: linear-gradient(90deg, transparent, #d4af37, transparent); opacity: 0; margin: 4px 0; }
-        
-        .elegant-sub { 
-            font-weight: 400; 
-            font-size: 1rem; 
-            color: #f0f0f0; 
+        .platform-title-en {
+            color: #f0f0f0;
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            margin: 0;
+            opacity: 0;
+            text-transform: uppercase;
+        }
+
+        .elegant-line { 
+            height: 1px; 
+            width: 40%; 
+            background: linear-gradient(90deg, transparent, #d4af37, transparent); 
             opacity: 0; 
-            text-align: center; 
-            line-height: 1.8; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+            margin: 8px 0; 
         }
         
+        /* زر الدخول المحدث (أصغر وأكثر تناسقاً) */
+        .mini-btn-solid {
+            margin-top: 15px; 
+            padding: 8px 35px; 
+            font-size: 0.8rem; 
+            font-family: 'Cairo', sans-serif;
+            color: #000; 
+            background: #d4af37; 
+            border: none; 
+            border-radius: 20px;
+            cursor: pointer; 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transition: all 0.4s ease; 
+            opacity: 0;
+            z-index: 100; 
+            font-weight: 700;
+        }
+
+        .mini-btn-solid:hover {
+            transform: scale(1.05);
+            background: #fff;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        }
+
+        /* مقولة الإمام مالك (خط أصغر بدون أيقونة) */
         .imam-malik-quote {
             position: absolute;
             bottom: 30px;
             width: 90%;
             text-align: center;
-            color: #d4af37;
-            font-size: 0.79rem;
-            font-weight: 200;
+            color: rgba(212, 175, 55, 0.7);
+            font-size: 0.65rem;
+            font-weight: 400;
             opacity: 0;
             animation: fadeIn 3s ease forwards 3.5s;
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
             padding-top: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
 
-        /* تعديل: أيقونة الرابط رقم 3 */
-        .mini-icon {
-            width: 18px;
-            height: auto;
-            vertical-align: middle;
-        }
-
-        .mini-btn-solid {
-            margin-top: 15px; padding: 10px 40px; font-size: 0.85rem; font-family: 'Cairo', sans-serif;
-            color: #000; background: #d4af37; border: none; border-radius: 4px;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            transition: transform 0.3s ease, background 0.3s ease; opacity: 0;
-            z-index: 100; font-weight: 600;
-        }
-
-        .fade-in-up { animation: fadeInUp 1.5s ease forwards; }
-        .fade-in { animation: fadeIn 2s ease forwards; }
-        .scale-x { animation: scaleX 1.2s ease forwards; }
+        /* Animations */
+        .fade-in-up { animation: fadeInUp 1.8s ease forwards; }
+        .fade-in { animation: fadeIn 2.5s ease forwards; }
+        .scale-x { animation: scaleX 1.5s ease forwards; }
         
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(20px) scale(0.9); } 
+            to { opacity: 1; transform: translateY(0) scale(1); } 
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleX { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
     </style>
@@ -136,62 +133,19 @@
     </audio>
 
     <div id="cinema-intro">
-        <div class="eid-decoration-top">
-            <img src="https://i.postimg.cc/Qt9wS05c/20260319-131157.png" alt="Eid Decoration">
-        </div>
-
-        <div class="moon-container">
-            <div class="crescent-moon"></div>
-        </div>
-
-        <div class="lanterns-lux-container">
-            <div class="lantern-wire" style="animation-delay: 0s;">
-                <div class="wire"></div>
-                <div class="royal-lantern">
-                    <div class="lantern-cap"></div><div class="lantern-roof"></div>
-                    <div class="lantern-glass"><div class="lantern-flame"></div></div>
-                    <div class="lantern-base"></div>
-                </div>
-            </div>
-            <div class="lantern-wire" style="animation-delay: -2.5s;">
-                <div class="wire" style="height: 75px;"></div>
-                <div class="royal-lantern">
-                    <div class="lantern-cap"></div><div class="lantern-roof"></div>
-                    <div class="lantern-glass"><div class="lantern-flame"></div></div>
-                    <div class="lantern-base"></div>
-                </div>
-            </div>
-            <div class="lantern-wire" style="animation-delay: -1.2s;">
-                <div class="wire" style="height: 55px;"></div>
-                <div class="royal-lantern">
-                    <div class="lantern-cap"></div><div class="lantern-roof"></div>
-                    <div class="lantern-glass"><div class="lantern-flame"></div></div>
-                    <div class="lantern-base"></div>
-                </div>
-            </div>
-        </div>
-
         <div class="intro-content">
             <img src="https://e-nafahat.github.io/e/leader/LogoNafahat.png" class="elegant-logo-img fade-in-up" style="animation-delay: 0.5s;">
             
-            <div class="eid-sub-decoration">
-                <img src="https://i.postimg.cc/MpYSjPbb/2026031014.png" alt="Eid Greeting">
-            </div>
+            <h1 class="platform-title fade-in" style="animation-delay: 1s;">نَفَحَاتٌ إِيمَانِيَّةٌ</h1>
+            <p class="platform-title-en fade-in" style="animation-delay: 1.4s;">NAFAHAT IMANIYAH</p>
 
-            <div class="elegant-line scale-x" style="animation-delay: 1.2s;"></div>
+            <div class="elegant-line scale-x" style="animation-delay: 1.8s;"></div>
             
-            <p class="elegant-sub fade-in" style="animation-delay: 1.8s;">
-                نَسْأَلُ اللهَ أَنْ يَتَقَبَّلَ مِنَّا وَمِنْكُمْ صَالِحَ الأَعْمَالِ،<br>
-                وَأَنْ يَجْعَلَ عِيدَنَا مَغْفِرَةً وَرِضْوَانًا.<br>
-                كُلُّ عَامٍ وَأَنْتُمْ إِلَى اللهِ أَقْرَبُ.. تَقَبَّلَ اللهُ طَاعَتَكُمْ.
-            </p>
-            
-            <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.5s;">دخول</button>
+            <button id="start-btn" class="mini-btn-solid fade-in" style="animation-delay: 2.5s;">دُخُول</button>
         </div>
 
         <div class="imam-malik-quote">
-            <img src="https://i.postimg.cc/DwpxD123/20260319-131306.png" class="mini-icon" alt="Icon">
-            <span>قال الإمام مالك رحمه الله - لا يصلح آخر هذه الأمة إلا ما أصلح أولها</span>
+            <span>قَالَ الإِمَامُ مَالِكٌ رَحِمَهُ اللهُ: لَا يُصْلِحُ آخِرَ هَذِهِ الأُمَّةِ إِلَّا مَا أَصْلَحَ أَوَّلَهَا</span>
         </div>
     </div>
 
@@ -210,27 +164,26 @@
             canvas.style.height = window.innerHeight + 'px';
             
             stars = [];
-            for(let i=0; i<180; i++) {
+            for(let i=0; i<200; i++) {
                 stars.push({
                     x: Math.random() * window.innerWidth,
                     y: Math.random() * window.innerHeight,
-                    size: Math.random() * 1.2 + 0.3,
+                    size: Math.random() * 1.2 + 0.2,
                     opacity: Math.random(),
-                    blink: 0.005 + Math.random() * 0.01,
-                    speed: 0.04 + Math.random() * 0.08
+                    blink: 0.003 + Math.random() * 0.007,
+                    speed: 0.02 + Math.random() * 0.04
                 });
             }
-            for(let i=0; i<5; i++) { setTimeout(createMeteor, i * 800); }
         }
 
         function createMeteor() {
             meteors.push({
-                x: Math.random() * window.innerWidth * 1.2,
-                y: Math.random() * window.innerHeight * -0.4,
-                len: 120 + Math.random() * 180,
+                x: Math.random() * window.innerWidth * 1.5,
+                y: Math.random() * window.innerHeight * -0.5,
+                len: 120 + Math.random() * 150,
                 speed: 3 + Math.random() * 5,
-                opacity: 0.8,
-                thickness: 1.2 + Math.random() * 1
+                opacity: 1,
+                thickness: 1 + Math.random() * 1
             });
         }
 
@@ -238,22 +191,19 @@
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
             const grad = ctx.createRadialGradient(window.innerWidth/2, window.innerHeight/2, 0, window.innerWidth/2, window.innerHeight/2, window.innerWidth);
-            grad.addColorStop(0, '#001220');
+            grad.addColorStop(0, '#001a2c');
             grad.addColorStop(1, '#000');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
             stars.forEach(s => {
                 s.opacity += s.blink;
-                if(s.opacity > 1 || s.opacity < 0.2) s.blink *= -1;
+                if(s.opacity > 1 || s.opacity < 0.3) s.blink *= -1;
                 s.x += s.speed;
                 if(s.x > window.innerWidth) s.x = 0;
                 ctx.beginPath();
-                const starGrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size);
-                starGrad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
-                starGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                ctx.fillStyle = starGrad;
-                ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
                 ctx.fill();
             });
 
@@ -261,9 +211,9 @@
                 ctx.save();
                 ctx.globalAlpha = m.opacity;
                 const meteorGrad = ctx.createLinearGradient(m.x, m.y, m.x - m.len, m.y + m.len);
-                meteorGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)'); 
-                meteorGrad.addColorStop(0.2, 'rgba(212, 175, 55, 0.5)'); 
-                meteorGrad.addColorStop(1, 'rgba(212, 175, 55, 0)'); 
+                meteorGrad.addColorStop(0, '#fff'); 
+                meteorGrad.addColorStop(0.2, '#d4af37'); 
+                meteorGrad.addColorStop(1, 'transparent'); 
                 ctx.strokeStyle = meteorGrad;
                 ctx.lineWidth = m.thickness;
                 ctx.lineCap = 'round';
@@ -271,12 +221,12 @@
                 ctx.moveTo(m.x, m.y);
                 ctx.lineTo(m.x - m.len, m.y + m.len);
                 ctx.stroke();
-                m.x -= m.speed; m.y += m.speed; m.opacity -= 0.006;
-                if(m.opacity <= 0 || m.y > window.innerHeight + m.len) meteors.splice(index, 1);
+                m.x -= m.speed; m.y += m.speed; m.opacity -= 0.005;
+                if(m.opacity <= 0) meteors.splice(index, 1);
                 ctx.restore();
             });
 
-            if(Math.random() < 0.012) createMeteor();
+            if(Math.random() < 0.01) createMeteor();
             requestAnimationFrame(draw);
         }
 
@@ -293,13 +243,11 @@
                 if(logoAudio) {
                     logoAudio.play().catch(e => console.log("Audio blocked"));
                 }
-                setTimeout(() => {
-                    window.parent.postMessage('START_SITE_NOW', '*');
-                }, 100);
                 document.getElementById('cinema-intro').style.opacity = '0';
                 setTimeout(() => {
+                    window.parent.postMessage('START_SITE_NOW', '*');
                     document.getElementById('cinema-intro').style.display = 'none';
-                }, 1500);
+                }, 1200);
             });
         })();
     </script>
