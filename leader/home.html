@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
@@ -148,8 +156,51 @@
             pointer-events: none;
         }
 
-        .showcase-slider {
-            margin-top: 10px !important; 
+        /* --- بطاقة الترحيب الملكية البديلة لجديدنا --- */
+        .welcome-card-premium {
+            margin: 10px auto 15px auto;
+            width: 92%;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .welcome-card-premium::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/islamic-art.png');
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .welcome-card-premium h2 {
+            color: var(--gold);
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .welcome-card-premium p {
+            color: #e0e0e0;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .premium-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 10px auto;
         }
 
         /* --- تصميم بوابة رحلة الخلود --- */
@@ -527,13 +578,12 @@
 
     <a href="Nresearch.html" class="floating-smart-btn" title="محرك نفحات الذكي">🔎</a>
 
-    <div class="showcase-slider">
-        <div class="ticker-label">جديدنا</div>
-        <div class="slider-window">
-            <div class="slider-track" id="sliderTrack"><span class="slider-item">جاري تحميل النفحات...</span></div>
-        </div>
-        <div class="slider-controls"><button id="toggleSlider">⏸</button></div>
+    <div class="welcome-card-premium">
+        <h2>مَرحباً بِكم في نَفَحَاتٍ إِيمَانِيَّة</h2>
+        <div class="premium-divider"></div>
+        <p>نَشرُ العِلمِ النَّافِعِ المَبنيِّ علىٰ كِتابِ اللهِ وسُنَّةِ رَسولِهِ ﷺ، بِفَهمِ السَّلَفِ الصَّالحِ؛ لِيَكونَ زاداً لِلمُؤمِنِ في طَرِيقِهِ إِلىٰ الله.</p>
     </div>
+
 
     <div onclick="location.href='Kholud.html'" class="kholud-entrance">
         <img src="https://i.postimg.cc/XYnKDrQM/fanos1.gif" class="kholud-visual" alt="فانوس">
@@ -549,7 +599,7 @@
         <div class="quiz-info">
             <div class="quiz-header-row">
                 <div class="quiz-tag">تحدي جديد</div>
-                <h3 class="quiz-title">اَلْمُسَابَقَةُ الرَّمَضَانِيَّةُ</h3>
+                <h3 class="quiz-title">المسابقة اليومية</h3>
             </div>
             <p class="quiz-desc">سؤال يومي سريع.. اختبر معلوماتك وانشر الفائدة مع أصحابك!</p>
         </div>
@@ -726,7 +776,6 @@
             } 
         }
         
-        // التحقق من حالة المستخدم المسجل وعرض الصورة الشخصية
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const currentUser = localStorage.getItem('currentUser');
