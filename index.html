@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F9RJ4WMPL6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-F9RJ4WMPL6');
+    </script>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -269,7 +278,6 @@
                 `;
                 document.body.appendChild(div);
                 localStorage.setItem(key, today);
-                // اختفاء تلقائي بعد 8 ثوانٍ لضمان عدم الإزعاج
                 setTimeout(() => { if(div) div.remove(); }, 8000);
             }
         }
@@ -282,7 +290,6 @@
             setTimeout(() => {
                 mainContent.style.opacity = '1';
                 document.body.style.backgroundColor = "#F5F5DC";
-                // تشغيل الترحيب بعد الدخول الناجح للموقع
                 showNafahatGreeting();
             }, 100);
             setTimeout(() => { if(holder) holder.remove(); }, 1500);
@@ -324,7 +331,6 @@
             if(targetFrame) targetFrame.classList.add('active');
         }
 
-        // [Logic Check] نظام الرسائل المتبادلة بين الـ Iframes والنافذة الرئيسية
         window.addEventListener('message', function(event) {
             if (event.data === 'START_SITE_NOW') executeSiteEntry();
             if (event.data === 'TOGGLE_MENU') document.getElementById('magicNav').classList.toggle('active');
@@ -363,7 +369,6 @@
         document.body.style.visibility = 'visible';
         document.body.style.opacity = '1';
 
-        // [Logic Check] إدارة حالة الزيارة المتكررة لمنع تكرار الانترو
         if (sessionStorage.getItem('hasSeenIntro')) {
             const holder = document.getElementById('intro-holder');
             if(holder) holder.remove();
@@ -373,7 +378,6 @@
                 mainContent.style.opacity = '1';
             }
             document.body.style.backgroundColor = "#F5F5DC";
-            // تشغيل الترحيب حتى في حالة تجاوز الانترو
             showNafahatGreeting();
         } else {
             fetch('leader/intro.html')
