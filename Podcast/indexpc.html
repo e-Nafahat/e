@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>أثير النفحات - مشغل فيديو الغريب</title>
+    <title>أثير النفحات - مشغل سلسلة الغريب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,7 @@
             --royal-beige: #d1c7b7;
             --royal-orange: #e67e22;
             --bg-black: #050a0f;
+            --glass-white: rgba(255, 255, 255, 0.05);
         }
 
         * {
@@ -32,31 +33,112 @@
             height: 100vh;
         }
 
-        /* زر العودة المعتمد في الذاكرة */
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(10, 25, 47, 0.8);
+        /* الشريط العلوي الجديد */
+        .top-bar {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--royal-navy), var(--bg-black));
+            border-bottom: 1px solid rgba(201, 160, 80, 0.3);
+            z-index: 2000;
+        }
+
+        /* تصميم القائمة المنسدلة المخصص (Custom Dropdown) */
+        .custom-dropdown {
+            position: relative;
+            width: 70%;
+        }
+
+        .selected-episode-box {
+            background: var(--glass-white);
             border: 1px solid var(--royal-gold);
             color: var(--royal-gold);
-            padding: 5px 15px;
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .selected-episode-box::after {
+            content: '▼';
+            font-size: 10px;
+            margin-right: 10px;
+        }
+
+        .episodes-list {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 25, 47, 0.98);
+            border: 1px solid var(--royal-gold);
+            border-radius: 15px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 3000;
+            backdrop-filter: blur(15px);
+        }
+
+        .episodes-list.active {
+            display: flex;
+        }
+
+        .episode-item {
+            padding: 15px;
+            border-bottom: 1px solid rgba(201, 160, 80, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .episode-item:last-child { border-bottom: none; }
+
+        .episode-item:hover {
+            background: rgba(201, 160, 80, 0.15);
+        }
+
+        .episode-item .num {
+            background: var(--royal-gold);
+            color: var(--bg-black);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--royal-gold);
+            color: var(--royal-gold);
+            padding: 6px 15px;
             border-radius: 20px;
             font-size: 12px;
             cursor: pointer;
-            z-index: 1000;
+            font-weight: 600;
         }
 
-        /* 1. شاشة العرض المركزية (Video Display) */
+        /* شاشة العرض */
         .video-hero {
             width: 100%;
-            height: 60vh; 
+            height: 50vh; 
             background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 2px solid var(--royal-gold);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.8);
             position: relative;
         }
 
@@ -64,91 +146,147 @@
             width: 100%;
             height: 100%;
             object-fit: contain; 
-            background: #000;
         }
 
-        /* 2. منطقة معلومات الحلقة السفلى */
+        /* منطقة المعلومات */
         .info-section {
             flex: 1;
-            padding: 25px 20px;
-            background: linear-gradient(to bottom, var(--bg-black), #080d14);
+            padding: 25px;
+            background: linear-gradient(to bottom, var(--bg-black), #0a1118);
             overflow-y: auto;
             text-align: center;
         }
 
-        .info-section h1 {
-            font-size: 20px;
+        .episode-tag {
+            display: inline-block;
+            background: rgba(201, 160, 80, 0.1);
             color: var(--royal-gold);
-            margin-bottom: 10px;
-            font-weight: 700;
+            padding: 3px 14px;
+            border-radius: 15px;
+            font-size: 11px;
+            margin-bottom: 12px;
+            border: 1px solid var(--royal-gold);
+            letter-spacing: 0.5px;
         }
 
-        .info-section .series-tag {
-            display: inline-block;
-            background: rgba(230, 126, 34, 0.15);
-            color: var(--royal-orange);
-            padding: 3px 12px;
-            border-radius: 15px;
-            font-size: 12px;
+        #episode-title {
+            font-size: 20px;
+            color: var(--royal-gold);
             margin-bottom: 15px;
-            border: 1px solid var(--royal-orange);
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .description {
-            font-size: 13px;
-            line-height: 1.8;
+            font-size: 14.5px;
+            line-height: 1.9;
             color: var(--royal-beige);
-            opacity: 0.9;
             text-align: justify;
+            opacity: 0.9;
         }
 
-        /* إخفاء شريط التمرير للمظهر الأنيق */
         .info-section::-webkit-scrollbar { display: none; }
-
-        /* ميزة اللمس: إخفاء عناصر التحكم عند عدم الاستخدام */
-        video::-webkit-media-controls-enclosure {
-            border-radius: 0;
-        }
     </style>
 </head>
 <body>
 
-    <button class="back-btn" onclick="goBackHome()">رجوع</button>
+    <header class="top-bar">
+        <div class="custom-dropdown" id="dropdownWrapper">
+            <div class="selected-episode-box" onclick="toggleDropdown()" id="currentSelection">
+                الحلقة (١): سَعِيدُ بْنُ الْمُسَيِّبِ
+            </div>
+            <div class="episodes-list" id="episodesMenu">
+                <div class="episode-item" onclick="selectEpisode(0)">
+                    <span class="num">١</span>
+                    <span>سَعِيدُ بْنُ الْمُسَيِّبِ</span>
+                </div>
+                <div class="episode-item" onclick="selectEpisode(1)">
+                    <span class="num">٢</span>
+                    <span>عَبْدُ اللَّهِ بْنُ عُمَرَ</span>
+                </div>
+            </div>
+        </div>
+        <button class="back-btn" onclick="goBackHome()">رجوع</button>
+    </header>
 
     <section class="video-hero">
         <video id="main-video" controls playsinline poster="https://i.postimg.cc/SKbK6JYM/20260322-235751.png">
-            <source src="Al-Gharib.mp4" type="video/mp4">
-            متصفحك لا يدعم تشغيل الفيديو.
+            <source id="video-source" src="Al-Gharib.mp4" type="video/mp4">
         </video>
     </section>
 
     <main class="info-section">
-        <span class="series-tag">سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (١)</span>
-        <h1>سَيِّدُ التَّابِعِينَ: سَعِيدُ بْنُ الْمُسَيِّبِ</h1>
+        <span class="episode-tag" id="episode-tag">سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (١)</span>
+        <h1 id="episode-title">سَيِّدُ التَّابِعِينَ: سَعِيدُ بْنُ الْمُسَيِّبِ</h1>
         
-        <div class="description">
-            <p>
-                نَبْتَدِئُ بِأَوَّلِ هَؤُلَاءِ الْغُرَبَاءِ، الرَّجُلُ الَّذِي لَمْ تُغْرِهِ دُنْيَا الْمُلُوكِ، وَلَمْ تَكْسِرْهُ سِيَاطُ الْجَلَّادِ. 
-                هُوَ سَعِيدُ بْنُ الْمُسَيِّبِ، مَنْ قَالَ فِيهِ الْعُلَمَاءُ: كَانَ النَّاسُ يَهَابُونَهُ مِثْلَمَا يَهَابُونَ الْأَمِيرَ، 
-                وَمَا زَادَهُ ذَلِكَ إِلَّا تَوَاضُعاً وَخَشْيَةً. سَرْدٌ كَامِلٌ وَمُوَثَّقٌ مِنْ أُصُولِ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ.
-            </p>
+        <div class="description" id="episode-desc">
+            نَبْتَدِئُ بِأَوَّلِ هَؤُلَاءِ الْغُرَبَاءِ، الرَّجُلُ الَّذِي لَمْ تُغْرِهِ دُنْيَا الْمُلُوكِ، وَلَمْ تَكْسِرْهُ سِيَاطُ الْجَلَّادِ. هُوَ سَعِيدُ بْنُ الْمُسَيِّبِ، مَنْ قَالَ فِيهِ الْعُلَمَاءُ: كَانَ النَّاسُ يَهَابُونَهُ مِثْلَمَا يَهَابُونَ الْأَمِيرَ، وَمَا زَادَهُ ذَلِكَ إِلَّا تَوَاضُعاً وَخَشْيَةً. سَرْدٌ كَامِلٌ وَمُوَثَّقٌ مِنْ أُصُولِ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ.
         </div>
     </main>
 
     <script>
-        // دالة العودة الملتزمة بتعليمات الذاكرة
+        const episodes = [
+            {
+                shortName: "الحلقة (١): سَعِيدُ بْنُ الْمُسَيِّبِ",
+                tag: "سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (١)",
+                title: "سَيِّدُ التَّابِعِينَ: سَعِيدُ بْنُ الْمُسَيِّبِ",
+                desc: "نَبْتَدِئُ بِأَوَّلِ هَؤُلَاءِ الْغُرَبَاءِ، الرَّجُلُ الَّذِي لَمْ تُغْرِهِ دُنْيَا الْمُلُوكِ، وَلَمْ تَكْسِرْهُ سِيَاطُ الْجَلَّادِ. هُوَ سَعِيدُ بْنُ الْمُسَيِّبِ، مَنْ قَالَ فِيهِ الْعُلَمَاءُ: كَانَ النَّاسُ يَهَابُونَهُ مِثْلَمَا يَهَابُونَ الْأَمِيرَ، وَمَا زَادَهُ ذَلِكَ إِلَّا تَوَاضُعاً وَخَشْيَةً. سَرْدٌ كَامِلٌ وَمُوَثَّقٌ مِنْ أُصُولِ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ.",
+                video: "Al-Gharib.mp4",
+                poster: "https://i.postimg.cc/SKbK6JYM/20260322-235751.png"
+            },
+            {
+                shortName: "الحلقة (٢): عَبْدُ اللَّهِ بْنُ عُمَرَ",
+                tag: "سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (٢)",
+                title: "عَبْدُ اللَّهِ بْنُ عُمَرَ: الزَّاهِدُ الْمُشْتَاقُ",
+                desc: "تَخَيَّلْ مَعِي.. شَمْسُ الْمَدِينَةِ تَمِيلُ لِلْغُرُوبِ، وَالسَّكِينَةُ تَلُفُّ جَنَبَاتِ الْمَسْجِدِ الشَّرِيفْ. هُنَاكَ، كَانَ الشَّابُّ عَبْدُ اللَّهِ بْنُ عُمَرَ يَمْشِي، فَفُوجِئَ بِيَدٍ رَحِيمَةٍ تُوضَعُ عَلَى مَنْكِبِهْ. لَمْ تَكُنْ أَيَّ يَدْ، بَلْ كَانَتْ يَدَ النَّبِيِّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمْ. شَعَرَ بِدِفْئِهَا يَسْرِي فِي عُرُوقِهِ، وَكَأَنَّ الزَّمَانَ تَوَقَّفَ لِحَظِيَّةْ. كَانَ لِقَاءً سَيُغَيِّرُ مَجْرَى حَيَاتِهِ لِلأَبَدْ. <br><br>الْتَفَتَ عَبْدُ اللَّهِ، فَرَأَى الْوَجْهَ الأَنْوَرْ. وَبِصَوْتٍ يَفِيضُ حِكْمَةً، هَمَسَ النَّبِيُّ فِي أُذُنِهِ بِجُمْلَةٍ وَاحِدَةٍ اخْتَصَرَتْ مَعْنَى الْوُجُودْ: «كُنْ فِي الدُّنْيَا كَأَنَّكَ غَرِيبٌ أَوْ عَابِرُ سَبِيلْ». كَلِمَاتٌ نَزَلَتْ عَلَى قَلْبِهِ كَالنَّدَى، لَكِنَّهَا كَانَتْ بِمَثَابَةِ الزِّلْزَالِ الَّذِي هَدَمَ تَعَلُّقَهُ بِكُلِّ فَانٍ، وَبَنَى فِيهِ رُوحَ الْمُسَافِرِ الْمُشْتَاقْ.",
+                video: "/Podcast/Ibn Umar.mp4",
+                poster: "https://i.postimg.cc/SKbK6JYM/20260322-235751.png"
+            }
+        ];
+
+        function toggleDropdown() {
+            document.getElementById('episodesMenu').classList.toggle('active');
+        }
+
+        function selectEpisode(index) {
+            const video = document.getElementById('main-video');
+            const source = document.getElementById('video-source');
+            
+            // تحديث العناوين والنصوص
+            document.getElementById('currentSelection').innerText = episodes[index].shortName;
+            document.getElementById('episode-tag').innerText = episodes[index].tag;
+            document.getElementById('episode-title').innerText = episodes[index].title;
+            document.getElementById('episode-desc').innerHTML = episodes[index].desc;
+            
+            // تحديث الفيديو
+            video.pause();
+            source.src = episodes[index].video;
+            video.load();
+            video.play();
+            
+            // إغلاق القائمة
+            toggleDropdown();
+        }
+
+        // إغلاق القائمة عند الضغط في أي مكان خارجها
+        window.onclick = function(event) {
+            if (!event.target.matches('.selected-episode-box')) {
+                const dropdowns = document.getElementsByClassName("episodes-list");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    if (dropdowns[i].classList.contains('active')) {
+                        dropdowns[i].classList.remove('active');
+                    }
+                }
+            }
+        }
+
         function goBackHome() {
             const video = document.getElementById('main-video');
             if (video) video.pause();
-            
             window.parent.postMessage('CLOSE_IFRAME', '*');
             window.history.back();
             window.top.location.href = '../index.html';
         }
-
-        window.onload = function() {
-            console.log("مشغل أثير النفحات جاهز - تم تصحيح منطق المسارات.");
-        };
     </script>
 </body>
 </html>
