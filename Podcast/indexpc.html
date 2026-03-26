@@ -33,7 +33,7 @@
             height: 100vh;
         }
 
-        /* الشريط العلوي الجديد */
+        /* الشريط العلوي */
         .top-bar {
             padding: 15px 20px;
             display: flex;
@@ -44,7 +44,6 @@
             z-index: 2000;
         }
 
-        /* تصميم القائمة المنسدلة المخصص (Custom Dropdown) */
         .custom-dropdown {
             position: relative;
             width: 70%;
@@ -130,22 +129,19 @@
             font-weight: 600;
         }
 
-        /* شاشة العرض */
+        /* شاشة العرض - YouTube Iframe */
         .video-hero {
             width: 100%;
-            height: 50vh; 
+            height: 35vh; 
             background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             border-bottom: 2px solid var(--royal-gold);
             position: relative;
         }
 
-        #main-video {
+        #main-video-iframe {
             width: 100%;
             height: 100%;
-            object-fit: contain; 
+            border: none;
         }
 
         /* منطقة المعلومات */
@@ -186,6 +182,15 @@
         }
 
         .info-section::-webkit-scrollbar { display: none; }
+        
+        .footer-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--royal-gold);
+            border-top: 1px solid rgba(201, 160, 80, 0.2);
+            padding-top: 10px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -193,7 +198,7 @@
     <header class="top-bar">
         <div class="custom-dropdown" id="dropdownWrapper">
             <div class="selected-episode-box" onclick="toggleDropdown()" id="currentSelection">
-                الحلقة (١): سَعِيدُ بْنُ الْمُسَيِّبِ
+                الْحَلْقَةُ (١): سَعِيدُ بْنُ الْمُسَيِّبِ
             </div>
             <div class="episodes-list" id="episodesMenu">
                 <div class="episode-item" onclick="selectEpisode(0)">
@@ -210,9 +215,11 @@
     </header>
 
     <section class="video-hero">
-        <video id="main-video" controls playsinline poster="https://i.postimg.cc/SKbK6JYM/20260322-235751.png">
-            <source id="video-source" src="Al-Gharib.mp4" type="video/mp4">
-        </video>
+        <iframe id="main-video-iframe" 
+                src="https://www.youtube.com/embed/oIDaK11XAmo?enablejsapi=1&rel=0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
     </section>
 
     <main class="info-section">
@@ -222,25 +229,27 @@
         <div class="description" id="episode-desc">
             نَبْتَدِئُ بِأَوَّلِ هَؤُلَاءِ الْغُرَبَاءِ، الرَّجُلُ الَّذِي لَمْ تُغْرِهِ دُنْيَا الْمُلُوكِ، وَلَمْ تَكْسِرْهُ سِيَاطُ الْجَلَّادِ. هُوَ سَعِيدُ بْنُ الْمُسَيِّبِ، مَنْ قَالَ فِيهِ الْعُلَمَاءُ: كَانَ النَّاسُ يَهَابُونَهُ مِثْلَمَا يَهَابُونَ الْأَمِيرَ، وَمَا زَادَهُ ذَلِكَ إِلَّا تَوَاضُعاً وَخَشْيَةً. سَرْدٌ كَامِلٌ وَمُوَثَّقٌ مِنْ أُصُولِ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ.
         </div>
+
+        <div class="footer-note">
+            عبر أثير النفحات - جميع الحقوق محفوظة
+        </div>
     </main>
 
     <script>
         const episodes = [
             {
-                shortName: "الحلقة (١): سَعِيدُ بْنُ الْمُسَيِّبِ",
+                shortName: "الْحَلْقَةُ (١): سَعِيدُ بْنُ الْمُسَيِّبِ",
                 tag: "سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (١)",
                 title: "سَيِّدُ التَّابِعِينَ: سَعِيدُ بْنُ الْمُسَيِّبِ",
                 desc: "نَبْتَدِئُ بِأَوَّلِ هَؤُلَاءِ الْغُرَبَاءِ، الرَّجُلُ الَّذِي لَمْ تُغْرِهِ دُنْيَا الْمُلُوكِ، وَلَمْ تَكْسِرْهُ سِيَاطُ الْجَلَّادِ. هُوَ سَعِيدُ بْنُ الْمُسَيِّبِ، مَنْ قَالَ فِيهِ الْعُلَمَاءُ: كَانَ النَّاسُ يَهَابُونَهُ مِثْلَمَا يَهَابُونَ الْأَمِيرَ، وَمَا زَادَهُ ذَلِكَ إِلَّا تَوَاضُعاً وَخَشْيَةً. سَرْدٌ كَامِلٌ وَمُوَثَّقٌ مِنْ أُصُولِ أَهْلِ السُّنَّةِ وَالْجَمَاعَةِ.",
-                video: "Al-Gharib.mp4",
-                poster: "https://i.postimg.cc/SKbK6JYM/20260322-235751.png"
+                youtubeId: "oIDaK11XAmo"
             },
             {
-                shortName: "الحلقة (٢): عَبْدُ اللَّهِ بْنُ عُمَرَ",
+                shortName: "الْحَلْقَةُ (٢): عَبْدُ اللَّهِ بْنُ عُمَرَ",
                 tag: "سِلْسِلَةُ الْغَرِيبِ - الْحَلْقَةُ (٢)",
                 title: "عَبْدُ اللَّهِ بْنُ عُمَرَ: الزَّاهِدُ الْمُشْتَاقُ",
                 desc: "تَخَيَّلْ مَعِي.. شَمْسُ الْمَدِينَةِ تَمِيلُ لِلْغُرُوبِ، وَالسَّكِينَةُ تَلُفُّ جَنَبَاتِ الْمَسْجِدِ الشَّرِيفْ. هُنَاكَ، كَانَ الشَّابُّ عَبْدُ اللَّهِ بْنُ عُمَرَ يَمْشِي، فَفُوجِئَ بِيَدٍ رَحِيمَةٍ تُوضَعُ عَلَى مَنْكِبِهْ. لَمْ تَكُنْ أَيَّ يَدْ، بَلْ كَانَتْ يَدَ النَّبِيِّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمْ. شَعَرَ بِدِفْئِهَا يَسْرِي فِي عُرُوقِهِ، وَكَأَنَّ الزَّمَانَ تَوَقَّفَ لِحَظِيَّةْ. كَانَ لِقَاءً سَيُغَيِّرُ مَجْرَى حَيَاتِهِ لِلأَبَدْ. <br><br>الْتَفَتَ عَبْدُ اللَّهِ، فَرَأَى الْوَجْهَ الأَنْوَرْ. وَبِصَوْتٍ يَفِيضُ حِكْمَةً، هَمَسَ النَّبِيُّ فِي أُذُنِهِ بِجُمْلَةٍ وَاحِدَةٍ اخْتَصَرَتْ مَعْنَى الْوُجُودْ: «كُنْ فِي الدُّنْيَا كَأَنَّكَ غَرِيبٌ أَوْ عَابِرُ سَبِيلْ». كَلِمَاتٌ نَزَلَتْ عَلَى قَلْبِهِ كَالنَّدَى، لَكِنَّهَا كَانَتْ بِمَثَابَةِ الزِّلْزَالِ الَّذِي هَدَمَ تَعَلُّقَهُ بِكُلِّ فَانٍ، وَبَنَى فِيهِ رُوحَ الْمُسَافِرِ الْمُشْتَاقْ.",
-                video: "/Podcast/Ibn Umar.mp4",
-                poster: "https://i.postimg.cc/SKbK6JYM/20260322-235751.png"
+                youtubeId: "XAlgXx54idw"
             }
         ];
 
@@ -249,26 +258,20 @@
         }
 
         function selectEpisode(index) {
-            const video = document.getElementById('main-video');
-            const source = document.getElementById('video-source');
+            const iframe = document.getElementById('main-video-iframe');
             
-            // تحديث العناوين والنصوص
+            // تحديث النصوص
             document.getElementById('currentSelection').innerText = episodes[index].shortName;
             document.getElementById('episode-tag').innerText = episodes[index].tag;
             document.getElementById('episode-title').innerText = episodes[index].title;
             document.getElementById('episode-desc').innerHTML = episodes[index].desc;
             
-            // تحديث الفيديو
-            video.pause();
-            source.src = episodes[index].video;
-            video.load();
-            video.play();
+            // تحديث رابط اليوتيوب
+            iframe.src = `https://www.youtube.com/embed/${episodes[index].youtubeId}?autoplay=1&rel=0`;
             
-            // إغلاق القائمة
             toggleDropdown();
         }
 
-        // إغلاق القائمة عند الضغط في أي مكان خارجها
         window.onclick = function(event) {
             if (!event.target.matches('.selected-episode-box')) {
                 const dropdowns = document.getElementsByClassName("episodes-list");
@@ -281,8 +284,8 @@
         }
 
         function goBackHome() {
-            const video = document.getElementById('main-video');
-            if (video) video.pause();
+            const iframe = document.getElementById('main-video-iframe');
+            if (iframe) iframe.src = "";
             window.parent.postMessage('CLOSE_IFRAME', '*');
             window.history.back();
             window.top.location.href = '../index.html';
